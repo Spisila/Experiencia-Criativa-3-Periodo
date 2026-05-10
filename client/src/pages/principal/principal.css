@@ -14,55 +14,7 @@ body {
 
 }
 
-.app {
-
-  height: 100%;
-  width: 100%;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  background-color: rgb(7, 22, 36);
-  border: 0;
-  margin: 0;
-
-}
-
-.center_container {
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  flex-direction: column;
-
-  width: 80%;
-  height: 80%;
-
-  gap: 20px;
-
-  background-color: rgb(68, 71, 204);
-
-}
-
-.title_container {
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  width: 80%;
-  height: 20%;
-
-  gap: 20px;
-
-  background-color: rgb(62, 36, 124);
-
-}
-
-.cadastro_container 
-{
+.principal_center {
 
   display: flex;
   justify-content: center;
@@ -75,6 +27,55 @@ body {
 
   gap: 20px;
 
-  background-color: rgb(62, 36, 124);
+  background-color: brown;
+
+}
+
+.admin_or_normal_login_container {
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  flex-direction: column;
+
+  width: 80%;
+  height: 80%;
+
+  flex-direction: row;
+
+  gap: 100px;
+
+  background-color: rgb(194, 15, 185);
+
+}
+
+.normal_login_container {
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  flex-direction: column;
+
+  width: 500px;
+  height: 500px;
+
+  background-color: rgb(63, 15, 194);
+
+}
+
+.admin_login_container {
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  flex-direction: column;
+
+  width: 500px;
+  height: 500px;
+
+  background-color: rgb(138, 126, 126);
 
 }
