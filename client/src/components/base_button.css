@@ -16,4 +16,13 @@
   color: aliceblue;
   background-color: rgb(107, 131, 158);
 
+  transition: transform 0.1s ease-in-out;
+
+}
+
+.base_button:hover 
+{
+
+  transform: scale(1.1);
+
 }

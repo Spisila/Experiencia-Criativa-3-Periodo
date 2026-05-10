@@ -1,7 +1,9 @@
 .base_input_text {
 
-  width: 200px;
+  width: 300px;
   height: 30px;
+
+  box-shadow: 0px 5px rgb(36, 9, 110);
 
   border: 0;
   border-radius: 7px;
