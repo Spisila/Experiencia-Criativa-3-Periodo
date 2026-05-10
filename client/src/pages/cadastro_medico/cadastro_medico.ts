@@ -4,13 +4,11 @@ import "../../components/input_boxes.css"
 
 import { supabase } from "../../../../server/src/lib/supabase"
 
-export async function init_cadastro_medico_page() 
-{
+export async function init_cadastro_medico_page() {
 
   const container = document.querySelector<HTMLDivElement>('#app');
 
-  if (container === null) 
-  {
+  if (container === null) {
     return;
   }
 
@@ -40,16 +38,38 @@ export async function init_cadastro_medico_page()
 
   `
 
-  const { data, error } = await supabase.from("usuario").insert({nome : "Socorro", email : "Meudeus", senha: "DoCeu", perfil:"Ajuda"})
+
+  const register_button = container.querySelector<HTMLButtonElement>('#register');
+
+  const name_input = container.querySelector<HTMLInputElement>('#name');
+  const email_input = container.querySelector<HTMLInputElement>('#email');
+  const password_input = container.querySelector<HTMLInputElement>('#password');
+
+  register_button?.addEventListener('click', (event) => {
+    register_button_press();
+  })
+
+  async function register_button_press() {
+
+    let name = name_input?.value
+    let email = email_input?.value
+    let password = password_input?.value
+
+    if (!name || !email || !password) {
+      return;
+    }
+
+    const { data, error } = await supabase.from("usuario").insert({ nome: name, email: email, senha: password, perfil: "Teste" })
 
 
-  if (error) 
-  {
-    console.log("ERRO = ", error)
-    return;
+    if (error) {
+      console.log("ERRO = ", error)
+      return;
+    }
+
+    console.log("Cadastro");
+
   }
-
-  console.log("CADASTRO");
 
 
 }
