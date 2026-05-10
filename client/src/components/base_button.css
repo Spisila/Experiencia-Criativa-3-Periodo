@@ -1,0 +1,19 @@
+.base_button {
+
+  border: 0;
+  border-radius: 15px;
+
+  width: 150px;
+  height: 80px;
+
+  box-shadow: 0px 9px rgb(22, 14, 88);
+
+  font-size: 1.5rem;
+  text-shadow: 0px 2px 1px black;
+  text-align: center;
+
+
+  color: aliceblue;
+  background-color: rgb(107, 131, 158);
+
+}

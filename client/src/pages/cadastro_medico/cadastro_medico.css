@@ -8,7 +8,6 @@ body {
   justify-content: center;
   align-items: center;
 
-  background-color: rgb(7, 22, 36);
   border: 0;
   margin: 0;
 
@@ -23,7 +22,6 @@ body {
   justify-content: center;
   align-items: center;
 
-  background-color: rgb(7, 22, 36);
   border: 0;
   margin: 0;
 
@@ -42,6 +40,11 @@ body {
 
   gap: 20px;
 
+  border: 25px;
+  margin: 25px;
+
+  border-radius: 50px;
+
   background-color: rgb(68, 71, 204);
 
 }
@@ -57,7 +60,14 @@ body {
 
   gap: 20px;
 
+  border: 25px;
+  margin: 25px;
+
+  border-radius: 50px;
+
   background-color: rgb(62, 36, 124);
+
+  font-size: 1.5rem;
 
 }
 
@@ -74,6 +84,11 @@ body {
   flex-direction: column;
 
   gap: 20px;
+
+  border: 25px;
+  margin: 25px;
+
+  border-radius: 50px;
 
   background-color: rgb(62, 36, 124);
 

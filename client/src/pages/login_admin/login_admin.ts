@@ -1,4 +1,6 @@
 import './login_admin.css'
+import '../../components/input_boxes.css'
+import '../../components/base_button.css'
 
 export function init_login_admin_page() {
 
@@ -14,9 +16,9 @@ export function init_login_admin_page() {
   
         <h1>LOGIN COM CREDENCIAIS </h1>
   
-        <input type="text" placeholder="Email" />
-        <input type="password" placeholder="Senha" />
-        <button id="login_button">Login</button>
+        <input type="text" class="base_input_text" placeholder="Email" />
+        <input type="password" class="base_input_text" placeholder="Senha" />
+        <button id="login_button" class="base_button">Login</button>
   
       </div>
   

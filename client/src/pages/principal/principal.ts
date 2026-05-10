@@ -1,4 +1,5 @@
 import './principal.css'
+import '../../components/base_button.css'
 
 import { navigateTo } from '../../main';
 
@@ -21,17 +22,17 @@ export function init_principal_page() {
       <div class="admin_or_normal_login_container ">
         <div class="admin_login_container">
           <h2>Admin Login</h2>
-          <button id="admin_login_btn">Login como admin</button>
+          <button id="admin_login_btn" class="base_button">Login</button>
         </div>
 
         <div class="normal_login_container">
           <h2>Normal Login</h2>
-          <button id="normal_login_btn">Login como medico</button>
+          <button id="normal_login_btn" class="base_button">Login</button>
         </div>
 
         <div class="normal_login_container">
           <h2>Cadastro</h2>
-          <button id="cadastro_btn">Cadastro</button>
+          <button id="cadastro_btn" class="base_button">Cadastro</button>
         </div>
 
       </div>

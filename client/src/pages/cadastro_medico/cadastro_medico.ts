@@ -1,4 +1,6 @@
 import './cadastro_medico.css'
+import "../../components/base_button.css"
+import "../../components/input_boxes.css"
 
 import { supabase } from "../../../../server/src/lib/supabase"
 
@@ -26,10 +28,10 @@ export async function init_cadastro_medico_page()
 
         <h2>Cadastro de Usuário</h2>
 
-        <input type="text" placeholder="Nome" id="name" />
-        <input type="email" placeholder="Email" id="email" />
-        <input type="password" placeholder="Senha" id="password" />
-        <button id="register">Registrar</button>
+        <input type="text" class="base_input_text" placeholder="Nome" id="name" />
+        <input type="email" class="base_input_text" placeholder="Email" id="email" />
+        <input type="password" class="base_input_text" placeholder="Senha" id="password" />
+        <button id="register" class="base_button">Registrar</button>
 
       </div>
 
