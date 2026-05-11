@@ -42,7 +42,8 @@ export function init_login_normal_page() {
   const password_input = container.querySelector<HTMLInputElement>('#password');
   const login_button = container.querySelector<HTMLButtonElement>('#login_button');
 
-  login_button?.addEventListener('click', (event) => {
+  login_button?.addEventListener('click', e => {
+    e.preventDefault()
     login_button_press();
   });
 
