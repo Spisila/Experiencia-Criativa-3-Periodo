@@ -2,7 +2,7 @@ import './login_normal.css'
 import "../../components/base_button.css"
 import "../../components/input_boxes.css"
 
-import { supabase } from "../../../../server/src/lib/supabase"
+import { supabase } from "../../lib/supabase"
 
 export function init_login_normal_page() {
 

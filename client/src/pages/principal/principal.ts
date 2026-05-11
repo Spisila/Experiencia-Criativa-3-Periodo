@@ -45,15 +45,15 @@ export function init_principal_page() {
   const admin_login_button = container.querySelector<HTMLButtonElement>('#admin_login_btn');
   const cadastro_button = container.querySelector<HTMLButtonElement>('#cadastro_btn');
 
-  normal_login_button?.addEventListener('click', (event) => {
+  normal_login_button?.addEventListener('click', (_event) => {
     press_normal_login_button();
   })
 
-  admin_login_button?.addEventListener('click', (event) => {
+  admin_login_button?.addEventListener('click', (_event) => {
     press_admin_login_button();
   })
 
-  cadastro_button?.addEventListener('click', (event) => {
+  cadastro_button?.addEventListener('click', (_event) => {
     press_cadastro_button();
   })
 

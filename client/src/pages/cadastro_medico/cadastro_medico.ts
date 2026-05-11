@@ -2,7 +2,7 @@ import './cadastro_medico.css'
 import "../../components/base_button.css"
 import "../../components/input_boxes.css"
 
-import { supabase } from "../../../../server/src/lib/supabase"
+import { supabase } from "../../lib/supabase"
 
 export async function init_cadastro_medico_page() {
 
@@ -45,7 +45,7 @@ export async function init_cadastro_medico_page() {
   const email_input = container.querySelector<HTMLInputElement>('#email');
   const password_input = container.querySelector<HTMLInputElement>('#password');
 
-  register_button?.addEventListener('click', (event) => {
+  register_button?.addEventListener('click', (_event) => {
     register_button_press();
   })
 
@@ -59,7 +59,7 @@ export async function init_cadastro_medico_page() {
       return;
     }
 
-    const { data, error } = await supabase.from("usuario").insert({ nome: name, email: email, senha: password, perfil: "Teste" })
+    const { error } = await supabase.from("usuario").insert({ nome: name, email: email, senha: password, perfil: "Teste" })
 
 
     if (error) {
