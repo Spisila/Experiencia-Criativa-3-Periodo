@@ -19,7 +19,7 @@ body {
 
   font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 
-  background-color: black;
+  background-color: rgb(4, 20, 49);
 
 }
 
@@ -48,13 +48,13 @@ body {
 
   border-radius: 50%;
 
-  background-color: aliceblue;
+  background-color: rgb(27, 35, 83);
 
   pointer-events: none;
 
   overflow: hidden;
 
-  animation: flutuar 20s ease-in-out infinite;
+  animation: flutuar 60s ease-in-out infinite;
 
 }
 

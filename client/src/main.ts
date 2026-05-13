@@ -41,14 +41,13 @@ for (let i = 0; i < numCircles; i++) {
   const size = Math.random() * 100 + 50; 
   const posX = Math.random() * 125;      
   const posY = Math.random() * 100;     
-  const delay = Math.random() * -20;       
+  const delay = Math.random() * -60;       
 
   Object.assign(circle.style, {
     width: `${size}px`,
     height: `${size}px`,
     top: `${posY}%`,
     left: `${posX}%`,
-    backgroundColor: 'aliceblue',
     opacity: (Math.random() * 0.5).toString(), 
     animationDelay: `${delay}s`
   });

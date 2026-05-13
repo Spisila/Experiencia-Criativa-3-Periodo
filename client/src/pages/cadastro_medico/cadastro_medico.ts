@@ -59,7 +59,7 @@ export async function init_cadastro_medico_page() {
       return;
     }
 
-    const { error } = await supabase.from("usuario").insert({ nome: name, email: email, senha: password, perfil: "Teste" })
+    const { error } = await supabase.from("usuario").insert({ nome: name, email: email, senha: password, perfil: "medico" })
 
 
     if (error) {

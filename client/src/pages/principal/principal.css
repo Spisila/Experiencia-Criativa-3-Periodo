@@ -56,7 +56,9 @@
 
   flex-direction: row;
 
-  gap: 100px;
+  text-align: center;
+
+  gap: 5%;
 
   border: 25px;
   margin: 25px;
