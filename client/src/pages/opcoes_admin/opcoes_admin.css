@@ -1,0 +1,17 @@
+.opcoes_admin_center 
+{
+  width: 80%;
+  height: 80%;
+  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  gap: 25%;
+
+  border-radius: 50px;
+
+  z-index: 1;
+  
+  background-color: rgb(49, 95, 136);
+}
