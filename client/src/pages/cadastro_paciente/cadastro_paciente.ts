@@ -3,6 +3,7 @@ import "../../components/base_button.css"
 import "../../components/input_boxes.css"
 
 import { supabase } from "../../lib/supabase"
+import { sintomas_atuais_masculinas, sintomas_atuais_feminino } from '../../lib/sintoma_pesos'
 
 export async function init_cadastro_paciente_page() {
 
@@ -17,8 +18,8 @@ export async function init_cadastro_paciente_page() {
     <div class="patient_card_container">
 
         <div class="patient_data_input_container">
-          <input class="base_input_text" placeholder="Nome">
-          <input class="base_input_text" placeholder="Data nascimento" type="date">
+          <input class="base_input_text" placeholder="Nome" id="name">
+          <input class="base_input_text" placeholder="Data nascimento" type="date" id="birth_date">
           <div class="patient_sex_container">
             <button class="toggle_base_button" id="toggle_male">
               Masculino 
@@ -80,6 +81,9 @@ export async function init_cadastro_paciente_page() {
   
 
   `
+
+  const name_input = container.querySelector<HTMLInputElement>('#name');
+  const birth_day_input = container.querySelector<HTMLInputElement>('#birth_date');
 
   const toggleMaleButton = container.querySelector<HTMLButtonElement>('#toggle_male');
   const toggleFemaleButton = container.querySelector<HTMLButtonElement>('#toggle_female');
@@ -149,24 +153,56 @@ export async function init_cadastro_paciente_page() {
 
   function toggleMaleButtonPress(): void { toggle_sex() }
   function toggleFemaleButtonPress(): void { toggle_sex() }
-  function cadastrarButtonPress(): void { }
+
+  function init_sex() {
+    if (toggleMaleButton && toggleFemaleButton && symptomButtonMacroorquidismo) {
+      is_male = true;
+      toggleMaleButton.classList.add('is_active');
+      toggleFemaleButton.classList.remove('is_active');
+      symptomButtonMacroorquidismo.disabled = false;
+    }
+  }
 
   function toggle_sex() {
     if (toggleMaleButton && toggleFemaleButton && symptomButtonMacroorquidismo) {
       if (is_male == true) {
-        toggleMaleButton.classList.add('is_active');
-        toggleFemaleButton.classList.remove('is_active');
         is_male = false;
-        symptomButtonMacroorquidismo.disabled = false;
-      }
-      else {
         toggleMaleButton.classList.remove('is_active');
         toggleFemaleButton.classList.add('is_active');
-        is_male = true;
         symptomButtonMacroorquidismo.disabled = true;
       }
+      else {
+        is_male = true;
+        toggleMaleButton.classList.add('is_active');
+        toggleFemaleButton.classList.remove('is_active');
+        symptomButtonMacroorquidismo.disabled = false;
+      }
     }
+
+    const chaves = Object.keys(temSintomas);
+
+    for (let i = 0; i < chaves.length; i++) 
+    {
+      temSintomas[chaves[i]] = false;
+
+      
+    }
+    
+    symptomButtonDeficienciaIntelectual?.classList.remove("is_active");
+    symptomButtonFaceOrelhasAlongadas?.classList.remove("is_active");
+    symptomButtonMacroorquidismo?.classList.remove("is_active");
+    symptomButtonHipermobilidadeArticular?.classList.remove("is_active");
+    symptomButtonDificuldadeAprendizagem?.classList.remove("is_active");
+    symptomButtonDeficitAtencao?.classList.remove("is_active");
+    symptomButtonMovimentosRepetitivos?.classList.remove("is_active");
+    symptomButtonAtrasoFala?.classList.remove("is_active");
+    symptomButtonHiperatividade?.classList.remove("is_active");
+    symptomButtonEvitaContatoVisual?.classList.remove("is_active");
+    symptomButtonEvitaContatoFisico?.classList.remove("is_active");
+    symptomButtonAgressividade?.classList.remove("is_active");
   }
+
+  init_sex();
 
   const temSintomas: Record<string, boolean> = {
     'deficiencia_intelectual': false,
@@ -194,52 +230,94 @@ export async function init_cadastro_paciente_page() {
   }
 
   function symptomDeficienciaIntelectualPress(): void {
-    temSintomas['deficiencia_intelectual'] = true;
     toggle_symptom('deficiencia_intelectual', symptomButtonDeficienciaIntelectual);
   }
   function symptomFaceOrelhasAlongadasPress(): void {
-    temSintomas['face_orelhas_alongadas'] = true;
     toggle_symptom('face_orelhas_alongadas', symptomButtonFaceOrelhasAlongadas);
   }
   function symptomMacroorquidismoPress(): void {
-    temSintomas['macroorquidismo'] = true;
     toggle_symptom('macroorquidismo', symptomButtonMacroorquidismo);
   }
   function symptomHipermobilidadeArticularPress(): void {
-    temSintomas['hipermobilidade_articular'] = true;
     toggle_symptom('hipermobilidade_articular', symptomButtonHipermobilidadeArticular);
   }
   function symptomDificuldadeAprendizagemPress(): void {
-    temSintomas['dificuldade_de_aprendizagem'] = true;
     toggle_symptom('dificuldade_de_aprendizagem', symptomButtonDificuldadeAprendizagem);
   }
   function symptomDeficitAtencaoPress(): void {
-    temSintomas['deficit_de_atencao'] = true;
     toggle_symptom('deficit_de_atencao', symptomButtonDeficitAtencao);
   }
   function symptomMovimentosRepetitivosPress(): void {
-    temSintomas['movimentos_repetitivos'] = true;
     toggle_symptom('movimentos_repetitivos', symptomButtonMovimentosRepetitivos);
   }
   function symptomAtrasoFalaPress(): void {
-    temSintomas['atraso_na_fala'] = true;
     toggle_symptom('atraso_na_fala', symptomButtonAtrasoFala);
   }
   function symptomHiperatividadePress(): void {
-    temSintomas['hiperatividade'] = true;
     toggle_symptom('hiperatividade', symptomButtonHiperatividade);
   }
   function symptomEvitaContatoVisualPress(): void {
-    temSintomas['evita_contato_visual'] = true;
     toggle_symptom('evita_contato_visual', symptomButtonEvitaContatoVisual);
   }
   function symptomEvitaContatoFisicoPress(): void {
-    temSintomas['evita_contato_fisico'] = true;
     toggle_symptom('evita_contato_fisico', symptomButtonEvitaContatoFisico);
   }
   function symptomAgressividadePress(): void {
-    temSintomas['agressividade'] = true;
     toggle_symptom('evita_contato_fisico', symptomButtonAgressividade);
+  }
+
+  // Inverti os pesos
+  function cadastrarButtonPress(): void {
+
+    const nome = name_input?.value;
+    const data_nascimento = birth_day_input?.value;
+
+    let score = 0;
+
+    if (nome && data_nascimento) {
+      const sintomas_selecionados = Object.keys(temSintomas)
+
+      console.log(is_male);
+
+      for (let i = 0; i < sintomas_selecionados.length; i++) {
+
+        if (is_male == true) {
+          console.log("Homeme");
+          if (temSintomas[sintomas_selecionados[i]] == true) {
+
+            score += sintomas_atuais_masculinas[sintomas_selecionados[i]];
+
+          }
+
+        } else {
+
+          if (temSintomas[sintomas_selecionados[i]] == true) {
+
+            score += sintomas_atuais_feminino[sintomas_selecionados[i]];
+
+          }
+
+        }
+
+      }
+    }
+
+    let sexo;
+
+    if (is_male == true) {
+      sexo = "masculino";
+    }
+    else {
+      sexo = "feminino";
+    }
+
+    console.log(score);
+
+    // supabase.from("paciente").insert({nome: nome, data_nascimento: data_nascimento, sexo: sexo, id_usuario: 1});
+
+    // supabase.from("avaliacao").insert({score_final: score, resultado_final: "Teste", id_usuario: 1, id_paciente: 2});
+
+
   }
 
 }

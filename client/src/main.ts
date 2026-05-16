@@ -20,11 +20,13 @@ import { init_lista_pacientes_page } from './pages/lista_pacientes/lista_pacient
 import { init_relatorios_admin_page } from './pages/relatorios_admin/relatorios_admin.ts';
 import { init_relatorios_usuario_page } from './pages/relatorios_usuario/relatorios_usuario.ts';
 
+import { carregar_pesos, sintomas_atuais_masculinas, sintomas_atuais_feminino } from './lib/sintoma_pesos.ts';
+
 type RenderFunction = (container: HTMLElement) => void;
 
 const routes: Record<string, RenderFunction> = {
   '/': init_principal_page,
-  
+
   '/login_medico': init_login_normal_page,
   '/login_admin': init_login_admin_page,
   '/login_total': init_login_total_page,
@@ -32,20 +34,27 @@ const routes: Record<string, RenderFunction> = {
   '/cadastro_paciente': init_cadastro_paciente_page,
   '/cadastro_medico': init_cadastro_medico_page,
   '/cadastro_admin': init_cadastro_admin_page,
-  
+
   '/opcoes_usuario': init_opcoes_usuario_page,
   '/opcoes_admin': init_opcoes_admin_page,
 
   '/lista_usuarios': init_lista_usuarios_page,
-  '/lista_pacientes' : init_lista_pacientes_page,
+  '/lista_pacientes': init_lista_pacientes_page,
 
-  '/relatorios_usuario' : init_relatorios_usuario_page,
-  '/relatorios_admin' : init_relatorios_admin_page
+  '/relatorios_usuario': init_relatorios_usuario_page,
+  '/relatorios_admin': init_relatorios_admin_page
 };
 
 export function navigateTo(url: string) {
   window.history.pushState(null, '', url);
   handleRouting();
+}
+
+async function init() {
+
+  await carregar_pesos();
+  handleRouting();
+
 }
 
 function handleRouting() {
@@ -58,7 +67,7 @@ function handleRouting() {
 }
 
 window.addEventListener('popstate', handleRouting);
-window.addEventListener('DOMContentLoaded', handleRouting);
+window.addEventListener('DOMContentLoaded', init);
 
 
 // Background
