@@ -14,25 +14,28 @@ export function init_principal_page() {
 
   container.innerHTML =  /* html */`
     <div class="principal_center">
-    
-      <div class="title_container">
-        <h1>Principal</h1>
-      </div>
 
       <div class="admin_or_normal_login_container ">
+        
         <div class="admin_login_container">
+      
           <h2>Admin Login</h2>
           <button id="admin_login_btn" class="base_button">Login</button>
+        
         </div>
 
         <div class="normal_login_container">
+        
           <h2>Normal Login</h2>
           <button id="normal_login_btn" class="base_button">Login</button>
+          
         </div>
 
         <div class="normal_login_container">
+        
           <h2>Cadastro</h2>
           <button id="cadastro_btn" class="base_button">Cadastro</button>
+        
         </div>
 
       </div>

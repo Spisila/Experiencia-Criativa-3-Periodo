@@ -21,6 +21,28 @@
 
 }
 
+.title_container {
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 80%;
+  height: 20%;
+
+  gap: 20px;
+
+  border: 25px;
+  margin: 25px;
+
+  border-radius: 50px;
+
+  background-color: rgb(62, 36, 124);
+
+  font-size: 1.5rem;
+
+}
+
 .cadastro_container 
 {
 
@@ -42,17 +64,4 @@
 
   background-color: rgb(62, 36, 124);
 
-}
-
-.cadastro_status 
-{
-  background-color: rgb(60, 119, 170);
-
-  width: 50%;
-
-  text-align: center;
-
-  font-size: 1.5rem;
-
-  padding: 10px;
 }

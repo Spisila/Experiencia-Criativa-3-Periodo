@@ -13,7 +13,8 @@ export function init_login_admin_page() {
   container.innerHTML =  /* html */`
     <div class="center">
       <div class="login_with_credentials">
-  
+
+
         <h1>LOGIN COM CREDENCIAIS </h1>
   
         <input type="text" class="base_input_text" placeholder="Email" />

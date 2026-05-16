@@ -1,11 +1,11 @@
-import './cadastro_medico.css'
+import './cadastro_admin.css'
 import "../../components/base_button.css"
 import "../../components/input_boxes.css"
 
 import { supabase } from "../../lib/supabase"
+import { navigateTo } from '../../main';
 
-
-export async function init_cadastro_medico_page() {
+export async function init_cadastro_admin_page() {
 
   const container = document.querySelector<HTMLDivElement>('#app');
 
@@ -17,15 +17,19 @@ export async function init_cadastro_medico_page() {
       
     <div class="center_container">
 
+      <div class="title_container">
+
+        <h1>Cadastro</h1>
+
+      </div>
+
       <div class="cadastro_container">
 
-        <h2>Cadastro de Usuário</h2>
+        <h2>Cadastro de Administrador</h2>
 
+        <input type="text" class="base_input_text" placeholder="Nome" id="name" />
         <input type="email" class="base_input_text" placeholder="Email" id="email" />
         <input type="password" class="base_input_text" placeholder="Senha" id="password" />
-        <div class=cadastro_status>
-          <h3 id="status">Status de cadastro<h3>
-        </div>
         <button id="register" class="base_button">Registrar</button>
 
       </div>
@@ -34,10 +38,7 @@ export async function init_cadastro_medico_page() {
   
 
   `
-  const mensagem_cadastro_feito = "Cadastro realizado";
-  const mensagem_cadastro_nao = "Erro no cadastro";
 
-  const status = container.querySelector<HTMLTextAreaElement>('#status');
 
   const register_button = container.querySelector<HTMLButtonElement>('#register');
 
@@ -57,31 +58,26 @@ export async function init_cadastro_medico_page() {
       return;
     }
 
+      
     const { data, error } = await supabase.auth.signUp({
       email: email,
       password: password,
       options: {
         data: {
-          role: "usuario"
+          role: "administrador"
         }
       }
     })
 
     if (error) {
       console.log("ERRO = " + error);
-      if (status) {
-        status.textContent = mensagem_cadastro_nao;
-      }
       return;
     }
 
-    if (data) {
-      console.log("Cadastro de usuario");
-      if (status) {
-        status.textContent = mensagem_cadastro_feito;
-      }
+    if (data) 
+    {
+      console.log("Cadastro de admin");
     }
-
 
   }
 
