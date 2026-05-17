@@ -1,9 +1,9 @@
-import './style.css'
-import './components/big_ass_button.css'
+import './style.css';
+import './components/big_ass_button.css';
 
 import { init_principal_page } from './pages/principal/principal.ts';
 
-import { init_login_normal_page } from './pages/login_normal/login_normal.ts'
+import { init_login_normal_page } from './pages/login_normal/login_normal.ts';
 import { init_login_admin_page } from './pages/login_admin/login_admin.ts';
 import { init_login_total_page } from './pages/login_total/login_total.ts';
 
@@ -26,6 +26,9 @@ import { supabase } from './lib/supabase.ts';
 type RenderFunction = (container: HTMLElement) => void;
 
 const routes: Record<string, RenderFunction> = {
+  '/': init_login_total_page,
+  '/principal': init_principal_page,
+
   '/login_medico': init_login_normal_page,
   '/login_admin': init_login_admin_page,
   '/login_total': init_login_total_page,
@@ -52,7 +55,54 @@ const show_options_button_path = [
   '/lista_pacientes',
   '/relatorios_usuario',
   '/relatorios_admin'
-]
+];
+
+export function actualizarIconeTema(theme: string) {
+  const themeIcon = document.querySelector<HTMLElement>('#theme-icon');
+  if (!themeIcon) return;
+
+  if (theme === 'light') {
+    themeIcon.innerHTML = `
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="5"></circle>
+        <line x1="12" y1="1" x2="12" y2="3"></line>
+        <line x1="12" y1="21" x2="12" y2="23"></line>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+        <line x1="1" y1="12" x2="3" y2="12"></line>
+        <line x1="21" y1="12" x2="23" y2="12"></line>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+      </svg>
+    `;
+  } else {
+    themeIcon.innerHTML = `
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+      </svg>
+    `;
+  }
+}
+
+export function toggleTheme() {
+  const currentTheme = document.documentElement.getAttribute('data-theme');
+  let newTheme = 'dark';
+
+  if (currentTheme === 'dark') {
+    newTheme = 'light';
+  }
+
+  document.documentElement.setAttribute('data-theme', newTheme);
+  localStorage.setItem('theme', newTheme);
+  actualizarIconeTema(newTheme);
+}
+
+export function initTheme() {
+  const savedTheme = localStorage.getItem('theme');
+  const systemTheme = savedTheme || 'dark'; 
+  document.documentElement.setAttribute('data-theme', systemTheme);
+  actualizarIconeTema(systemTheme);
+}
 
 export function navigateTo(url: string) {
   window.history.pushState(null, '', url);
@@ -60,21 +110,22 @@ export function navigateTo(url: string) {
 }
 
 async function init() {
+  initTheme();
 
   await carregar_pesos();
   handleRouting();
 
-  const return_button = document.querySelector<HTMLButtonElement>('#options_return_button');
-
+  const return_button = document.querySelector<HTMLButtonElement>('#btn-back');
   return_button?.addEventListener('click', return_to_options);
 
+  const theme_button = document.querySelector<HTMLButtonElement>('#btn-theme-toggle');
+  theme_button?.addEventListener('click', toggleTheme);
 }
 
 async function return_to_options() {
-
-  const { data, error } = await supabase.auth.getUser()
+  const { data, error } = await supabase.auth.getUser();
   if (error) {
-    console.log("ERRO = " + error)
+    console.log("ERRO = " + error);
     return;
   }
 
@@ -90,8 +141,6 @@ async function return_to_options() {
   else {
     console.log("Role nao conhecida");
   }
-
-
 }
 
 function handleRouting() {
@@ -99,18 +148,16 @@ function handleRouting() {
   const render = routes[path] || routes['/login_total'];
   const app = document.querySelector<HTMLDivElement>('#app')!;
 
-  const return_button = document.querySelector<HTMLButtonElement>('#options_return_button');
+  const return_button = document.querySelector<HTMLButtonElement>('#btn-back');
 
-  console.log(path)
+  console.log(path);
 
   if (show_options_button_path.includes(path)) {
     if (!return_button) { return; }
-
     return_button.hidden = false;
   }
   else {
     if (!return_button) { return; }
-
     return_button.hidden = true;
   }
 
@@ -120,30 +167,3 @@ function handleRouting() {
 
 window.addEventListener('popstate', handleRouting);
 window.addEventListener('DOMContentLoaded', init);
-
-
-// Background
-
-const container = document.querySelector('.circles');
-const numCircles = 150;
-
-for (let i = 0; i < numCircles; i++) {
-  const circle = document.createElement('div');
-  circle.classList.add('circle');
-
-  const size = Math.random() * 100 + 50;
-  const posX = Math.random() * 125;
-  const posY = Math.random() * 100;
-  const delay = Math.random() * -60;
-
-  Object.assign(circle.style, {
-    width: `${size}px`,
-    height: `${size}px`,
-    top: `${posY}%`,
-    left: `${posX}%`,
-    opacity: (Math.random() * 0.5).toString(),
-    animationDelay: `${delay}s`
-  });
-
-  container?.appendChild(circle);
-}

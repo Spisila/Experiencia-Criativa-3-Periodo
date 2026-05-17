@@ -1,60 +1,70 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Painel Clínico</title>
+  </head>
+  <body>
+    
+    <div class="medical-screen-wrapper">
+      
+      <div class="medical-bg-elements">
+        <svg class="medical-svg svg-dna-left" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+          <path d="M4.5 10.5C4.5 5.25 9.75 3 12 3s7.5 2.25 7.5 7.5-5.25 7.5-7.5 7.5-7.5-2.25-7.5-7.5Z"/>
+          <path d="M12 3v15M4.5 10.5h15M7 6.5h10M7 14.5h10"/>
+        </svg>
 
-<head>
+        <svg class="medical-svg svg-molecule-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+          <circle cx="12" cy="5" r="2"/>
+          <circle cx="5" cy="12" r="2"/>
+          <circle cx="19" cy="12" r="2"/>
+          <circle cx="12" cy="19" r="2"/>
+          <line x1="12" y1="7" x2="12" y2="17"/>
+          <line x1="7" y1="12" x2="17" y2="12"/>
+        </svg>
 
-  <meta charset="UTF-8" />
-  <link rel="icon" type="image/svg+xml" href="/group.svg" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sindrome X</title>
+        <svg class="medical-svg svg-cell-left" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+          <circle cx="12" cy="12" r="9"/>
+          <circle cx="10" cy="9" r="1.5"/>
+          <circle cx="15" cy="14" r="2"/>
+        </svg>
+      </div>
 
-</head>
-
-<body>
-
-
-
-  <div class="whole">
-
-    <div class="upper_bar">
-
-      <div class="back_button_container">
-        <button class="round_button" id="options_return_button">
-          <img src="/node_modules/lucide-static/icons/arrow-big-left.svg" style="height: 100%; width: 100%;" alt="">
+      <header class="app-header">
+        <button class="icon-btn" id="btn-back" title="Voltar">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
         </button>
-      </div>
-
-      <div class="page_title_container">
-        TESTE
-      </div>
-
-      <div class="log_out_and_switch_light_dark_container">
         
-        <button class="round_button" id="log_out_button">
-          <img src="/node_modules/lucide-static/icons/moon.svg" alt="User" style="height: 100%; width: 100%;" />
-        </button>
+        <div class="header-title">SISTEMA HOSPITALAR</div>
+        
+        <div class="header-actions">
+          <button class="icon-btn" id="btn-theme-toggle" title="Alternar Tema">
+            <span id="theme-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+              </svg>
+            </span>
+          </button>
+          <button class="icon-btn" title="Perfil">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"/>
+            </svg>
+          </button>
+        </div>
+      </header>
 
-        <button class="round_button" id="log_out_button">
-          <img src="/node_modules/lucide-static/icons/user.svg" alt="User" style="height: 100%; width: 100%;" />
-        </button>
-      </div>
+      <main class="main-content-area">
+        <div id="app">
+          </div>
+      </main>
 
     </div>
 
-
-    <div id="app" class="app">
-
-    </div>
-
-  </div>
-
-
-  <div class="circles">
-
-  </div>
-
-  <script type="module" src="/src/main.ts"></script>
-
-</body>
-
+    <script type="module" src="/src/main.ts"></script>
+  </body>
 </html>

@@ -1,193 +1,142 @@
-html,
-body {
 
-  width: 100%;
-  height: 100%;
+:root {
+  --bg-hospital: #050c1e;
+  --card-bg: #111a2e;
+  --card-border: #1e293b;
+  --text-primary: #ffffff;
+  --text-secondary: #64748b;
+  --input-bg: #1e293b;
+  --input-border: #334155;
+  --accent-blue: #00b4d8;
+  --header-bg: #091124;
+}
 
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  border: 0px;
-  margin: 0px;
-
-  overflow: hidden;
-
-  color: aliceblue;
-
-  text-shadow: 0px 2px 1px black;
-
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-
-  background-color: rgb(4, 20, 49);
-
+[data-theme="light"] {
+  --bg-hospital: #ffffff;
+  --card-bg: #ffffff;
+  --card-border: #e2e8f0;
+  --text-primary: #0f172a;
+  --text-secondary: #64748b;
+  --input-bg: #ffffff;
+  --input-border: #cbd5e1;
+  --accent-blue: #00a8cc;
+  --header-bg: #ffffff;
 }
 
 
-.whole {
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-hospital) !important;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  min-height: 100vh;
+  overflow: hidden; /* Evita barras de rolagem desnecessárias */
+  color: var(--text-primary);
+  position: relative;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.medical-screen-wrapper {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
   display: flex;
-  justify-content: center;
-  align-items: center;
-
   flex-direction: column;
+  z-index: 2;
+  background-color: var(--bg-hospital) !important;
+  transition: background-color 0.2s ease;
+}
 
+
+.medical-bg-elements {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   z-index: 1;
-
-}
-
-.upper_bar {
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  flex-direction: row;
-
-  width: 100%;
-  height: 25px;
-
-
-  background-color: rgb(50, 71, 141);
-
-}
-
-.page_title_container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  font-size: 2.5rem;
-
-  width: 76%;
-  height: auto;
-}
-
-.back_button_container {
-  width: 12%;
-  height: auto;
-
-  margin-left: 25px;
-}
-
-.log_out_and_switch_light_dark_container {
-  display: flex;
-  justify-content: center;
-
-  width: 12%;
-
-  gap: 25px;
-}
-
-
-.app {
-
-  height: 100%;
-  width: 100%;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  border: 0;
-  margin: 0;
-
-
-}
-
-.card_center {
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  flex-direction: column;
-
-  width: 80%;
-  height: 80%;
-
-  gap: 20px;
-
-  border: 25px;
-  margin: 25px;
-
-  border-radius: 50px;
-
-  background-color: rgb(68, 71, 204);
-
-}
-
-.circle {
-
-  width: 100px;
-  height: 100px;
-
-  position: absolute;
-
-  border-radius: 50%;
-
-  background-color: rgb(27, 35, 83);
-
   pointer-events: none;
-
-  overflow: hidden;
-
-  animation: flutuar 60s ease-in-out infinite;
-
 }
 
+.medical-svg {
+  position: absolute;
+  color: var(--text-secondary);
+  opacity: 0.15;
+  transition: color 0.2s ease;
+}
 
-.round_button {
+.svg-dna-left { left: 8%; top: 22%; width: 110px; }
+.svg-molecule-right { right: 10%; top: 55%; width: 130px; }
+.svg-cell-left { left: 12%; bottom: 15%; width: 95px; }
 
-  border: 0;
+
+.app-header {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  padding: 1rem 2rem;
+  background: var(--header-bg);
+  border-bottom: 1px solid var(--card-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.header-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 2px;
+  color: var(--text-primary);
+}
+
+.header-actions {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.icon-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
   border-radius: 50%;
-
-  width: 75px;
-  height: 75px;
-
-  padding: 25px;
-
-  box-shadow: 0px 9px rgb(22, 14, 88);
-
-  font-size: 1.5rem;
-  text-shadow: 0px 2px 1px black;
-  text-align: center;
-
-  background-color: rgb(107, 131, 158);
-
-  transition:
-    transform 0.1s ease-in-out,
-    box-shadow 0.1s ease-in-out;
-
+  transition: background-color 0.2s;
 }
 
-.round_button:hover {
-
-  transform: translateY(-5px);
-  box-shadow: 0px 13px rgb(22, 14, 88);
-  ;
-
+.icon-btn:hover {
+  background-color: var(--card-border);
 }
 
-.round_button:active {
-  transform: translateY(5px);
-  box-shadow: 0px 0px rgb(22, 14, 88);
-  ;
+
+.main-content-area {
+  flex: 1;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  width: 100% !important;
+  height: 100% !important;
+  padding: 2rem;
+  z-index: 5;
+  box-sizing: border-box;
 }
 
-@keyframes flutuar {
-  0% {
-    transform: translateY(100vh) translateX(-100vh) scale(0.5);
-    opacity: 0.5;
-  }
 
-  50% {
-    opacity: 0.8;
-  }
-
-  100% {
-    transform: translateY(-100vh) translateX(+100vh) scale(1.2);
-    opacity: 0;
-  }
+#app {
+  width: 100% ;
+  height: 100%;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
 }
