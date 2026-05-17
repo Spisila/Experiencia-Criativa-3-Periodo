@@ -184,8 +184,6 @@ export async function init_cadastro_paciente_page() {
     for (let i = 0; i < chaves.length; i++) 
     {
       temSintomas[chaves[i]] = false;
-
-      
     }
     
     symptomButtonDeficienciaIntelectual?.classList.remove("is_active");

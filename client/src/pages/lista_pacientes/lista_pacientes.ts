@@ -24,6 +24,10 @@ export async function init_lista_pacientes_page() {
           <div class="entry_info_container">
 
             <div class="patient_name_container">
+              <button>
+                <img src="/node_modules/lucide-static/icons/arrow-down-narrow-wide.svg" alt="Relatorio" style="height: 30%;" />
+              </button>
+            
               Nome
             </div>
   
@@ -43,13 +47,11 @@ export async function init_lista_pacientes_page() {
 
           <div class="entry_buttons_container">
 
-            <button class="patient_edit_button">
-              editar
-            </button>
-          
-            <button class="patient_delete_button">
-              Deletar
-            </button>
+            <select>
+            <option>Grande</option>
+            <option>Medio</option>
+            <option>Compacto</option>
+            </select>
 
           </div>
 

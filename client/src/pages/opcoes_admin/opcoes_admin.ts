@@ -17,10 +17,17 @@ export function init_opcoes_admin_page() {
 
       <button class="big_ass_button" id="admin_relatorios_btn">
         Relatorios
+        <img src="/node_modules/lucide-static/icons/clipboard.svg" alt="Relatorio" style="height: 30%;" />
       </button>
 
       <button class="big_ass_button" id="admin_usuarios_btn">
-      Usuarios
+        Cadastrar usuario
+        <img src="/node_modules/lucide-static/icons/user.svg" alt="Relatorio" style="height: 30%;" />
+      </button>
+
+      <button class="big_ass_button" id="admin_usuarios_btn">
+        Cadastrar administrador
+        <img src="/node_modules/lucide-static/icons/user-cog.svg" alt="Relatorio" style="height: 30%;" />
       </button>
 
     </div>
@@ -39,12 +46,12 @@ export function init_opcoes_admin_page() {
 
   function relatorios_button_press() 
   {
-    navigateTo("\relatorios_admin");
+    navigateTo("/relatorios_admin");
   }
 
   function usuarios_button_press() 
   {
-    navigateTo("\lista_usuarios");
+    navigateTo("/lista_usuarios");
   }
 
 }

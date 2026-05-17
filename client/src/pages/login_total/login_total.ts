@@ -5,7 +5,6 @@ import "../../components/input_boxes.css"
 import { supabase } from "../../lib/supabase"
 
 import { navigateTo } from '../../main'
-import { da } from 'zod/locales'
 
 export function init_login_total_page() {
 

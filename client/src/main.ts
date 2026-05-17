@@ -20,13 +20,12 @@ import { init_lista_pacientes_page } from './pages/lista_pacientes/lista_pacient
 import { init_relatorios_admin_page } from './pages/relatorios_admin/relatorios_admin.ts';
 import { init_relatorios_usuario_page } from './pages/relatorios_usuario/relatorios_usuario.ts';
 
-import { carregar_pesos, sintomas_atuais_masculinas, sintomas_atuais_feminino } from './lib/sintoma_pesos.ts';
+import { carregar_pesos } from './lib/sintoma_pesos.ts';
+import { supabase } from './lib/supabase.ts';
 
 type RenderFunction = (container: HTMLElement) => void;
 
 const routes: Record<string, RenderFunction> = {
-  '/': init_principal_page,
-
   '/login_medico': init_login_normal_page,
   '/login_admin': init_login_admin_page,
   '/login_total': init_login_total_page,
@@ -45,6 +44,16 @@ const routes: Record<string, RenderFunction> = {
   '/relatorios_admin': init_relatorios_admin_page
 };
 
+const show_options_button_path = [
+  '/cadastro_paciente',
+  '/cadastro_medico',
+  '/cadastro_admin',
+  '/lista_usuarios',
+  '/lista_pacientes',
+  '/relatorios_usuario',
+  '/relatorios_admin'
+]
+
 export function navigateTo(url: string) {
   window.history.pushState(null, '', url);
   handleRouting();
@@ -55,12 +64,55 @@ async function init() {
   await carregar_pesos();
   handleRouting();
 
+  const return_button = document.querySelector<HTMLButtonElement>('#options_return_button');
+
+  return_button?.addEventListener('click', return_to_options);
+
+}
+
+async function return_to_options() {
+
+  const { data, error } = await supabase.auth.getUser()
+  if (error) {
+    console.log("ERRO = " + error)
+    return;
+  }
+
+  const role = data.user.user_metadata.role;
+  console.log(role);
+
+  if (role == "administrador") {
+    navigateTo("/opcoes_admin");
+  }
+  else if (role == "usuario") {
+    navigateTo('/opcoes_usuario');
+  }
+  else {
+    console.log("Role nao conhecida");
+  }
+
+
 }
 
 function handleRouting() {
   const path = window.location.pathname;
   const render = routes[path] || routes['/login_total'];
   const app = document.querySelector<HTMLDivElement>('#app')!;
+
+  const return_button = document.querySelector<HTMLButtonElement>('#options_return_button');
+
+  console.log(path)
+
+  if (show_options_button_path.includes(path)) {
+    if (!return_button) { return; }
+
+    return_button.hidden = false;
+  }
+  else {
+    if (!return_button) { return; }
+
+    return_button.hidden = true;
+  }
 
   app.innerHTML = '';
   render(app);
