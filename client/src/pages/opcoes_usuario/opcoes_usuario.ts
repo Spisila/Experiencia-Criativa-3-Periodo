@@ -16,12 +16,12 @@ export function init_opcoes_usuario_page() {
     <div class="opcoes_usuario_center">
 
       <button class="big_ass_button" id="relatorios_usuario_button">
-        <img src="/node_modules/lucide-static/icons/clipboard.svg" alt="Relatorio" style="height: 30%;" />
+        <img class="icon_image" src="/node_modules/lucide-static/icons/clipboard.svg" alt="Relatorio" style="height: 30%;" />
         Relatorios
       </button>
 
       <button class="big_ass_button" id="pacientes_usuario_button">
-        <img src="/node_modules/lucide-static/icons/heart-handshake.svg" alt="Relatorio" style="height: 30%;" />
+        <img class="icon_image" src="/node_modules/lucide-static/icons/heart-handshake.svg" alt="Relatorio" style="height: 30%;" />
         Pacientes
       </button>
 

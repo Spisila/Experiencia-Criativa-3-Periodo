@@ -9,9 +9,7 @@
 
   gap: 75px;
 
-  border-radius: 50px;
-
   z-index: 1;
   
-  background-color: rgb(49, 95, 136);
+  background-color: var(--card-bg);
 }

@@ -15,22 +15,34 @@ export async function init_cadastro_paciente_page() {
 
   container.innerHTML = /* html */`
       
-    <div class="patient_card_container">
+    <div class="card_container">
 
         <div class="patient_data_input_container">
-          <input class="base_input_text" placeholder="Nome" id="name">
-          <input class="base_input_text" placeholder="Data nascimento" type="date" id="birth_date">
+          
+          <div class="patient_input_container">
+        
+            <input class="base_input_text" placeholder="Nome" id="name">
+            <input class="base_input_text" placeholder="Data nascimento" type="date" id="birth_date">
+        
+          </div>
+
+          
           <div class="patient_sex_container">
+        
             <button class="toggle_base_button" id="toggle_male">
               Masculino 
             </button> 
+          
             <button class="toggle_base_button" id="toggle_female">
               Feminino
             </button>
+          
           </div>
+        
           <button class="base_button" id="cadastrar">
             Cadastrar
           </button>
+        
         </div>
 
         <div class="symptoms_checklist_container">

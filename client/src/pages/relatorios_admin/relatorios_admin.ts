@@ -15,13 +15,9 @@ export async function init_relatorios_admin_page() {
 
   container.innerHTML = /* html */`
       
-    <div class="center_container">
+    <div class="card_container">
 
-      <div class="title_container">
-
-        <h1>Relatorios Administrador</h1>
-
-      </div>
+      <h1>Relatorios Administrador</h1>
       
     </div>
   

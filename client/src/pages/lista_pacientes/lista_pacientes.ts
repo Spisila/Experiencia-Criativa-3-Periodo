@@ -15,7 +15,7 @@ export async function init_lista_pacientes_page() {
 
   container.innerHTML = /* html */`
       
-    <div class="card_center">
+    <div class="card_container">
 
       <div class="patients_table">
 
@@ -24,9 +24,6 @@ export async function init_lista_pacientes_page() {
           <div class="entry_info_container">
 
             <div class="patient_name_container">
-              <button>
-                <img src="/node_modules/lucide-static/icons/arrow-down-narrow-wide.svg" alt="Relatorio" style="height: 30%;" />
-              </button>
             
               Nome
             </div>

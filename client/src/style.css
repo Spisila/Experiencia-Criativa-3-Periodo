@@ -1,18 +1,30 @@
-
 :root {
-  --bg-hospital: #050c1e;
+  --bg: #050c1e;
+
   --card-bg: #111a2e;
+  --secondary-card-bg: #162544;
+  --tertiary-card-bg: #203764;
   --card-border: #1e293b;
+  
   --text-primary: #ffffff;
   --text-secondary: #64748b;
+  
   --input-bg: #1e293b;
   --input-border: #334155;
+  
   --accent-blue: #00b4d8;
-  --header-bg: #091124;
-}
+  --button_color: #172b4e;
+  --button_shadow: #0f0c2c;
 
-[data-theme="light"] {
-  --bg-hospital: #ffffff;
+  --toggled_button_color:  #405cb9;
+
+  --header-bg: #091124;
+  
+  --icon-theme: 100%;
+}
+/* Claro antes */
+/* [data-theme="light"] {
+  --bg: #ffffff;
   --card-bg: #ffffff;
   --card-border: #e2e8f0;
   --text-primary: #0f172a;
@@ -21,8 +33,35 @@
   --input-border: #cbd5e1;
   --accent-blue: #00a8cc;
   --header-bg: #ffffff;
-}
+  --icon-theme: 0%;
+} */
 
+[data-theme="light"] {
+  --bg: #99c2e7;
+
+  --card-bg: #779bdf;
+  --secondary-card-bg: #6181c2;
+  --tertiary-card-bg: #7398e4;
+  --card-border: #8db6eb;
+  
+  --text-primary: #0f172a;
+  --text-secondary: #01060c;
+  
+  --input-bg: #ffffff;
+  --input-border: #cbd5e1;
+  
+  --accent-blue: #00a8cc;
+
+  --button_color: #a2bbdb;
+  --button_shadow: #2e4d75;
+  
+  --toggled_button_color :  #1d244e;
+  --toggled_text_color : #ffffff;
+
+  --header-bg: #c7def8;
+  
+  --icon-theme: 0%;
+}
 
 * {
   box-sizing: border-box;
@@ -33,67 +72,65 @@
 body {
   margin: 0;
   padding: 0;
-  background-color: var(--bg-hospital) !important;
-  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+
   min-height: 100vh;
-  overflow: hidden; /* Evita barras de rolagem desnecessárias */
-  color: var(--text-primary);
+  
+  overflow: hidden;
+  
   position: relative;
+  
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  
+  color: var(--text-primary);
+  background-color: var(--bg);
+  
   transition: background-color 0.2s ease, color 0.2s ease;
 }
 
-.medical-screen-wrapper {
-  position: relative;
-  width: 100vw;
-  height: 100vh;
+.whole {
+
   display: flex;
   flex-direction: column;
+
+  width: 100vw;
+  height: 100vh;
+
+  position: relative;
+
   z-index: 2;
-  background-color: var(--bg-hospital) !important;
+
+  background-color: var(--bg) !important;
+
   transition: background-color 0.2s ease;
 }
 
-
-.medical-bg-elements {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
-  pointer-events: none;
-}
-
-.medical-svg {
-  position: absolute;
-  color: var(--text-secondary);
-  opacity: 0.15;
-  transition: color 0.2s ease;
-}
-
-.svg-dna-left { left: 8%; top: 22%; width: 110px; }
-.svg-molecule-right { right: 10%; top: 55%; width: 130px; }
-.svg-cell-left { left: 12%; bottom: 15%; width: 95px; }
-
-
 .app-header {
-  position: relative;
-  z-index: 10;
-  width: 100%;
-  padding: 1rem 2rem;
-  background: var(--header-bg);
-  border-bottom: 1px solid var(--card-border);
+  
   display: flex;
   justify-content: space-between;
   align-items: center;
+  
+  width: 100%;
+  
+  position: relative;
+  
+  z-index: 10;
+  
+  padding: 1rem 2rem;
+  border-bottom: 1px solid var(--card-border);
+  
+  background: var(--header-bg);
   transition: background 0.2s ease, border-color 0.2s ease;
 }
 
 .header-title {
+
   font-size: 1.1rem;
   font-weight: 600;
   letter-spacing: 2px;
+
   color: var(--text-primary);
+
 }
 
 .header-actions {
@@ -103,15 +140,20 @@ body {
 }
 
 .icon-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: var(--text-primary);
   display: flex;
   align-items: center;
   justify-content: center;
+
+  border: none;
+  cursor: pointer;
+  
   padding: 5px;
+  
   border-radius: 50%;
+
+  color: var(--text-primary);
+  background: none;
+  
   transition: background-color 0.2s;
 }
 
@@ -119,24 +161,72 @@ body {
   background-color: var(--card-border);
 }
 
+.icon_image 
+{
+  filter: invert(var(--icon-theme))
+}
 
 .main-content-area {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
   flex: 1;
-  display: flex !important;
-  justify-content: center !important;
-  align-items: center !important;
-  width: 100% !important;
-  height: 100% !important;
+  
+  width: 100%;
+  height: 100%;
+  
   padding: 2rem;
+  
   z-index: 5;
+  
   box-sizing: border-box;
 }
 
+.card_container 
+{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+  width: 80%;
+  height: 80%;
+  
+  z-index: 5;
+  
+  box-sizing: border-box;
+
+  border: 3px solid var(--card-border);
+  background-color: var(--card-bg);
+}
+
+.cadastro_container 
+{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+  flex-direction: column;
+
+  width: 30%;
+  height: 80%;
+  
+  padding: 2rem;
+  
+  gap: 25px;
+
+  z-index: 5;
+  
+  box-sizing: border-box;
+
+  background-color: var(--card-bg);
+}
 
 #app {
-  width: 100% ;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 100%;
   height: 100%;
-  display: flex !important;
-  justify-content: center !important;
-  align-items: center !important;
 }

@@ -15,7 +15,7 @@ export async function init_cadastro_medico_page() {
 
   container.innerHTML = /* html */`
       
-    <div class="center_container">
+    <div class="card_container">
 
       <div class="cadastro_container">
 

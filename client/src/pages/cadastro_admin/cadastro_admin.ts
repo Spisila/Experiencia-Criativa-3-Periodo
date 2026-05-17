@@ -15,13 +15,7 @@ export async function init_cadastro_admin_page() {
 
   container.innerHTML = /* html */`
       
-    <div class="center_container">
-
-      <div class="title_container">
-
-        <h1>Cadastro</h1>
-
-      </div>
+    <div class="card_container">
 
       <div class="cadastro_container">
 
@@ -58,7 +52,7 @@ export async function init_cadastro_admin_page() {
       return;
     }
 
-      
+
     const { data, error } = await supabase.auth.signUp({
       email: email,
       password: password,
@@ -74,8 +68,7 @@ export async function init_cadastro_admin_page() {
       return;
     }
 
-    if (data) 
-    {
+    if (data) {
       console.log("Cadastro de admin");
     }
 

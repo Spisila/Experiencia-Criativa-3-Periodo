@@ -15,22 +15,82 @@ export async function init_lista_usuarios_page() {
 
   container.innerHTML = /* html */`
       
-    <div class="center_container">
+    <div class="card_container">
 
-      <div class="title_container">
+      <div class="patients_table">
 
-        <h1>Lista de Usuarios</h1>
+        <div class="patients_table_header">
+         
+          <div class="entry_info_container">
 
-      </div>
+            <div class="patient_name_container">
+            
+              Nome
+            </div>
+  
+            <div class="separator"></div>
 
-      <div class="cadastro_container">
+            <div class="patient_score_container">
+              Score
+            </div>
+  
+            <div class="separator"></div>
 
-        <h2>Cadastro de Administrador</h2>
+            <div style="width: 50%;">
+  
+            </div>
+          
+          </div>
 
-        <input type="text" class="base_input_text" placeholder="Nome" id="name" />
-        <input type="email" class="base_input_text" placeholder="Email" id="email" />
-        <input type="password" class="base_input_text" placeholder="Senha" id="password" />
-        <button id="register" class="base_button">Registrar</button>
+          <div class="entry_buttons_container">
+
+            <select>
+            <option>Grande</option>
+            <option>Medio</option>
+            <option>Compacto</option>
+            </select>
+
+          </div>
+
+        </div>
+
+        <div class="patient_entry">
+
+          <div class="entry_info_container">
+
+            <div class="patient_name_container">
+              Nome : Wilson Segundo
+            </div>
+  
+            <div class="separator"></div>
+
+            <div class="patient_score_container">
+              Score = 10
+            </div>
+  
+            <div class="separator"></div>
+
+            <div style="width: 50%;">
+  
+            </div>
+          
+          </div>
+
+          <div class="entry_buttons_container">
+
+            <button class="patient_edit_button">
+              editar
+            </button>
+          
+            <button class="patient_delete_button">
+              Deletar
+            </button>
+
+          </div>
+
+
+
+        </div>
 
       </div>
 

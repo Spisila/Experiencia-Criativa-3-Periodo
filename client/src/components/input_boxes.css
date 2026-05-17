@@ -1,13 +1,29 @@
-.base_input_text {
+.base_input_text 
+{
 
-  width: 80%;
-  height: 2.5rem;
+  width: 100% ;
+  height: 48px ;
+  
+  padding: 0 16px ;
+  
+  background: var(--input-bg) ;
+  color: var(--text-primary) ;
+  
+  border: 1px solid var(--input-border) ;
+  border-radius: 12px ;
+  
+  font-size: 1rem ;
+  outline: none ;
+  
+  box-sizing: border-box ;
+  
+  box-shadow: none ;
+  border-bottom: 1px solid var(--input-border) ;
+  
+  transition: all 0.2s ease ;
+}
 
-  box-shadow: 0px 5px rgb(36, 9, 110);
-
-  font-size: 1.5rem;
-
-  border: 0;
-  border-radius: 7px;
-
+.base_input_text:focus 
+{
+  border-color: var(--accent-blue);
 }
