@@ -14,12 +14,6 @@ export async function init_relatorios_usuario_page() {
   }
 
   container.innerHTML = /* html */`
-      
-    <div class="card_container">
-
-      <h1>Relatorios usuario</h1>
-      
-    </div>
   
 
   `

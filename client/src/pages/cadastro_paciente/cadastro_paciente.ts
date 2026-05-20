@@ -23,7 +23,8 @@ export async function init_cadastro_paciente_page() {
         
             <input class="base_input_text" placeholder="Nome" id="name">
             <input class="base_input_text" placeholder="Data nascimento" type="date" id="birth_date">
-        
+            <input class="base_input_text" placeholder="Observação" id="observacao">
+
           </div>
 
           
@@ -96,6 +97,7 @@ export async function init_cadastro_paciente_page() {
 
   const name_input = container.querySelector<HTMLInputElement>('#name');
   const birth_day_input = container.querySelector<HTMLInputElement>('#birth_date');
+  // Adicionar observacao
 
   const toggleMaleButton = container.querySelector<HTMLButtonElement>('#toggle_male');
   const toggleFemaleButton = container.querySelector<HTMLButtonElement>('#toggle_female');

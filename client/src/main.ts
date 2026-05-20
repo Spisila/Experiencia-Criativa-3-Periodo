@@ -16,6 +16,8 @@ import { init_lista_pacientes_page } from './pages/lista_pacientes/lista_pacient
 import { init_relatorios_admin_page } from './pages/relatorios_admin/relatorios_admin.ts';
 import { init_relatorios_usuario_page } from './pages/relatorios_usuario/relatorios_usuario.ts';
 
+import { init_relatorio_page } from './pages/relatorio/relatorio.ts';
+
 import { carregar_pesos } from './lib/sintoma_pesos.ts';
 import { supabase } from './lib/supabase.ts';
 
@@ -37,7 +39,9 @@ const routes: Record<string, RenderFunction> = {
   '/lista_pacientes': init_lista_pacientes_page,
 
   '/relatorios_usuario': init_relatorios_usuario_page,
-  '/relatorios_admin': init_relatorios_admin_page
+  '/relatorios_admin': init_relatorios_admin_page,
+
+  '/relatorio' : init_relatorio_page
 };
 
 const show_options_button_path = [
@@ -47,7 +51,8 @@ const show_options_button_path = [
   '/lista_usuarios',
   '/lista_pacientes',
   '/relatorios_usuario',
-  '/relatorios_admin'
+  '/relatorios_admin',
+  '/relatorio'
 ];
 
 export function atualizarIconeTema(theme: string) {
