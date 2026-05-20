@@ -1,10 +1,6 @@
 import './style.css';
 import './components/big_ass_button.css';
 
-import { init_principal_page } from './pages/principal/principal.ts';
-
-import { init_login_normal_page } from './pages/login_normal/login_normal.ts';
-import { init_login_admin_page } from './pages/login_admin/login_admin.ts';
 import { init_login_total_page } from './pages/login_total/login_total.ts';
 
 import { init_cadastro_admin_page } from './pages/cadastro_admin/cadastro_admin.ts';
@@ -27,10 +23,7 @@ type RenderFunction = (container: HTMLElement) => void;
 
 const routes: Record<string, RenderFunction> = {
   '/': init_login_total_page,
-  '/principal': init_principal_page,
 
-  '/login_medico': init_login_normal_page,
-  '/login_admin': init_login_admin_page,
   '/login_total': init_login_total_page,
 
   '/cadastro_paciente': init_cadastro_paciente_page,
