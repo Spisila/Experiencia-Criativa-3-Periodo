@@ -1,0 +1,96 @@
+.reports_container {
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  flex-direction: column;
+
+  width: 90%;
+  height: 90%;
+
+  padding: 25px;
+
+  gap: 25px;
+
+  background-color: var(--secondary-card-bg);
+
+}
+
+.search_and_pages_container {
+
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  flex-direction: row;
+
+  width: 95%;
+  height: 10%;
+
+  background-color: var(--tertiary-card-bg);
+
+}
+
+.report_pages_container {
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  flex-direction: row;
+
+  width: 20%;
+  height: 95%;
+
+  background-color: var(--tertiary-card-bg);
+
+}
+
+.reports_list_container {
+
+  width: 95%;
+  height: 85%;
+
+  background-color: var(--tertiary-card-bg);
+}
+
+.reports_table {
+  width: 100%;
+  min-height: 110px;
+
+
+  background-color: var(--card-border)
+}
+
+.reports_table_header {
+
+  max-height: 2rem;
+  width: 100%;
+
+  background-color: var(--bg);
+}
+
+.reports_table_header_cell {
+  max-height: 2rem;
+  width: auto;
+
+  padding-left: 5px;
+}
+
+.reports_table_row {
+
+  max-height: 2rem;
+  width: auto;
+
+  background-color: var(--tertiary-card-bg);
+}
+
+.reports_table_cell {
+
+  max-height: 2rem;
+  width: auto;
+
+  padding-left: 5px;
+}

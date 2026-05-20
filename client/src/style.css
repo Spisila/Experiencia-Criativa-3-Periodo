@@ -5,23 +5,24 @@
   --secondary-card-bg: #162544;
   --tertiary-card-bg: #203764;
   --card-border: #1e293b;
-  
+
   --text-primary: #ffffff;
   --text-secondary: #64748b;
-  
+
   --input-bg: #1e293b;
   --input-border: #334155;
-  
+
   --accent-blue: #00b4d8;
   --button_color: #172b4e;
   --button_shadow: #0f0c2c;
 
-  --toggled_button_color:  #405cb9;
+  --toggled_button_color: #405cb9;
 
   --header-bg: #091124;
-  
+
   --icon-theme: 100%;
 }
+
 /* Claro antes */
 /* [data-theme="light"] {
   --bg: #ffffff;
@@ -43,23 +44,23 @@
   --secondary-card-bg: #6181c2;
   --tertiary-card-bg: #72a1dd;
   --card-border: #8db6eb;
-  
+
   --text-primary: #0f172a;
   --text-secondary: #01060c;
-  
+
   --input-bg: #ffffff;
   --input-border: #cbd5e1;
-  
+
   --accent-blue: #00a8cc;
 
   --button_color: #a2bbdb;
   --button_shadow: #2e4d75;
-  
-  --toggled_button_color :  #1d244e;
-  --toggled_text_color : #ffffff;
+
+  --toggled_button_color: #1d244e;
+  --toggled_text_color: #ffffff;
 
   --header-bg: #c7def8;
-  
+
   --icon-theme: 0%;
 }
 
@@ -74,16 +75,16 @@ body {
   padding: 0;
 
   min-height: 100vh;
-  
+
   overflow: hidden;
-  
+
   position: relative;
-  
+
   font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-  
+
   color: var(--text-primary);
   background-color: var(--bg);
-  
+
   transition: background-color 0.2s ease, color 0.2s ease;
 }
 
@@ -105,20 +106,20 @@ body {
 }
 
 .app-header {
-  
+
   display: flex;
   justify-content: space-between;
   align-items: center;
-  
+
   width: 100%;
-  
+
   position: relative;
-  
+
   z-index: 10;
-  
+
   padding: 1rem 2rem;
   border-bottom: 1px solid var(--card-border);
-  
+
   background: var(--header-bg);
   transition: background 0.2s ease, border-color 0.2s ease;
 }
@@ -146,14 +147,14 @@ body {
 
   border: none;
   cursor: pointer;
-  
+
   padding: 5px;
-  
+
   border-radius: 50%;
 
   color: var(--text-primary);
   background: none;
-  
+
   transition: background-color 0.2s;
 }
 
@@ -161,8 +162,7 @@ body {
   background-color: var(--card-border);
 }
 
-.icon_image 
-{
+.icon_image {
   filter: invert(var(--icon-theme))
 }
 
@@ -170,53 +170,51 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  
+
   flex: 1;
-  
+
   width: 100%;
   height: 100%;
-  
+
   padding: 2rem;
-  
+
   z-index: 5;
-  
+
   box-sizing: border-box;
 }
 
-.card_container 
-{
+.card_container {
   display: flex;
   justify-content: center;
   align-items: center;
-  
-  width: 80%;
-  height: 80%;
-  
+
+  width: 90%;
+  height: 90%;
+
   z-index: 5;
-  
+
   box-sizing: border-box;
 
   border: 3px solid var(--card-border);
   background-color: var(--card-bg);
 }
 
-.cadastro_container 
-{
+.cadastro_container {
   display: flex;
   justify-content: center;
   align-items: center;
-  
+
   flex-direction: column;
 
   width: 30%;
   height: 80%;
-  
+
   padding: 2rem;
-  
+
   gap: 25px;
 
   z-index: 5;
-  
+
   box-sizing: border-box;
 
   background-color: var(--card-bg);
@@ -229,182 +227,4 @@ body {
 
   width: 100%;
   height: 100%;
-}
-
-.report_container {
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  
-  flex-direction: column;
-
-  width: 80%;
-  height: 100%;
-  
-  z-index: 5;
-  
-  padding: 25px;
-
-  box-sizing: border-box;
-
-  border: 3px solid var(--card-border);
-  background-color: var(--card-bg);
-
-}
-
-.report_info_container {
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  
-  flex-direction: row;
-
-  width: 90%;
-  height: 25%;
-
-  gap: 25px;
-
-  padding: 25px;
-
-  
-
-  border:3px solid var(--card-border);
-  background-color:var(--secondary-card-bg);
-
-}
-
-.patient_info {
-
-
-  display: flex;
-  justify-content: center;
-  align-items: start;
-
-  flex-direction: column;
-
-  width: 90%;
-  height: 100%;
-
-  gap: 0.5rem;
-
-  padding: 25px;
-
-  background-color: var(--tertiary-card-bg)
-  
-}
-
-.doctor_info{
-  
-  display: flex;
-  justify-content: center;
-  align-items: start;
-
-  flex-direction: column;
-
-  width: 90%;
-  height: 100%;
-
-  gap: 0.5rem;
-
-  padding: 25px;
-
-  background-color: var(--tertiary-card-bg)
-}
-
-.report_data_container {
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  
-  flex-direction: row;
-
-  width: 90%;
-  height: 75%;
-
-  gap: 10px;
-
-  padding: 25px;
-
-  border:3px solid var(--card-border);
-  background-color:var(--secondary-card-bg);
-
-}
-
-.report_conclusion_container{
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  width: 90%;
-  height: 100%;
-  
-  background-color: var(--tertiary-card-bg);
-
-}
-
-.report_conclusion {
-
-  width: 90%;
-  height: 90%;
-
-}
-
-.report_identified_symptoms_container {
-
-  
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  flex-direction: column;
-
-  width: 90%;
-  height: 100%;
-
-  background-color: var(--tertiary-card-bg)
-
-}
-
-.report_symptoms_table 
-{
-  width: 100%;
-  height: 100%;
-
-  background-color: var(--card-border)
-
-}
-
-.symptoms_table_header {
-
-  height: 7.69%;
-  width: 100%;
-
-  background-color: var(--bg);
-}
-
-.symptoms_table_header_cell {
-  height: 7.69%;
-  width: 50%;
-
-  padding-left: 5px;
-}
-
-.symptoms_table_row {
-
-  height: 7.69%;
-  width: 50%;
-
-  background-color: var(--tertiary-card-bg);
-}
-
-.symptoms_table_cell{
-
-  height: 7.69%;
-  width: 50%;
-
-  padding-left: 5px;
 }

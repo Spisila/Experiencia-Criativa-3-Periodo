@@ -32,15 +32,15 @@ export function init_opcoes_admin_page() {
 
     </div>
   `
-  
+
   const relatorios_button = container.querySelector<HTMLInputElement>('#admin_relatorios_btn');
   const usuarios_button = container.querySelector<HTMLInputElement>('#admin_usuarios_btn');
-  const cadastrar_admin_button = container.querySelector<HTMLInputElement>('#cadastrar_admin_btn');  
+  const cadastrar_admin_button = container.querySelector<HTMLInputElement>('#cadastrar_admin_btn');
 
   relatorios_button?.addEventListener('click', (_event) => {
     relatorios_button_press();
   })
-  
+
   usuarios_button?.addEventListener('click', (_event) => {
     usuarios_button_press();
   })
@@ -49,18 +49,15 @@ export function init_opcoes_admin_page() {
     cadastrar_admin_press();
   })
 
-  function relatorios_button_press() 
-  {
+  function relatorios_button_press() {
     navigateTo("/relatorios_admin");
   }
 
-  function usuarios_button_press() 
-  {
-    navigateTo("/lista_usuarios");
+  function usuarios_button_press() {
+    navigateTo("/cadastro_medico");
   }
 
-  function cadastrar_admin_press()
-  {
+  function cadastrar_admin_press() {
     navigateTo("/cadastro_admin");
   }
 }
