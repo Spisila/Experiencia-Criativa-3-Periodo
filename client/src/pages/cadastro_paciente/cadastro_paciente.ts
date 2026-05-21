@@ -22,8 +22,9 @@ export async function init_cadastro_paciente_page() {
           <div class="patient_input_container">
         
             <input class="base_input_text" placeholder="Nome" id="name">
+            <input class="base_input_text" placeholder="CPF" id="cpf">
             <input class="base_input_text" placeholder="Data nascimento" type="date" id="birth_date">
-            <input class="base_input_text" placeholder="Observação" id="observacao">
+            <input class="base_input_text" placeholder="Observação" id="observation">
 
           </div>
 
@@ -96,7 +97,9 @@ export async function init_cadastro_paciente_page() {
   `
 
   const name_input = container.querySelector<HTMLInputElement>('#name');
+  const cpf_input = container.querySelector<HTMLInputElement>('#cpf');
   const birth_day_input = container.querySelector<HTMLInputElement>('#birth_date');
+  const observation_input = container.querySelector<HTMLInputElement>('#observation');
   // Adicionar observacao
 
   const toggleMaleButton = container.querySelector<HTMLButtonElement>('#toggle_male');
@@ -195,11 +198,10 @@ export async function init_cadastro_paciente_page() {
 
     const chaves = Object.keys(temSintomas);
 
-    for (let i = 0; i < chaves.length; i++) 
-    {
+    for (let i = 0; i < chaves.length; i++) {
       temSintomas[chaves[i]] = false;
     }
-    
+
     symptomButtonDeficienciaIntelectual?.classList.remove("is_active");
     symptomButtonFaceOrelhasAlongadas?.classList.remove("is_active");
     symptomButtonMacroorquidismo?.classList.remove("is_active");
@@ -278,26 +280,31 @@ export async function init_cadastro_paciente_page() {
     toggle_symptom('evita_contato_fisico', symptomButtonAgressividade);
   }
 
+  const id_sintomas_selecionados: number[] = [];
+
   // Inverti os pesos
-  function cadastrarButtonPress(): void {
+  async function cadastrarButtonPress() {
 
     const nome = name_input?.value;
+    const cpf = cpf_input?.value;
     const data_nascimento = birth_day_input?.value;
+    const observacao = observation_input?.value;
 
     let score = 0;
 
-    if (nome && data_nascimento) {
-      const sintomas_selecionados = Object.keys(temSintomas)
+    if (nome && data_nascimento && cpf) {
 
-      console.log(is_male);
+      const sintomas_selecionados = Object.keys(temSintomas)
 
       for (let i = 0; i < sintomas_selecionados.length; i++) {
 
         if (is_male == true) {
-          console.log("Homeme");
+
           if (temSintomas[sintomas_selecionados[i]] == true) {
 
             score += sintomas_atuais_masculinas[sintomas_selecionados[i]];
+
+            id_sintomas_selecionados.push(i)
 
           }
 
@@ -306,6 +313,8 @@ export async function init_cadastro_paciente_page() {
           if (temSintomas[sintomas_selecionados[i]] == true) {
 
             score += sintomas_atuais_feminino[sintomas_selecionados[i]];
+
+            id_sintomas_selecionados.push(i)
 
           }
 
@@ -323,12 +332,107 @@ export async function init_cadastro_paciente_page() {
       sexo = "feminino";
     }
 
-    console.log(score);
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
 
-    // supabase.from("paciente").insert({nome: nome, data_nascimento: data_nascimento, sexo: sexo, id_usuario: 1});
+    if (authError) {
+      console.log("Erro de autenticação = " + authError)
+      return;
+    }
 
-    // supabase.from("avaliacao").insert({score_final: score, resultado_final: "Teste", id_usuario: 1, id_paciente: 2});
+    if (!user) {
+      console.log("Nenhum usuario")
+      return;
+    }
 
+    const id_medico = user?.id;
+
+    interface Paciente {
+      id: number,
+      nome: string,
+      cpf: string,
+      sexo: string,
+      id_usuario: number
+    }
+
+    const { data: novoPaciente, error: insertPacienteError } = await supabase
+      .from("paciente")
+      .insert({
+        nome: nome,
+        data_nascimento: data_nascimento,
+        cpf: cpf,
+        sexo: sexo,
+        usuario_id: id_medico
+      })
+      .select()
+      .single();
+
+    if (insertPacienteError) {
+      console.log("Erro ao criar paciente");
+      console.log(insertPacienteError);
+      return;
+    }
+
+    if (!novoPaciente) {
+      console.log("Paciente não criado?");
+      return;
+    }
+
+    console.log("Paciente criado");
+
+    const id_paciente = (novoPaciente as Paciente).id;
+
+    const { data: novaAvaliacao, error: insertAvaliacaoError } = await supabase
+      .from("avaliacao")
+      .insert({
+        usuario_id: id_medico,
+        paciente_id: id_paciente,
+        resultado_final: observacao,
+        score_final: score
+      })
+      .select()
+      .single()
+
+    if (insertAvaliacaoError) {
+      console.log("Erro ao criar avaliação");
+      console.log(insertAvaliacaoError);
+      return;
+    }
+
+    if (!novaAvaliacao) {
+      console.log("Avaliação não criada?");
+      return;
+    }
+
+    console.log("Avaliação criada");
+
+    interface Avaliacao {
+      id: number,
+      usuario_id: number,
+      paciente_id: number,
+      resultado_final: string,
+      score_final: number
+    }
+
+    const id_avaliacao = (novaAvaliacao as Avaliacao).id;
+
+    const sintomasAssociativos = id_sintomas_selecionados.map((sintomaId) => ({
+      avaliacao_id: id_avaliacao,
+      sintoma_id: sintomaId
+    }));
+
+    const { data: novoItemAvaliacao, error: insertItemAvaliacaoError } = await supabase
+      .from("item_avaliacao").
+      insert(
+        sintomasAssociativos
+      )
+
+    if (insertItemAvaliacaoError) {
+      console.log("Erro ao criar item avaliação");
+      console.log(insertItemAvaliacaoError);
+      return;
+    }
+
+    console.log("Item avaliação criados");
 
   }
 
