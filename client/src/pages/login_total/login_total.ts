@@ -60,16 +60,13 @@ export function init_login_total_page() {
 
     if (data) {
       console.log(data);
-      if(data.user.user_metadata.role == "administrador") 
-      {
+      if (data.user.user_metadata.perfil == "administrador") {
         navigateTo("/opcoes_admin");
       }
-      else if (data.user.user_metadata.role == "usuario") 
-      {
+      else if (data.user.user_metadata.perfil == "medico") {
         navigateTo("/opcoes_usuario");
       }
-      else 
-      {
+      else {
         console.log("Erro: role desconhecida");
       }
     }

@@ -21,6 +21,8 @@ export async function init_cadastro_medico_page() {
 
         <h2>Cadastro de Usuário</h2>
 
+        <input type="text" class="base_input_text" placeholder="Nome" id="name" />
+        <input type="text" class="base_input_text" placeholder="CPF" id="cpf" />
         <input type="email" class="base_input_text" placeholder="Email" id="email" />
         <input type="password" class="base_input_text" placeholder="Senha" id="password" />
         <div class=cadastro_status>
@@ -41,6 +43,8 @@ export async function init_cadastro_medico_page() {
 
   const register_button = container.querySelector<HTMLButtonElement>('#register');
 
+  const name_input = container.querySelector<HTMLInputElement>('#name');
+  const cpf_input = container.querySelector<HTMLInputElement>('#cpf');
   const email_input = container.querySelector<HTMLInputElement>('#email');
   const password_input = container.querySelector<HTMLInputElement>('#password');
 
@@ -50,10 +54,13 @@ export async function init_cadastro_medico_page() {
 
   async function register_button_press() {
 
+    let name = cpf_input?.value
+    let cpf = cpf_input?.value
     let email = email_input?.value
     let password = password_input?.value
 
-    if (!email || !password) {
+    if (!name || !cpf || !email || !password) {
+      window.alert("Preencha todos os campos");
       return;
     }
 
@@ -62,7 +69,9 @@ export async function init_cadastro_medico_page() {
       password: password,
       options: {
         data: {
-          role: "usuario"
+          nome: name,
+          cpf: cpf,
+          perfil: "medico"
         }
       }
     })

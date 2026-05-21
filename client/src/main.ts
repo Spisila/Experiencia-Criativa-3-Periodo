@@ -41,7 +41,7 @@ const routes: Record<string, RenderFunction> = {
   '/relatorios_usuario': init_relatorios_usuario_page,
   '/relatorios_admin': init_relatorios_admin_page,
 
-  '/relatorio' : init_relatorio_page
+  '/relatorio': init_relatorio_page
 };
 
 const show_options_button_path = [
@@ -85,7 +85,7 @@ export function initTheme() {
   const systemTheme = savedTheme || 'dark';
 
   document.documentElement.setAttribute('data-theme', systemTheme);
-  
+
   atualizarIconeTema(systemTheme);
 }
 
@@ -114,13 +114,13 @@ async function return_to_options() {
     return;
   }
 
-  const role = data.user.user_metadata.role;
+  const role = data.user.user_metadata.perfil;
   console.log(role);
 
   if (role == "administrador") {
     navigateTo("/opcoes_admin");
   }
-  else if (role == "usuario") {
+  else if (role == "medico") {
     navigateTo('/opcoes_usuario');
   }
   else {
@@ -134,8 +134,6 @@ function handleRouting() {
   const app = document.querySelector<HTMLDivElement>('#app')!;
 
   const return_button = document.querySelector<HTMLButtonElement>('#btn-back');
-
-  console.log(path);
 
   if (show_options_button_path.includes(path)) {
     if (!return_button) { return; }
