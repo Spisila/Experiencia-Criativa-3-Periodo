@@ -134,10 +134,33 @@ body {
 
 }
 
-.header-actions {
+.header_right_container {
+
   display: flex;
-  gap: 1.5rem;
+  justify-content: right;
   align-items: center;
+
+  min-width: 30%;
+
+}
+
+.header_center_container {
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  min-width: 30%;
+
+}
+
+.header_left_container {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+
+  min-width: 30%;
+  gap: 1.5rem;
 }
 
 .icon-btn {

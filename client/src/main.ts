@@ -55,6 +55,11 @@ const show_options_button_path = [
   '/relatorio'
 ];
 
+const hide_logout_button_path = [
+  '/',
+  '/login_total',
+];
+
 export function navigateTo(url: string) {
   window.history.pushState(null, '', url);
   handleRouting();
@@ -86,7 +91,6 @@ async function return_to_options() {
   }
 
   const role = data.user.user_metadata.perfil;
-  console.log(role);
 
   if (role == "administrador") {
     navigateTo("/opcoes_admin");
@@ -104,19 +108,43 @@ function handleRouting() {
   const render = routes[path] || routes['/login_total'];
   const app = document.querySelector<HTMLDivElement>('#app')!;
 
-  const return_button = document.querySelector<HTMLButtonElement>('#btn-back');
-
   if (show_options_button_path.includes(path)) {
-    if (!return_button) { return; }
-    return_button.hidden = false;
+    atualizar_botao_voltar("visivel");
   }
   else {
-    if (!return_button) { return; }
-    return_button.hidden = true;
+    atualizar_botao_voltar("escondido");
+  }
+
+  if (hide_logout_button_path.includes(path)) {
+    atualizar_botao_log_out("escondido");
+  }
+  else {
+    atualizar_botao_log_out("visivel");
   }
 
   app.innerHTML = '';
   render(app);
+}
+
+export function atualizar_botao_voltar(estado: "escondido" | "visivel") {
+
+  const return_button = document.querySelector<HTMLButtonElement>('#btn-back');
+
+  if (!return_button) {
+    console.log("Botão voltar nao existe");
+    return;
+  }
+
+  if (estado == "visivel") {
+    return_button.style.display = 'block';
+  }
+  else if (estado == "escondido") {
+    return_button.style.display = 'none';
+  }
+  else {
+    console.log("estado de botao desconhecido");
+  }
+
 }
 
 export async function log_out() {
