@@ -60,6 +60,27 @@ const hide_logout_button_path = [
   '/login_total',
 ];
 
+const path_to_page_title: Record<string, string> = {
+
+  '/login_total': 'LOGIN',
+
+  '/cadastro_paciente': "CADASTRO DE PACIENTE",
+  '/cadastro_medico': "CADASTRO DE USUARIO",
+  '/cadastro_admin': "CADASTRO DE ADMIN",
+
+  '/opcoes_usuario': "OPÇÕES DO USUARIO",
+  '/opcoes_admin': "OPÇÕES DO ADMINISTRADOR",
+
+  '/lista_usuarios': "LISTA DE USUARIOS",
+  '/lista_pacientes': "LISTA DE PACIENTES",
+
+  '/relatorios_usuario': "RELATORIOS DO USUARIO",
+  '/relatorios_admin': "RELATORIOS DO ADMINISTRADOR",
+
+  '/relatorio': "RELATORIO"
+
+};
+
 export function navigateTo(url: string) {
   window.history.pushState(null, '', url);
   handleRouting();
@@ -122,11 +143,23 @@ function handleRouting() {
     atualizar_botao_log_out("visivel");
   }
 
+  atualizar_titulo_da_pagina(path_to_page_title[path])
+
   app.innerHTML = '';
   render(app);
 }
 
-export function atualizar_botao_voltar(estado: "escondido" | "visivel") {
+function atualizar_titulo_da_pagina(titulo: string) {
+
+  const title = document.querySelector<HTMLHeadingElement>('#page_title');
+
+  if (!title) { return; }
+
+  title.textContent = titulo;
+
+}
+
+function atualizar_botao_voltar(estado: "escondido" | "visivel") {
 
   const return_button = document.querySelector<HTMLButtonElement>('#btn-back');
 
@@ -147,7 +180,7 @@ export function atualizar_botao_voltar(estado: "escondido" | "visivel") {
 
 }
 
-export async function log_out() {
+async function log_out() {
 
 
   const { data: userAntes, error: userAntesError } = await supabase.auth.getUser();
