@@ -4,7 +4,7 @@ import "../../components/input_boxes.css"
 
 import { supabase } from "../../lib/supabase"
 
-import { navigateTo } from '../../main'
+import { atualizar_botao_log_out, navigateTo } from '../../main'
 
 export function init_login_total_page() {
 
@@ -69,6 +69,9 @@ export function init_login_total_page() {
       else {
         console.log("Erro: role desconhecida");
       }
+
+      atualizar_botao_log_out("visivel");
+
     }
 
   }
