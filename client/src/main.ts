@@ -21,6 +21,10 @@ import { init_relatorio_page } from './pages/relatorio/relatorio.ts';
 import { carregar_pesos } from './lib/sintoma_pesos.ts';
 import { supabase } from './lib/supabase.ts';
 
+import { return_to_options, should_hide_return_button } from './components/return_to_options_button.ts';
+import { should_hide_logout_button, log_out } from './components/logout_button.ts';
+import { initTheme, toggleTheme } from './components/tema_claro_escuro.ts';
+
 type RenderFunction = (container: HTMLElement) => void;
 
 const routes: Record<string, RenderFunction> = {
@@ -43,22 +47,6 @@ const routes: Record<string, RenderFunction> = {
 
   '/relatorio': init_relatorio_page
 };
-
-const show_options_button_path = [
-  '/cadastro_paciente',
-  '/cadastro_medico',
-  '/cadastro_admin',
-  '/lista_usuarios',
-  '/lista_pacientes',
-  '/relatorios_usuario',
-  '/relatorios_admin',
-  '/relatorio'
-];
-
-const hide_logout_button_path = [
-  '/',
-  '/login_total',
-];
 
 const path_to_page_title: Record<string, string> = {
 
@@ -107,13 +95,11 @@ async function init() {
   initTheme();
   await carregar_pesos();
 
-  atualizar_botao_log_out("escondido");
-
   const { data: user_session } = await supabase.auth.getSession();
 
-  // if (user_session) {
-  //   return_to_options();
-  // }
+  if (!user_session) {
+    navigateTo("/login_total")
+  }
 
   handleRouting();
 
@@ -125,33 +111,6 @@ async function init() {
 
   const log_out_button = document.querySelector<HTMLButtonElement>('#btn-log-out');
   log_out_button?.addEventListener('click', log_out)
-}
-
-async function return_to_options() {
-
-  const { data: user_session, error } = await supabase.auth.getSession();
-
-  if (error) {
-    console.log("Erro em retornar a opçoes = ");
-    console.log(error);
-    return;
-  }
-
-  if (!user_session.session) {
-    return;
-  }
-
-  const role = user_session.session?.user.user_metadata.perfil
-
-  if (role == "administrador") {
-    navigateTo("/opcoes_admin");
-  }
-  else if (role == "medico") {
-    navigateTo('/opcoes_usuario');
-  }
-  else {
-    console.log("Role nao conhecida");
-  }
 }
 
 async function handleRouting() {
@@ -191,19 +150,8 @@ async function handleRouting() {
 
   }
 
-  if (show_options_button_path.includes(path)) {
-    atualizar_botao_voltar("visivel");
-  }
-  else {
-    atualizar_botao_voltar("escondido");
-  }
-
-  if (hide_logout_button_path.includes(path)) {
-    atualizar_botao_log_out("escondido");
-  }
-  else {
-    atualizar_botao_log_out("visivel");
-  }
+  should_hide_return_button(path);
+  should_hide_logout_button(path);
 
   atualizar_titulo_da_pagina(path_to_page_title[path])
 
@@ -219,116 +167,6 @@ function atualizar_titulo_da_pagina(titulo: string) {
 
   title.textContent = titulo;
 
-}
-
-function atualizar_botao_voltar(estado: "escondido" | "visivel") {
-
-  const return_button = document.querySelector<HTMLButtonElement>('#btn-back');
-
-  if (!return_button) {
-    console.log("Botão voltar nao existe");
-    return;
-  }
-
-  if (estado == "visivel") {
-    return_button.style.display = 'block';
-  }
-  else if (estado == "escondido") {
-    return_button.style.display = 'none';
-  }
-  else {
-    console.log("estado de botao desconhecido");
-  }
-
-}
-
-async function log_out() {
-
-
-  const { data: userAntes, error: userAntesError } = await supabase.auth.getUser();
-
-  if (userAntesError) {
-    console.log("Erro usuario nao achado em logout");
-    console.log(userAntesError);
-    return;
-  }
-
-  console.log(userAntes)
-
-  const { error: logOutError } = await supabase.auth.signOut();
-
-  if (logOutError) {
-    console.log("Erro de log out")
-    console.log(logOutError);
-    return;
-  }
-
-  console.log("Log out");
-
-  atualizar_botao_log_out("escondido")
-
-  navigateTo('/login_total')
-
-  const { data: userDepois } = await supabase.auth.getUser();
-
-  console.log("User depois")
-  console.log(userDepois)
-
-}
-
-export function atualizar_botao_log_out(estado: "escondido" | "visivel") {
-
-  const botao_log_out = document.querySelector<HTMLButtonElement>('#btn-log-out');
-
-  if (!botao_log_out) {
-    console.log("Botão log out nao existe");
-    return;
-  }
-
-  if (estado == "visivel") {
-    botao_log_out.style.display = 'block';
-  }
-  else if (estado == "escondido") {
-    botao_log_out.style.display = 'none';
-  }
-  else {
-    console.log("estado de botao desconhecido");
-  }
-
-}
-
-export function atualizarIconeTema(theme: string) {
-  const themeIcon = document.querySelector<HTMLImageElement>('#theme_icon');
-  if (!themeIcon) return;
-
-  if (theme === 'light') {
-    themeIcon.src = "/node_modules/lucide-static/icons/sun.svg"
-  }
-  else {
-    themeIcon.src = "/node_modules/lucide-static/icons/moon.svg"
-  }
-}
-
-export function toggleTheme() {
-  const currentTheme = document.documentElement.getAttribute('data-theme');
-  let newTheme = 'dark';
-
-  if (currentTheme === 'dark') {
-    newTheme = 'light';
-  }
-
-  document.documentElement.setAttribute('data-theme', newTheme);
-  localStorage.setItem('theme', newTheme);
-  atualizarIconeTema(newTheme);
-}
-
-export function initTheme() {
-  const savedTheme = localStorage.getItem('theme');
-  const systemTheme = savedTheme || 'dark';
-
-  document.documentElement.setAttribute('data-theme', systemTheme);
-
-  atualizarIconeTema(systemTheme);
 }
 
 window.addEventListener('popstate', handleRouting);

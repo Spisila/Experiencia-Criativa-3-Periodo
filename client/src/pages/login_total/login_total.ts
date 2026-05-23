@@ -4,7 +4,8 @@ import "../../components/input_boxes.css"
 
 import { supabase } from "../../lib/supabase"
 
-import { atualizar_botao_log_out, navigateTo } from '../../main'
+import { navigateTo } from '../../main'
+import { atualizar_botao_log_out } from '../../components/logout_button'
 
 export function init_login_total_page() {
 
