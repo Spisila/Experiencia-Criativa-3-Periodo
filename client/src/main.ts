@@ -18,73 +18,46 @@ import { init_relatorios_usuario_page } from './pages/relatorios_usuario/relator
 
 import { init_relatorio_page } from './pages/relatorio/relatorio.ts';
 
+// Libs
 import { carregar_pesos } from './lib/sintoma_pesos.ts';
 import { supabase } from './lib/supabase.ts';
 
+// Componentes
 import { return_to_options, should_hide_return_button } from './components/return_to_options_button.ts';
 import { should_hide_logout_button, log_out } from './components/logout_button.ts';
 import { initTheme, toggleTheme } from './components/tema_claro_escuro.ts';
 
-type RenderFunction = (container: HTMLElement) => void;
 
-const routes: Record<string, RenderFunction> = {
-  '/': init_login_total_page,
+type FuncaoInit = (container: HTMLElement) => void;
 
-  '/login_total': init_login_total_page,
+interface Pagina {
+  path: string,
+  init: FuncaoInit,
+  perfil_necessario: string | null,
+  titulo: string
+}
 
-  '/cadastro_paciente': init_cadastro_paciente_page,
-  '/cadastro_medico': init_cadastro_medico_page,
-  '/cadastro_admin': init_cadastro_admin_page,
+const Paginas: Pagina[] = [
+  { path: '/login_total', init: init_login_total_page, perfil_necessario: null, titulo: "LOGIN" },
 
-  '/opcoes_usuario': init_opcoes_usuario_page,
-  '/opcoes_admin': init_opcoes_admin_page,
+  { path: '/cadastro_paciente', init: init_cadastro_paciente_page, perfil_necessario: "medico", titulo: "CADASTRO DE PACIENTE" },
+  
+  { path: '/cadastro_medico', init: init_cadastro_medico_page, perfil_necessario: "administrador", titulo: "CADASTRO DE USUARIO" },
+  { path: '/cadastro_admin', init: init_cadastro_admin_page, perfil_necessario: "administrador", titulo: "CADASTRO DE ADMIN" },
 
-  '/lista_usuarios': init_lista_usuarios_page,
-  '/lista_pacientes': init_lista_pacientes_page,
+  { path: '/opcoes_usuario', init: init_opcoes_usuario_page, perfil_necessario: "medico", titulo: "OPÇÕES DO USUARIO" },
+  { path: '/opcoes_admin', init: init_opcoes_admin_page, perfil_necessario: "administrador", titulo: "OPÇÕES DO ADMINISTRADOR" },
 
-  '/relatorios_usuario': init_relatorios_usuario_page,
-  '/relatorios_admin': init_relatorios_admin_page,
+  { path: '/lista_pacientes', init: init_lista_pacientes_page, perfil_necessario: "medico", titulo: "LISTA DE PACIENTES" },
+  { path: '/lista_usuarios', init: init_lista_usuarios_page, perfil_necessario: "administrador", titulo: "LISTA DE USUARIOS" },
 
-  '/relatorio': init_relatorio_page
-};
+  { path: '/relatorios_usuario', init: init_relatorios_usuario_page, perfil_necessario: "medico", titulo: "RELATORIOS DO USUARIO" },
+  { path: '/relatorios_admin', init: init_relatorios_admin_page, perfil_necessario: "administrador", titulo: "RELATORIOS DO ADMINISTRADOR" },
 
-const path_to_page_title: Record<string, string> = {
-
-  '/login_total': 'LOGIN',
-
-  '/cadastro_paciente': "CADASTRO DE PACIENTE",
-  '/cadastro_medico': "CADASTRO DE USUARIO",
-  '/cadastro_admin': "CADASTRO DE ADMIN",
-
-  '/opcoes_usuario': "OPÇÕES DO USUARIO",
-  '/opcoes_admin': "OPÇÕES DO ADMINISTRADOR",
-
-  '/lista_usuarios': "LISTA DE USUARIOS",
-  '/lista_pacientes': "LISTA DE PACIENTES",
-
-  '/relatorios_usuario': "RELATORIOS DO USUARIO",
-  '/relatorios_admin': "RELATORIOS DO ADMINISTRADOR",
-
-  '/relatorio': "RELATORIO"
-
-};
-
-const paginas_somente_medico = [
-  '/opcoes_usuario',
-  '/cadastro_paciente',
-  '/lista_pacientes',
-  '/relatorios_usuario',
-  '/relatorio'
+  { path: '/relatorio/*', init: init_relatorio_page, perfil_necessario: "autorizado", titulo: "RELATORIO" },
 ]
 
-const paginas_somente_admin = [
-  '/opcoes_admin',
-  '/cadastro_medico',
-  '/cadastro_admin',
-  '/lista_usuarios',
-  '/relatorios_admin',
-  '/relatorio'
-]
+let paths: string[] = Paginas.map(p => p.path);
 
 export function navigateTo(url: string) {
   window.history.pushState(null, '', url);
@@ -92,7 +65,9 @@ export function navigateTo(url: string) {
 }
 
 async function init() {
+
   initTheme();
+
   await carregar_pesos();
 
   const { data: user_session } = await supabase.auth.getSession();
@@ -102,6 +77,7 @@ async function init() {
   }
 
   handleRouting();
+
 
   const return_button = document.querySelector<HTMLButtonElement>('#btn-back');
   return_button?.addEventListener('click', return_to_options);
@@ -115,7 +91,14 @@ async function init() {
 
 async function handleRouting() {
   const path = window.location.pathname;
-  const render = routes[path] || routes['/login_total'];
+
+  if (paths.includes(path) == false) 
+  {
+    window.alert("Pagina não existe")
+    navigateTo("/login_total")
+    return;
+  }
+
   const app = document.querySelector<HTMLDivElement>('#app')!;
 
   const { data: user_session } = await supabase.auth.getSession();
@@ -127,36 +110,39 @@ async function handleRouting() {
     }
   }
 
-  const user_perfil = user_session.session?.user.user_metadata.perfil
-
-  if (paginas_somente_admin.includes(path) && path != "/relatorio") {
-
-    if (user_perfil == "medico") {
-      window.alert("ACESSO NEGADO");
-      log_out();
-      navigateTo("/login_total")
-      return;
-    }
-
-  }
-  else if (paginas_somente_medico.includes(path) && path != "/relatorio") {
-
-    if (user_perfil == "administrador") {
-      window.alert("ACESSO NEGADO");
-      log_out();
-      navigateTo("/login_total")
-      return;
-    }
-
-  }
+  const user_perfil = user_session.session?.user.user_metadata.perfil; 
 
   should_hide_return_button(path);
   should_hide_logout_button(path);
-
-  atualizar_titulo_da_pagina(path_to_page_title[path])
-
+  
   app.innerHTML = '';
-  render(app);
+  
+  for (let i = 0; i < Paginas.length; i++) {
+    
+    let pagina_i = Paginas.at(i) 
+    
+    if (pagina_i?.path == path) {
+      
+      if (pagina_i.perfil_necessario == null) {
+        atualizar_titulo_da_pagina(Paginas.at(i)?.titulo!)
+        Paginas.at(i)?.init(app)
+        return;
+      }
+
+      if (user_perfil != pagina_i.perfil_necessario) {
+        window.alert("ACESSO NEGADO")
+        navigateTo("/login_total")
+        log_out()
+        return;
+      }
+      
+      atualizar_titulo_da_pagina(Paginas.at(i)?.titulo!)
+      
+      Paginas.at(i)?.init(app)
+    
+    }
+  }
+
 }
 
 function atualizar_titulo_da_pagina(titulo: string) {
