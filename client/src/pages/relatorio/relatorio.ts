@@ -21,17 +21,17 @@ export async function init_relatorio_page() {
 
           <div class="patient_info">
             
-            <p>Nome Paciente : Paciente Teste</p>
-            <p>Data Nascimento : dd/mm/YYYY</p>
-            <p>Sexo : Masculino/Feminino </p>
+            <p id="nome_paciente_texto" >Nome Paciente : Paciente Teste</p>
+            <p id="data_nascimento_texto" >Data Nascimento : dd/mm/YYYY</p>
+            <p id="sexo_texto" >Sexo : Masculino/Feminino </p>
 
           </div>
 
           <div class="doctor_info">
 
-            <p>Nome medico : Medico Teste </p>
-            <p>Data avaliação : dd/mm/YYYY </p>
-            <p>Indicação : Fazer teste genetico </p>
+            <p id="nome_medico_texto" >Nome medico : Medico Teste </p>
+            <p id="data_avaliacao_texto" >Data avaliação : dd/mm/YYYY </p>
+            <p id="indicacao_texto" >Indicação : Fazer teste genetico </p>
 
           </div>
 
@@ -44,7 +44,7 @@ export async function init_relatorio_page() {
 
             <div class="report_conclusion"">
               
-              <p>Observações :</p>
+              <p id="observacoes_texto" >Observações :</p>
 
             </div>
 
@@ -65,109 +65,109 @@ export async function init_relatorio_page() {
 
               <tr class="symptoms_table_row">
                 <td class="symptoms_table_cell">
-                  Sintoma 1
+                  Deficiência Intelectual
                 </td>
-                <td class="symptoms_table_cell">
-                  Sim/Nao
-                </td>
-              </tr>
-
-              <tr class="symptoms_table_row">
-                <td class="symptoms_table_cell">
-                  Sintoma 2
-                </td>
-                <td class="symptoms_table_cell">
-                  Sim/Nao
+                <td id="deficiencia_intelectual_texto" class="symptoms_table_cell">
+                  Nao
                 </td>
               </tr>
 
               <tr class="symptoms_table_row">
                 <td class="symptoms_table_cell">
-                  Sintoma 3
+                  Face alongada/orelhas
                 </td>
-                <td class="symptoms_table_cell">
-                  Sim/Nao
-                </td>
-              </tr>
-
-              <tr class="symptoms_table_row">
-                <td class="symptoms_table_cell">
-                  Sintoma 4
-                </td>
-                <td class="symptoms_table_cell">
-                  Sim/Nao
+                <td id="face_alongada_orelhas_texto" class="symptoms_table_cell">
+                  Nao
                 </td>
               </tr>
 
               <tr class="symptoms_table_row">
                 <td class="symptoms_table_cell">
-                  Sintoma 5
+                  Macroorquidismo
+                </td>
+                <td id="macroorquidismo_texto" class="symptoms_table_cell">
+                  Nao
+                </td>
+              </tr>
+
+              <tr class="symptoms_table_row">
+                <td class="symptoms_table_cell">
+                  Hipermobilidade articular
+                </td>
+                <td id="hipermobilidade_articular_texto" class="symptoms_table_cell">
+                  Nao
+                </td>
+              </tr>
+
+              <tr class="symptoms_table_row">
+                <td class="symptoms_table_cell">
+                  Dificuldades de aprendizagem
                 </td> 
-                <td class="symptoms_table_cell">
-                  Sim/Nao
+                <td id="dificuldades_aprendizagem_texto" class="symptoms_table_cell">
+                  Nao
                 </td>
               </tr>
 
               <tr class="symptoms_table_row">
                 <td class="symptoms_table_cell">
-                  Sintoma 6
+                  Déficit de atenção
                 </td>
-                <td class="symptoms_table_cell">
-                  Sim/Nao
-                </td>
-              </tr>
-
-              <tr class="symptoms_table_row">
-                <td class="symptoms_table_cell">
-                  Sintoma 7
-                </td>
-                <td class="symptoms_table_cell">
-                  Sim/Nao
+                <td id="deficit_atencao_texto" class="symptoms_table_cell">
+                  Nao
                 </td>
               </tr>
 
               <tr class="symptoms_table_row">
                 <td class="symptoms_table_cell">
-                  Sintoma 8
+                  Movimentos repetitivos
                 </td>
-                <td class="symptoms_table_cell">
-                  Sim/Nao
-                </td>
-              </tr>
-
-              <tr class="symptoms_table_row">
-                <td class="symptoms_table_cell">
-                  Sintoma 9
-                </td>
-                <td class="symptoms_table_cell">
-                  Sim/Nao
+                <td id="movimentos_repetitivos_texto" class="symptoms_table_cell">
+                  Nao
                 </td>
               </tr>
 
               <tr class="symptoms_table_row">
                 <td class="symptoms_table_cell">
-                  Sintoma 10
+                  Atraso na fala
                 </td>
-                <td class="symptoms_table_cell">
-                  Sim/Nao
-                </td>
-              </tr>
-
-              <tr class="symptoms_table_row">
-                <td class="symptoms_table_cell">
-                  Sintoma 11
-                </td>
-                <td class="symptoms_table_cell">
-                  Sim/Nao
+                <td id="atraso_fala_texto" class="symptoms_table_cell">
+                  Nao
                 </td>
               </tr>
 
               <tr class="symptoms_table_row">
                 <td class="symptoms_table_cell">
-                  Sintoma 12
+                  Hiperatividade 
                 </td>
+                <td id="hiperatividade_texto" class="symptoms_table_cell">
+                  Nao
+                </td>
+              </tr>
+
+              <tr class="symptoms_table_row">
                 <td class="symptoms_table_cell">
-                  Sim/Nao
+                  Evita contato visual 
+                </td>
+                <td id="evita_contato_visual_texto" class="symptoms_table_cell">
+                  Nao
+                </td>
+              </tr>
+
+              <tr class="symptoms_table_row">
+                <td class="symptoms_table_cell">
+                  Evita contato físico 
+                </td>
+                <td id="evita_contato_fisico_texto" class="symptoms_table_cell">
+                  Nao
+                </td>
+              </tr>
+
+              <tr class="symptoms_table_row">
+                <td class="symptoms_table_cell">
+                  Agressividade 
+                </td>
+                <td id="agressividade_texto" class="symptoms_table_cell">
+                  Nao
                 </td>
               </tr>
 
@@ -185,7 +185,147 @@ export async function init_relatorio_page() {
 
       </div>
   
-
   `
+
+  const relatorio_id = window.location.pathname.replace("/relatorio/", "")
+
+  const { data: relatorioDados, error: getRelatorioError } = await supabase.from("avaliacao").select("*").eq("id", relatorio_id);
+
+  console.log(typeof relatorioDados)
+
+  if (getRelatorioError) {
+    console.log("Erro ao pegar relatorio");
+    console.log(relatorioDados);
+  }
+
+  if (!relatorioDados) {
+    console.log("Fala ao pegar dados do relatorio");
+  }
+
+  const medico_id = relatorioDados?.at(0).usuario_id;
+  const paciente_id = relatorioDados?.at(0).paciente_id;
+
+  const { data: medicoDados, error: getMedicoError } = await supabase.from("usuario").select("*").eq("id", medico_id);
+  const { data: pacienteDados, error: getPacienteError } = await supabase.from("paciente").select("*").eq("id", paciente_id);
+
+  if (getMedicoError || getPacienteError) {
+    console.log("Erro ao pegar medico ou paciente em relatorio");
+  }
+
+  const nome_paciente = pacienteDados?.at(0).nome;
+  const data_nascimento = pacienteDados?.at(0).data_nascimento;
+  const sexo = pacienteDados?.at(0).sexo;
+
+  const nome_medico = medicoDados?.at(0).nome;
+
+  const data_avaliacao = relatorioDados?.at(0).data_realizada;
+
+  const score_total = relatorioDados?.at(0).score_final;
+
+  let indicacao = ""
+
+  if (sexo == "masculino" && score_total > 0.56) {
+    indicacao = "Fazer teste genetico";
+  }
+  else if (sexo == "feminino" && score_total > 0.55) {
+    indicacao = "Fazer teste genetico";
+  }
+  else {
+    indicacao == "Nenhuma";
+  }
+
+  const observacao = relatorioDados?.at(0).resultado_final;
+
+  const nome_paciente_container = container.querySelector<HTMLTextAreaElement>('#nome_paciente_texto')
+  const data_nascimento_container = container.querySelector<HTMLTextAreaElement>('#data_nascimento_texto')
+  const sexo_container = container.querySelector<HTMLTextAreaElement>('#sexo_texto')
+
+  const nome_medico_container = container.querySelector<HTMLTextAreaElement>('#nome_medico_texto')
+  const data_avaliacao_container = container.querySelector<HTMLTextAreaElement>('#data_avaliacao_texto')
+  const indicacao_container = container.querySelector<HTMLTextAreaElement>('#indicacao_texto')
+
+  const observacao_container = container.querySelector<HTMLTextAreaElement>('#observacoes_texto')
+
+  if (
+    !nome_paciente_container ||
+    !data_nascimento_container ||
+    !sexo_container ||
+    !nome_medico_container ||
+    !data_avaliacao_container ||
+    !indicacao_container ||
+    !observacao_container) { return; }
+
+  nome_paciente_container.textContent = "Nome do paciente : " + nome_paciente;
+  data_nascimento_container.textContent = "Data nascimento : " + data_nascimento;
+  sexo_container.textContent = "Sexo : " + sexo;
+
+  nome_medico_container.textContent = "Nome Medico : " + nome_medico;
+  data_avaliacao_container.textContent = "Data avaliação : " + data_avaliacao;
+  indicacao_container.textContent = "Indicação : " + indicacao;
+
+  observacao_container.textContent = "Observação : " + observacao;
+
+  const { data: itemAvaliacaoDados, error: getItemAvaliacaoError } = await supabase.from("item_avaliacao").select("sintoma_id").eq("avaliacao_id", relatorio_id);
+
+  if (getItemAvaliacaoError) {
+    console.log("Erro ao pegar item relatorios");
+  }
+
+  if (!itemAvaliacaoDados) {
+    console.log("Fala ao pegar dados do relatorio");
+    return;
+  }
+
+  const deficiencia_intelectual_container = container.querySelector<HTMLTextAreaElement>('#deficiencia_intelectual_texto')
+  const face_alongada_orelhas_container = container.querySelector<HTMLTextAreaElement>('#face_alongada_orelhas_texto')
+  const macroorquidismo_container = container.querySelector<HTMLTextAreaElement>('#macroorquidismo_texto')
+  const hipermobilidade_articular_container = container.querySelector<HTMLTextAreaElement>('#hipermobilidade_articular_texto')
+  const dificuldades_aprendizagem_container = container.querySelector<HTMLTextAreaElement>('#dificuldades_aprendizagem_texto')
+  const deficit_atencao_container = container.querySelector<HTMLTextAreaElement>('#deficit_atencao_texto')
+  const movimentos_repetitivos_container = container.querySelector<HTMLTextAreaElement>('#movimentos_repetitivos_texto')
+  const atraso_fala_container = container.querySelector<HTMLTextAreaElement>('#atraso_fala_texto')
+  const hiperatividade_container = container.querySelector<HTMLTextAreaElement>('#hiperatividade_texto')
+  const evita_contato_visual_container = container.querySelector<HTMLTextAreaElement>('#evita_contato_visual_texto')
+  const evita_contato_fisico_container = container.querySelector<HTMLTextAreaElement>('#evita_contato_fisico_texto')
+  const agressividade_container = container.querySelector<HTMLTextAreaElement>('#agressividade_texto')
+
+  if (
+
+    !deficiencia_intelectual_container ||
+    !face_alongada_orelhas_container ||
+    !macroorquidismo_container ||
+    !hipermobilidade_articular_container ||
+    !dificuldades_aprendizagem_container ||
+    !deficit_atencao_container ||
+    !movimentos_repetitivos_container ||
+    !atraso_fala_container ||
+    !hiperatividade_container ||
+    !evita_contato_visual_container ||
+    !evita_contato_fisico_container ||
+    !agressividade_container
+  ) {
+    return
+  }
+
+  const containers = [
+    deficiencia_intelectual_container,
+    face_alongada_orelhas_container,
+    macroorquidismo_container,
+    hipermobilidade_articular_container,
+    dificuldades_aprendizagem_container,
+    deficiencia_intelectual_container,
+    movimentos_repetitivos_container,
+    atraso_fala_container,
+    hiperatividade_container,
+    evita_contato_visual_container,
+    evita_contato_fisico_container,
+    agressividade_container
+  ]
+
+  for (let i = 0; i < itemAvaliacaoDados.length; i++) {
+
+    containers.at(itemAvaliacaoDados.at(i)?.sintoma_id)!.textContent = "Sim"
+
+  }
 
 }

@@ -41,7 +41,7 @@ const Paginas: Pagina[] = [
   { path: '/login_total', init: init_login_total_page, perfil_necessario: null, titulo: "LOGIN" },
 
   { path: '/cadastro_paciente', init: init_cadastro_paciente_page, perfil_necessario: "medico", titulo: "CADASTRO DE PACIENTE" },
-  
+
   { path: '/cadastro_medico', init: init_cadastro_medico_page, perfil_necessario: "administrador", titulo: "CADASTRO DE USUARIO" },
   { path: '/cadastro_admin', init: init_cadastro_admin_page, perfil_necessario: "administrador", titulo: "CADASTRO DE ADMIN" },
 
@@ -54,7 +54,7 @@ const Paginas: Pagina[] = [
   { path: '/relatorios_usuario', init: init_relatorios_usuario_page, perfil_necessario: "medico", titulo: "RELATORIOS DO USUARIO" },
   { path: '/relatorios_admin', init: init_relatorios_admin_page, perfil_necessario: "administrador", titulo: "RELATORIOS DO ADMINISTRADOR" },
 
-  { path: '/relatorio/*', init: init_relatorio_page, perfil_necessario: "autorizado", titulo: "RELATORIO" },
+  { path: '/relatorio', init: init_relatorio_page, perfil_necessario: "autorizado", titulo: "RELATORIO" },
 ]
 
 let paths: string[] = Paginas.map(p => p.path);
@@ -89,11 +89,12 @@ async function init() {
   log_out_button?.addEventListener('click', log_out)
 }
 
+
 async function handleRouting() {
+
   const path = window.location.pathname;
 
-  if (paths.includes(path) == false) 
-  {
+  if (paths.includes(path) == false && path.startsWith("/relatorio/") == false) {
     window.alert("Pagina não existe")
     navigateTo("/login_total")
     return;
@@ -110,36 +111,42 @@ async function handleRouting() {
     }
   }
 
-  const user_perfil = user_session.session?.user.user_metadata.perfil; 
+  const user_perfil = user_session.session?.user.user_metadata.perfil;
 
   should_hide_return_button(path);
   should_hide_logout_button(path);
-  
+
   app.innerHTML = '';
-  
+
   for (let i = 0; i < Paginas.length; i++) {
-    
-    let pagina_i = Paginas.at(i) 
-    
+
+    let pagina_i = Paginas.at(i)
+
     if (pagina_i?.path == path) {
-      
+
       if (pagina_i.perfil_necessario == null) {
         atualizar_titulo_da_pagina(Paginas.at(i)?.titulo!)
         Paginas.at(i)?.init(app)
         return;
       }
 
-      if (user_perfil != pagina_i.perfil_necessario) {
-        window.alert("ACESSO NEGADO")
-        navigateTo("/login_total")
-        log_out()
+      if (user_perfil == "medico" || user_perfil == "administrador") {
+        atualizar_titulo_da_pagina(Paginas.at(i)?.titulo!)
+        Paginas.at(i)?.init(app)
         return;
       }
-      
+
+      if (user_perfil != pagina_i.perfil_necessario) {
+        window.alert("ACESSO NEGADO");
+        navigateTo("/login_total");
+        log_out();
+        return;;
+      }
+
       atualizar_titulo_da_pagina(Paginas.at(i)?.titulo!)
-      
+
       Paginas.at(i)?.init(app)
-    
+
     }
   }
 

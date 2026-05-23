@@ -159,6 +159,7 @@ export async function init_relatorios_usuario_page() {
 
 function ir_relatorio_especifico(relatorio_id: string) {
 
-  navigateTo("/relatorio/" + relatorio_id)
+  navigateTo("/relatorio")
+  window.history.pushState(null, '', "/relatorio/" + relatorio_id);
 
 }
