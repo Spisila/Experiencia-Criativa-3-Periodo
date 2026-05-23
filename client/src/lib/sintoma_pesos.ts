@@ -49,7 +49,4 @@ export async function carregar_pesos() {
 
   }
 
-  console.log(sintomas_atuais_masculinas)
-  console.log(sintomas_atuais_feminino)
-
 }

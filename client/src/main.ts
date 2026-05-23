@@ -81,6 +81,23 @@ const path_to_page_title: Record<string, string> = {
 
 };
 
+const paginas_somente_medico = [
+  '/opcoes_usuario',
+  '/cadastro_paciente',
+  '/lista_pacientes',
+  '/relatorios_usuario',
+  '/relatorio'
+]
+
+const paginas_somente_admin = [
+  '/opcoes_admin',
+  '/cadastro_medico',
+  '/cadastro_admin',
+  '/lista_usuarios',
+  '/relatorios_admin',
+  '/relatorio'
+]
+
 export function navigateTo(url: string) {
   window.history.pushState(null, '', url);
   handleRouting();
@@ -88,10 +105,18 @@ export function navigateTo(url: string) {
 
 async function init() {
   initTheme();
+  await carregar_pesos();
 
   atualizar_botao_log_out("escondido");
 
-  await carregar_pesos();
+  const { data: user_session } = await supabase.auth.getSession();
+  console.log("Seção = ")
+  console.log(user_session)
+
+  if (user_session) {
+    return_to_options();
+  }
+
   handleRouting();
 
   const return_button = document.querySelector<HTMLButtonElement>('#btn-back');
@@ -105,13 +130,20 @@ async function init() {
 }
 
 async function return_to_options() {
-  const { data, error } = await supabase.auth.getUser();
+
+  const { data: user_session, error } = await supabase.auth.getSession();
+
   if (error) {
-    console.log("ERRO = " + error);
+    console.log("Erro em retornar a opçoes = ");
+    console.log(error);
     return;
   }
 
-  const role = data.user.user_metadata.perfil;
+  if (!user_session.session) {
+    return;
+  }
+
+  const role = user_session.session?.user.user_metadata.perfil
 
   if (role == "administrador") {
     navigateTo("/opcoes_admin");
@@ -124,10 +156,45 @@ async function return_to_options() {
   }
 }
 
-function handleRouting() {
+async function handleRouting() {
   const path = window.location.pathname;
   const render = routes[path] || routes['/login_total'];
   const app = document.querySelector<HTMLDivElement>('#app')!;
+
+  const { data: user_session } = await supabase.auth.getSession();
+
+  console.log("Routing : ");
+  console.log(user_session);
+
+  if (path != "/login_total") {
+    if (!user_session.session) {
+      navigateTo("/login_total")
+      return;
+    }
+  }
+
+  const user_perfil = user_session.session?.user.user_metadata.perfil
+
+  if (paginas_somente_admin.includes(path)) {
+
+    if (user_perfil == "medico") {
+      window.alert("ACESSO NEGADO");
+      log_out();
+      navigateTo("/login_total")
+      return;
+    }
+
+  }
+  else if (paginas_somente_medico.includes(path)) {
+
+    if (user_perfil == "administrador") {
+      window.alert("ACESSO NEGADO");
+      log_out();
+      navigateTo("/login_total")
+      return;
+    }
+
+  }
 
   if (show_options_button_path.includes(path)) {
     atualizar_botao_voltar("visivel");
