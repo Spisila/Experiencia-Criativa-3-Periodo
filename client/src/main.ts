@@ -110,12 +110,10 @@ async function init() {
   atualizar_botao_log_out("escondido");
 
   const { data: user_session } = await supabase.auth.getSession();
-  console.log("Seção = ")
-  console.log(user_session)
 
-  if (user_session) {
-    return_to_options();
-  }
+  // if (user_session) {
+  //   return_to_options();
+  // }
 
   handleRouting();
 
@@ -163,9 +161,6 @@ async function handleRouting() {
 
   const { data: user_session } = await supabase.auth.getSession();
 
-  console.log("Routing : ");
-  console.log(user_session);
-
   if (path != "/login_total") {
     if (!user_session.session) {
       navigateTo("/login_total")
@@ -175,7 +170,7 @@ async function handleRouting() {
 
   const user_perfil = user_session.session?.user.user_metadata.perfil
 
-  if (paginas_somente_admin.includes(path)) {
+  if (paginas_somente_admin.includes(path) && path != "/relatorio") {
 
     if (user_perfil == "medico") {
       window.alert("ACESSO NEGADO");
@@ -185,7 +180,7 @@ async function handleRouting() {
     }
 
   }
-  else if (paginas_somente_medico.includes(path)) {
+  else if (paginas_somente_medico.includes(path) && path != "/relatorio") {
 
     if (user_perfil == "administrador") {
       window.alert("ACESSO NEGADO");
