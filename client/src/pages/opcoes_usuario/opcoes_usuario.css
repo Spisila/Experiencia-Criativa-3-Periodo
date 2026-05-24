@@ -1,15 +1,16 @@
-.opcoes_usuario_center
-{
+.opcoes_usuario_center {
   width: 80%;
   height: 80%;
-  
+
   display: flex;
   justify-content: center;
   align-items: center;
 
+  flex-wrap: wrap;
+
   gap: 75px;
 
   z-index: 1;
-  
+
   background-color: var(--card-bg);
 }

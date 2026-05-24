@@ -28,7 +28,7 @@ export function init_opcoes_usuario_page() {
 
       <button class="big_ass_button" id="pacientes_usuario_button">
         <img class="icon_image" src="/node_modules/lucide-static/icons/heart-handshake.svg" alt="Paciente" style="height: 30%;" />
-        Pacientes
+        Nova avaliação
       </button>
 
     </div>

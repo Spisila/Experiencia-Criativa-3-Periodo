@@ -58,7 +58,8 @@
 
 .reports_table {
   width: 100%;
-  min-height: 110px;
+  min-height: 2rem;
+  max-height: 2rem;
 
 
   background-color: var(--card-border)
@@ -66,22 +67,50 @@
 
 .reports_table_header {
 
+  
   max-height: 2rem;
   width: 100%;
 
   background-color: var(--bg);
 }
 
+.header_cell_title_button_container {
+  
+  display: flex;
+
+  width: 100%;
+}
+
 .reports_table_header_cell {
-  max-height: 2rem;
+
+
+  min-height: 2rem;
   width: auto;
 
   padding-left: 5px;
 }
 
+.header_cell_title {
+  
+  display: flex;
+  justify-content: left;
+  
+  width: 50%;
+  height: auto;
+}
+
+.header_cell_button {
+  
+  display: flex;
+  justify-content: right;
+  
+  width: 50%;
+  
+}
+
 .reports_table_row {
 
-  max-height: 2rem;
+  min-height: 2rem;
   width: auto;
 
   background-color: var(--tertiary-card-bg);
@@ -89,7 +118,7 @@
 
 .reports_table_cell {
 
-  max-height: 2rem;
+  min-height: 4rem;
   width: auto;
 
   padding-left: 5px;

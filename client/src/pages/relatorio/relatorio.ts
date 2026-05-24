@@ -4,6 +4,7 @@ import "../../components/input_boxes.css"
 
 import { supabase } from "../../lib/supabase"
 import { navigateTo } from '../../main';
+import { date } from 'zod';
 
 export async function init_relatorio_page() {
 
@@ -177,7 +178,7 @@ export async function init_relatorio_page() {
 
         </div>
 
-        <button class="base_button" style="margin-top: 15px;">
+        <button id="imprimir_button" class="base_button" style="margin-top: 15px;">
 
           Imprimir
 
@@ -214,11 +215,16 @@ export async function init_relatorio_page() {
 
   const nome_paciente = pacienteDados?.at(0).nome;
   const data_nascimento = pacienteDados?.at(0).data_nascimento;
+
+  const nascimento_formatada = new Date(data_nascimento).toLocaleDateString('pt-BR');
+
   const sexo = pacienteDados?.at(0).sexo;
 
   const nome_medico = medicoDados?.at(0).nome;
 
   const data_avaliacao = relatorioDados?.at(0).data_realizada;
+
+  const data_avaliacao_formatada = new Date(data_avaliacao).toLocaleString('pt-BR');
 
   const score_total = relatorioDados?.at(0).score_final;
 
@@ -256,11 +262,11 @@ export async function init_relatorio_page() {
     !observacao_container) { return; }
 
   nome_paciente_container.textContent = "Nome do paciente : " + nome_paciente;
-  data_nascimento_container.textContent = "Data nascimento : " + data_nascimento;
+  data_nascimento_container.textContent = "Data nascimento : " + nascimento_formatada;
   sexo_container.textContent = "Sexo : " + sexo;
 
   nome_medico_container.textContent = "Nome Medico : " + nome_medico;
-  data_avaliacao_container.textContent = "Data avaliação : " + data_avaliacao;
+  data_avaliacao_container.textContent = "Data avaliação : " + data_avaliacao_formatada;
   indicacao_container.textContent = "Indicação : " + indicacao;
 
   observacao_container.textContent = "Observação : " + observacao;
@@ -327,5 +333,11 @@ export async function init_relatorio_page() {
     containers.at(itemAvaliacaoDados.at(i)?.sintoma_id)!.textContent = "Sim"
 
   }
+
+  const imprimir = container.querySelector<HTMLButtonElement>('#imprimir_button');
+
+  imprimir?.addEventListener('click', (MouseEvent) => {
+    window.print();
+  })
 
 }
