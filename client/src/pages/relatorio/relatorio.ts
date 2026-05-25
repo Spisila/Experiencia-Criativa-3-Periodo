@@ -4,7 +4,7 @@ import "../../components/input_boxes.css"
 
 import { supabase } from "../../lib/supabase"
 import { navigateTo } from '../../main';
-import { date } from 'zod';
+
 
 export async function init_relatorio_page() {
 
@@ -228,7 +228,7 @@ export async function init_relatorio_page() {
 
   const score_total = relatorioDados?.at(0).score_final;
 
-  let indicacao = ""
+  let indicacao = "Nenhuma"
 
   if (sexo == "masculino" && score_total > 0.56) {
     indicacao = "Fazer teste genetico";

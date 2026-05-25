@@ -7,7 +7,7 @@ import { navigateTo } from '../../main';
 import { UserPlus } from 'lucide-static';
 
 interface Relatorio {
-  id: string;
+  relatorio_id: string;
   nome_paciente: string;
   data_nascimento: string;
   sexo: string;
@@ -343,6 +343,8 @@ export async function init_relatorios_usuario_page() {
 
 function encher_relatorios(relatorios: Relatorio[], table: HTMLTableElement) {
 
+  console.log(relatorios)
+
   for (let i = 0; i < relatorios.length; i++) {
 
     const linha = document.createElement('tr');
@@ -376,7 +378,7 @@ function encher_relatorios(relatorios: Relatorio[], table: HTMLTableElement) {
     botao_abrir_relatorio.className = "base_table_button"
 
     botao_abrir_relatorio.addEventListener('click', (_MouseEvent) => {
-      ir_relatorio_especifico(relatorios.at(i)!.id)
+      ir_relatorio_especifico(relatorios.at(i)!.relatorio_id)
     })
 
     table.appendChild(linha)
