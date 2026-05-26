@@ -43,88 +43,419 @@ export async function init_relatorios_admin_page() {
 
         <div class="reports_list_container">
 
-          <table class="reports_table">
+          <table class="reports_table" id="reports_table">
 
             <tr class="reports_table_header">
+              <td class="reports_table_header_cell" style="display: flex; justify-content: left; align-items: center; text-align:center">
+
+                <div class="header_cell_title_button_container">
+
+                  <div class="header_cell_title">
+                    Nome do Paciente
+                  </div>
+  
+                  <div class="header_cell_button">
+                    <button id="sort_by_patient_name_button" class="base_table_button" style="max-width: 30px; min-width: 30px; margin-right: 5px;">
+                      <img class="icon_image" src="/node_modules/lucide-static/icons/arrow-up-down.svg" alt="Paciente"
+                        style="height: 100%;  " />
+                    </button>
+                  </div>
+                
+                </div>
+
+
+              </td>
+
               <td class="reports_table_header_cell">
-                Nome do Paciente
+
+                <div class="header_cell_title_button_container">
+
+                  <div class="header_cell_title">
+                    Nome do Medico
+                  </div>
+  
+                  <div class="header_cell_button">
+                    <button id="sort_by_doctor_name_button" class="base_table_button" style="max-width: 30px; min-width: 30px; margin-right: 5px;">
+                      <img class="icon_image" src="/node_modules/lucide-static/icons/arrow-up-down.svg" alt="Paciente"
+                        style="height: 100%;  " />
+                    </button>
+                  </div>
+                
+                </div>
+
+
+              </td>
+
+
+              <td class="reports_table_header_cell">
+                
+                <div class="header_cell_title_button_container">
+
+                  <div class="header_cell_title">
+                    Data de nascimento
+                  </div>
+  
+                  <div class="header_cell_button">
+                    <button id="sort_by_date_of_birth_button" class="base_table_button" style="max-width: 30px; min-width: 30px; margin-right: 5px;">
+                      <img class="icon_image" src="/node_modules/lucide-static/icons/arrow-up-down.svg" alt="Paciente"
+                        style="height: 100%;  " />
+                    </button>
+                  </div>
+                
+                </div>
+
               </td>
               <td class="reports_table_header_cell">
-                Nome do Medico
+                
+                <div class="header_cell_title_button_container">
+
+                  <div class="header_cell_title">
+                    Sexo
+                  </div>
+  
+                  <div class="header_cell_button">
+                    <button id="sort_by_sex_button" class="base_table_button" style="max-width: 30px; min-width: 30px; margin-right: 5px;">
+                      <img class="icon_image" src="/node_modules/lucide-static/icons/arrow-up-down.svg" alt="Paciente"
+                        style="height: 100%; " />
+                    </button>
+                  </div>
+                
+                </div>
+
               </td>
               <td class="reports_table_header_cell">
-                Data de nascimento
+                
+                <div class="header_cell_title_button_container">
+
+                  <div class="header_cell_title">
+                    Data avaliação
+                  </div>
+  
+                  <div class="header_cell_button">
+                    <button id="sort_by_avaliacao_date_button" class="base_table_button" style="max-width: 30px; min-width: 30px; margin-right: 5px;">
+                      <img class="icon_image" src="/node_modules/lucide-static/icons/arrow-up-down.svg" alt="Paciente"
+                        style="height: 100%;  " />
+                    </button>
+                  </div>
+                
+                </div>
+
               </td>
               <td class="reports_table_header_cell">
-                Sexo
-              </td>
-              <td class="reports_table_header_cell">
-                Avaliação data
-              </td>
-              <td class="reports_table_header_cell">
-                Score total
+                <div class="header_cell_title_button_container">
+
+                  <div class="header_cell_title">
+                    Score total
+                  </div>
+  
+                  <div class="header_cell_button">
+                    <button id="sort_by_total_score_button" class="base_table_button" style="width: 30%; margin-right: 5px;">
+                      <img class="icon_image" src="/node_modules/lucide-static/icons/arrow-up-down.svg" alt="Paciente"
+                        style="height: 100%;" />
+                    </button>
+                  </div>
+                
+                </div>
               </td>
               <td class="reports_table_header_cell" colspan="2">
-                Botoes
+                Abrir
               </td>
             </tr>
-
-            <tr class="reports_table_row">
-              <td class="reports_table_cell">
-                Paciente 1
-              </td>
-              <td class="reports_table_cell">
-                Medico 1
-              </td>
-              <td class="reports_table_cell">
-                dd/mm/YYYY
-              </td>
-              <td class="reports_table_cell">
-                Masculino
-              </td>
-              <td class="reports_table_cell">
-                dd/mm/YYYY
-              </td>
-              <td class="reports_table_cell">
-                1.85
-              </td>
-              <td class="reports_table_cell">
-                <button class="base_table_button">Abrir</button>
-              </td>
-            </tr>
-
-            <tr class="reports_table_row">
-              <td class="reports_table_cell">
-                Paciente 1
-              </td>
-              <td class="reports_table_cell">
-                Medico 1
-              </td>
-              <td class="reports_table_cell">
-                dd/mm/YYYY
-              </td>
-              <td class="reports_table_cell">
-                Masculino
-              </td>
-              <td class="reports_table_cell">
-                dd/mm/YYYY
-              </td>
-              <td class="reports_table_cell">
-                1.85
-              </td>
-              <td class="reports_table_cell">
-                <button class="base_table_button">Abrir</button>
-              </td>
-            </tr>
-
-            
+      
           </table>
 
         </div>
 
       </div>
   
-
   `
+
+  console.log("Init relatorios admin")
+
+  const { data: user_session } = await supabase.auth.getSession();
+  
+  if (!user_session) {
+    console.log("Sem seção de usuário")
+    return;
+  }
+
+  let nomes_pacientes_ascendentes= true;
+  let nomes_medicos_ascendentes= true;
+  let nascimentos_ascendentes = true;
+  let sexo_ascendentes = true;
+  let realizadas_ascendentes = true;
+  let score_ascendentes = true;
+
+  const user_id = user_session.session?.user.id
+
+  const table = container.querySelector<HTMLTableElement>('#reports_table')
+
+  if (!table) { return; }
+  console.log("ENCHER")
+  
+
+  const { data: relatorios, error: pegarRelatoriosError } = await supabase
+    .rpc('obter_todos_relatorios', {
+      ascendente: nomes_pacientes_ascendentes,
+      ordenar_por: 'nome'
+    });
+
+  if (pegarRelatoriosError) {
+    console.log("Erro ao pegar dados de relatorios")
+    console.log(pegarRelatoriosError)
+    return;
+  }
+
+  encher_relatorios(relatorios, table);
+
+  const sort_by_patient_name_button = container.querySelector<HTMLButtonElement>('#sort_by_patient_name_button');
+  const sort_by_doctor_name_button = container.querySelector<HTMLButtonElement>('#sort_by_doctor_name_button');
+  const sort_by_date_of_birth_button = container.querySelector<HTMLButtonElement>('#sort_by_date_of_birth_button');
+  const sort_by_sex_button = container.querySelector<HTMLButtonElement>('#sort_by_sex_button');
+  const sort_by_avaliacao_date_button = container.querySelector<HTMLButtonElement>('#sort_by_avaliacao_date_button');
+  const sort_by_total_score_button = container.querySelector<HTMLButtonElement>('#sort_by_total_score_button');
+
+
+  sort_by_patient_name_button?.addEventListener('click', async () => {
+
+    const linhas = container.querySelectorAll('.reports_table_row')
+
+    linhas.forEach(linha => {
+      linha.remove();
+    })
+
+    const { data: relatorios, error: pegarRelatoriosError } = await supabase
+      .rpc('obter_todos_relatorios', {
+        ascendente: nomes_pacientes_ascendentes,
+        ordenar_por: 'nome'
+      });
+
+    nomes_pacientes_ascendentes= !nomes_pacientes_ascendentes;
+
+    if (pegarRelatoriosError) {
+      console.log("Erro relatorios em ordem de nome");
+      console.log(pegarRelatoriosError)
+    }
+
+    if (relatorios) {
+      encher_relatorios(relatorios, table)
+    }
+
+  });
+
+  sort_by_doctor_name_button?.addEventListener('click', async () => {
+
+    const linhas = container.querySelectorAll('.reports_table_row')
+
+    linhas.forEach(linha => {
+      linha.remove();
+    })
+
+    const { data: relatorios, error: pegarRelatoriosError } = await supabase
+      .rpc('obter_relatorios_todos', {
+        ascendente: nomes_pacientes_ascendentes,
+        ordenar_por: 'nome'
+      });
+
+    nomes_pacientes_ascendentes= !nomes_pacientes_ascendentes;
+
+    if (pegarRelatoriosError) {
+      console.log("Erro relatorios em ordem de nome");
+      console.log(pegarRelatoriosError)
+    }
+
+    if (relatorios) {
+      encher_relatorios(relatorios, table)
+    }
+
+  });
+
+  sort_by_date_of_birth_button?.addEventListener('click', async () => {
+
+    const linhas = container.querySelectorAll('.reports_table_row')
+
+    linhas.forEach(linha => {
+      linha.remove();
+    })
+
+    const { data: relatorios, error: pegarRelatoriosError } = await supabase
+      .rpc('obter_todos_relatorios', {
+        ascendente: nascimentos_ascendentes,
+        ordenar_por: 'nascimento'
+      });
+
+    nascimentos_ascendentes = !nascimentos_ascendentes;
+
+    if (pegarRelatoriosError) {
+      console.log("Erro relatorios em ordem de nascimento");
+      console.log(pegarRelatoriosError)
+    }
+
+    if (relatorios) {
+      encher_relatorios(relatorios, table)
+    }
+
+  });
+
+  sort_by_sex_button?.addEventListener('click', async () => {
+
+    const linhas = container.querySelectorAll('.reports_table_row')
+
+    linhas.forEach(linha => {
+      linha.remove();
+    })
+
+    const { data: relatorios, error: pegarRelatoriosError } = await supabase
+      .rpc('obter_todos_relatorios', {
+        ascendente: sexo_ascendentes,
+        ordenar_por: 'sexo'
+      });
+
+    sexo_ascendentes = !sexo_ascendentes;
+
+    if (pegarRelatoriosError) {
+      console.log("Erro relatorios em ordem de sexo");
+      console.log(pegarRelatoriosError)
+    }
+
+    if (relatorios) {
+      encher_relatorios(relatorios, table)
+    }
+
+  });
+
+  sort_by_avaliacao_date_button?.addEventListener('click', async () => {
+
+    const linhas = container.querySelectorAll('.reports_table_row')
+
+    linhas.forEach(linha => {
+      linha.remove();
+    })
+
+    const { data: relatorios, error: pegarRelatoriosError } = await supabase
+      .rpc('obter_todos_relatorios', {
+        ascendente: realizadas_ascendentes,
+        ordenar_por: 'realizada'
+      });
+
+    realizadas_ascendentes = !realizadas_ascendentes;
+
+    if (pegarRelatoriosError) {
+      console.log("Erro relatorios em ordem de realização");
+      console.log(pegarRelatoriosError)
+    }
+
+    if (relatorios) {
+      encher_relatorios(relatorios, table)
+    }
+
+  });
+
+  sort_by_total_score_button?.addEventListener('click', async () => {
+
+    const linhas = container.querySelectorAll('.reports_table_row')
+
+    linhas.forEach(linha => {
+      linha.remove();
+    })
+
+    const { data: relatorios, error: pegarRelatoriosError } = await supabase
+      .rpc('obter_todos_relatorios', {
+        ascendente: score_ascendentes,
+        ordenar_por: 'score'
+      });
+
+    score_ascendentes = !score_ascendentes;
+
+    if (pegarRelatoriosError) {
+      console.log("Erro relatorios em ordem de nascimento");
+      console.log(pegarRelatoriosError)
+    }
+
+    if (relatorios) {
+      encher_relatorios(relatorios, table)
+    }
+
+  });
+
+}
+
+interface Relatorio {
+  avaliacao_id: string;
+  nome_medico: string;
+  nome_paciente: string;
+  data_nascimento: string;
+  sexo: string;
+  data_avaliacao: string;
+  score_total: number;
+};
+
+
+function encher_relatorios(relatorios: Relatorio[], table: HTMLTableElement) {
+
+  console.log(relatorios)
+
+  for (let i = 0; i < relatorios.length; i++) {
+
+    const linha = document.createElement('tr');
+    linha.className = "reports_table_row"
+
+    const nome_paciente = document.createElement('td');
+    nome_paciente.textContent = relatorios.at(i)!.nome_paciente;
+    nome_paciente.className = "reports_table_cell"
+
+    const nome_medico = document.createElement('td');
+    nome_medico.textContent = relatorios.at(i)!.nome_medico;
+    nome_medico.className = "reports_table_cell"
+
+
+    const data_nascimento = document.createElement('td');
+    data_nascimento.textContent = new Date(relatorios.at(i)!.data_nascimento).toLocaleString('pt-BR');
+    data_nascimento.className = "reports_table_cell"
+
+    const sexo = document.createElement('td');
+    sexo.textContent = relatorios.at(i)!.sexo;
+    sexo.className = "reports_table_cell"
+
+    const avaliacao_data = document.createElement('td');
+    avaliacao_data.textContent = new Date(relatorios.at(i)!.data_avaliacao).toLocaleString('pt-BR');
+    avaliacao_data.className = "reports_table_cell"
+
+    const score_total = document.createElement('td');
+    score_total.textContent = relatorios.at(i)!.score_total.toString();
+    score_total.className = "reports_table_cell"
+
+    const botao_container = document.createElement('td');
+    botao_container.className = "reports_table_cell"
+
+    const botao_abrir_relatorio = document.createElement("button");
+    botao_abrir_relatorio.textContent = "Abrir"
+    botao_abrir_relatorio.className = "base_table_button"
+
+    botao_abrir_relatorio.addEventListener('click', (_MouseEvent) => {
+      ir_relatorio_especifico(relatorios.at(i)!.avaliacao_id)
+    })
+
+    table.appendChild(linha)
+
+    linha.appendChild(nome_paciente)
+    linha.appendChild(nome_medico)
+    linha.appendChild(data_nascimento)
+    linha.appendChild(sexo)
+    linha.appendChild(avaliacao_data)
+    linha.appendChild(score_total)
+
+    botao_container.appendChild(botao_abrir_relatorio)
+    linha.appendChild(botao_container)
+
+
+  }
+  
+  }
+
+function ir_relatorio_especifico(relatorio_id: string) {
+
+  navigateTo("/relatorio")
+  window.history.pushState(null, '', "/relatorio/" + relatorio_id);
 
 }
