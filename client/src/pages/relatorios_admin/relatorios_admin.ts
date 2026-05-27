@@ -254,15 +254,15 @@ export async function init_relatorios_admin_page() {
     })
 
     const { data: relatorios, error: pegarRelatoriosError } = await supabase
-      .rpc('obter_relatorios_todos', {
-        ascendente: nomes_pacientes_ascendentes,
-        ordenar_por: 'nome'
+      .rpc('obter_todos_relatorios', {
+        ascendente: nomes_medicos_ascendentes,
+        ordenar_por: 'medico'
       });
 
-    nomes_pacientes_ascendentes= !nomes_pacientes_ascendentes;
+    nomes_medicos_ascendentes= !nomes_medicos_ascendentes;
 
     if (pegarRelatoriosError) {
-      console.log("Erro relatorios em ordem de nome");
+      console.log("Erro relatorios em ordem de nome do medico");
       console.log(pegarRelatoriosError)
     }
 
