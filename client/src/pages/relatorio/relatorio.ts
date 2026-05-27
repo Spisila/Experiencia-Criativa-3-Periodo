@@ -192,8 +192,6 @@ export async function init_relatorio_page() {
 
   const { data: relatorioDados, error: getRelatorioError } = await supabase.from("avaliacao").select("*").eq("id", relatorio_id);
 
-  console.log(typeof relatorioDados)
-
   if (getRelatorioError) {
     console.log("Erro ao pegar relatorio");
     console.log(relatorioDados);
@@ -215,17 +213,11 @@ export async function init_relatorio_page() {
 
   const nome_paciente = pacienteDados?.at(0).nome;
   const data_nascimento = pacienteDados?.at(0).data_nascimento;
-
   const nascimento_formatada = new Date(data_nascimento).toLocaleDateString('pt-BR');
-
   const sexo = pacienteDados?.at(0).sexo;
-
   const nome_medico = medicoDados?.at(0).nome;
-
   const data_avaliacao = relatorioDados?.at(0).data_realizada;
-
   const data_avaliacao_formatada = new Date(data_avaliacao).toLocaleString('pt-BR');
-
   const score_total = relatorioDados?.at(0).score_final;
 
   let indicacao = "Nenhuma"

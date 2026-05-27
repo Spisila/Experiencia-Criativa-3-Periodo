@@ -54,10 +54,6 @@ export async function init_cadastro_paciente_page() {
           <button class="toggle_base_button" id="symptom_button_face_orelhas_alongadas" aria-pressed="false">
             Face/orelhas alongadas
           </button>
-          <div id="macroorquidismo_div">
-        
-
-          </div>
           <button class="toggle_base_button" id="symptom_button_macroorquidismo" aria-pressed="false">
             Macroorquidismo
           </button>
@@ -131,40 +127,40 @@ export async function init_cadastro_paciente_page() {
 
   //Remover funcoes inuteis depois
   symptomButtonDeficienciaIntelectual?.addEventListener('click', (_event) => {
-    symptomDeficienciaIntelectualPress();
+    toggle_symptom('deficiencia_intelectual', symptomButtonDeficienciaIntelectual);
   });
   symptomButtonFaceOrelhasAlongadas?.addEventListener('click', (_event) => {
-    symptomFaceOrelhasAlongadasPress();
+    toggle_symptom('face_orelhas_alongadas', symptomButtonFaceOrelhasAlongadas);
   });
   symptomButtonMacroorquidismo?.addEventListener('click', (_event) => {
-    symptomMacroorquidismoPress();
+    toggle_symptom('macroorquidismo', symptomButtonMacroorquidismo);
   });
   symptomButtonHipermobilidadeArticular?.addEventListener('click', (_event) => {
-    symptomHipermobilidadeArticularPress();
+    toggle_symptom('hipermobilidade_articular', symptomButtonHipermobilidadeArticular);
   });
   symptomButtonDificuldadeAprendizagem?.addEventListener('click', (_event) => {
-    symptomDificuldadeAprendizagemPress();
+    toggle_symptom('dificuldade_de_aprendizagem', symptomButtonDificuldadeAprendizagem);
   });
   symptomButtonDeficitAtencao?.addEventListener('click', (_event) => {
-    symptomDeficitAtencaoPress();
+    toggle_symptom('deficit_de_atenção', symptomButtonDeficitAtencao);
   });
   symptomButtonMovimentosRepetitivos?.addEventListener('click', (_event) => {
-    symptomMovimentosRepetitivosPress();
+    toggle_symptom('movimentos_repetitivos', symptomButtonMovimentosRepetitivos);
   });
   symptomButtonAtrasoFala?.addEventListener('click', (_event) => {
-    symptomAtrasoFalaPress();
+    toggle_symptom('atraso_na_fala', symptomButtonAtrasoFala);
   });
   symptomButtonHiperatividade?.addEventListener('click', (_event) => {
-    symptomHiperatividadePress();
+    toggle_symptom('hiperatividade', symptomButtonHiperatividade);
   });
   symptomButtonEvitaContatoVisual?.addEventListener('click', (_event) => {
-    symptomEvitaContatoVisualPress();
+    toggle_symptom('evita_contato_visual', symptomButtonEvitaContatoVisual);
   });
   symptomButtonEvitaContatoFisico?.addEventListener('click', (_event) => {
-    symptomEvitaContatoFisicoPress();
+    toggle_symptom('evita_contato_fisico', symptomButtonEvitaContatoFisico);
   });
   symptomButtonAgressividade?.addEventListener('click', (_event) => {
-    symptomAgressividadePress();
+    toggle_symptom('agressividade', symptomButtonAgressividade);
   });
 
   let is_male = true;
@@ -244,42 +240,6 @@ export async function init_cadastro_paciente_page() {
     }
   }
 
-  function symptomDeficienciaIntelectualPress(): void {
-    toggle_symptom('deficiencia_intelectual', symptomButtonDeficienciaIntelectual);
-  }
-  function symptomFaceOrelhasAlongadasPress(): void {
-    toggle_symptom('face_orelhas_alongadas', symptomButtonFaceOrelhasAlongadas);
-  }
-  function symptomMacroorquidismoPress(): void {
-    toggle_symptom('macroorquidismo', symptomButtonMacroorquidismo);
-  }
-  function symptomHipermobilidadeArticularPress(): void {
-    toggle_symptom('hipermobilidade_articular', symptomButtonHipermobilidadeArticular);
-  }
-  function symptomDificuldadeAprendizagemPress(): void {
-    toggle_symptom('dificuldade_de_aprendizagem', symptomButtonDificuldadeAprendizagem);
-  }
-  function symptomDeficitAtencaoPress(): void {
-    toggle_symptom('deficit_de_atencao', symptomButtonDeficitAtencao);
-  }
-  function symptomMovimentosRepetitivosPress(): void {
-    toggle_symptom('movimentos_repetitivos', symptomButtonMovimentosRepetitivos);
-  }
-  function symptomAtrasoFalaPress(): void {
-    toggle_symptom('atraso_na_fala', symptomButtonAtrasoFala);
-  }
-  function symptomHiperatividadePress(): void {
-    toggle_symptom('hiperatividade', symptomButtonHiperatividade);
-  }
-  function symptomEvitaContatoVisualPress(): void {
-    toggle_symptom('evita_contato_visual', symptomButtonEvitaContatoVisual);
-  }
-  function symptomEvitaContatoFisicoPress(): void {
-    toggle_symptom('evita_contato_fisico', symptomButtonEvitaContatoFisico);
-  }
-  function symptomAgressividadePress(): void {
-    toggle_symptom('evita_contato_fisico', symptomButtonAgressividade);
-  }
 
   const id_sintomas_selecionados: number[] = [];
 
@@ -421,7 +381,7 @@ export async function init_cadastro_paciente_page() {
       sintoma_id: sintomaId
     }));
 
-    const { data: novoItemAvaliacao, error: insertItemAvaliacaoError } = await supabase
+    const {error: insertItemAvaliacaoError } = await supabase
       .from("item_avaliacao").
       insert(
         sintomasAssociativos

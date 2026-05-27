@@ -193,22 +193,8 @@ export async function init_relatorios_admin_page() {
   const table = container.querySelector<HTMLTableElement>('#reports_table')
 
   if (!table) { return; }
-  console.log("ENCHER")
   
-
-  const { data: relatorios, error: pegarRelatoriosError } = await supabase
-    .rpc('obter_todos_relatorios', {
-      ascendente: nomes_pacientes_ascendentes,
-      ordenar_por: 'nome'
-    });
-
-  if (pegarRelatoriosError) {
-    console.log("Erro ao pegar dados de relatorios")
-    console.log(pegarRelatoriosError)
-    return;
-  }
-
-  encher_relatorios(relatorios, table);
+  relatorios_por('nome', table, realizadas_ascendentes, container);
 
   const sort_by_patient_name_button = container.querySelector<HTMLButtonElement>('#sort_by_patient_name_button');
   const sort_by_doctor_name_button = container.querySelector<HTMLButtonElement>('#sort_by_doctor_name_button');
@@ -220,163 +206,42 @@ export async function init_relatorios_admin_page() {
 
   sort_by_patient_name_button?.addEventListener('click', async () => {
 
-    const linhas = container.querySelectorAll('.reports_table_row')
-
-    linhas.forEach(linha => {
-      linha.remove();
-    })
-
-    const { data: relatorios, error: pegarRelatoriosError } = await supabase
-      .rpc('obter_todos_relatorios', {
-        ascendente: nomes_pacientes_ascendentes,
-        ordenar_por: 'nome'
-      });
-
-    nomes_pacientes_ascendentes= !nomes_pacientes_ascendentes;
-
-    if (pegarRelatoriosError) {
-      console.log("Erro relatorios em ordem de nome");
-      console.log(pegarRelatoriosError)
-    }
-
-    if (relatorios) {
-      encher_relatorios(relatorios, table)
-    }
+    relatorios_por('nome', table, nomes_pacientes_ascendentes, container);
+    nomes_pacientes_ascendentes = !nomes_pacientes_ascendentes;
 
   });
 
   sort_by_doctor_name_button?.addEventListener('click', async () => {
 
-    const linhas = container.querySelectorAll('.reports_table_row')
-
-    linhas.forEach(linha => {
-      linha.remove();
-    })
-
-    const { data: relatorios, error: pegarRelatoriosError } = await supabase
-      .rpc('obter_todos_relatorios', {
-        ascendente: nomes_medicos_ascendentes,
-        ordenar_por: 'medico'
-      });
-
-    nomes_medicos_ascendentes= !nomes_medicos_ascendentes;
-
-    if (pegarRelatoriosError) {
-      console.log("Erro relatorios em ordem de nome do medico");
-      console.log(pegarRelatoriosError)
-    }
-
-    if (relatorios) {
-      encher_relatorios(relatorios, table)
-    }
-
+    relatorios_por('medico', table, nomes_medicos_ascendentes, container);
+    nomes_medicos_ascendentes = !nomes_medicos_ascendentes;
   });
 
   sort_by_date_of_birth_button?.addEventListener('click', async () => {
 
-    const linhas = container.querySelectorAll('.reports_table_row')
-
-    linhas.forEach(linha => {
-      linha.remove();
-    })
-
-    const { data: relatorios, error: pegarRelatoriosError } = await supabase
-      .rpc('obter_todos_relatorios', {
-        ascendente: nascimentos_ascendentes,
-        ordenar_por: 'nascimento'
-      });
-
+    relatorios_por('nascimento', table, nascimentos_ascendentes, container);
     nascimentos_ascendentes = !nascimentos_ascendentes;
-
-    if (pegarRelatoriosError) {
-      console.log("Erro relatorios em ordem de nascimento");
-      console.log(pegarRelatoriosError)
-    }
-
-    if (relatorios) {
-      encher_relatorios(relatorios, table)
-    }
 
   });
 
   sort_by_sex_button?.addEventListener('click', async () => {
 
-    const linhas = container.querySelectorAll('.reports_table_row')
-
-    linhas.forEach(linha => {
-      linha.remove();
-    })
-
-    const { data: relatorios, error: pegarRelatoriosError } = await supabase
-      .rpc('obter_todos_relatorios', {
-        ascendente: sexo_ascendentes,
-        ordenar_por: 'sexo'
-      });
-
+    relatorios_por('sexo', table, sexo_ascendentes, container);
     sexo_ascendentes = !sexo_ascendentes;
-
-    if (pegarRelatoriosError) {
-      console.log("Erro relatorios em ordem de sexo");
-      console.log(pegarRelatoriosError)
-    }
-
-    if (relatorios) {
-      encher_relatorios(relatorios, table)
-    }
 
   });
 
   sort_by_avaliacao_date_button?.addEventListener('click', async () => {
 
-    const linhas = container.querySelectorAll('.reports_table_row')
-
-    linhas.forEach(linha => {
-      linha.remove();
-    })
-
-    const { data: relatorios, error: pegarRelatoriosError } = await supabase
-      .rpc('obter_todos_relatorios', {
-        ascendente: realizadas_ascendentes,
-        ordenar_por: 'realizada'
-      });
-
+    relatorios_por('realizada', table, realizadas_ascendentes, container);
     realizadas_ascendentes = !realizadas_ascendentes;
-
-    if (pegarRelatoriosError) {
-      console.log("Erro relatorios em ordem de realização");
-      console.log(pegarRelatoriosError)
-    }
-
-    if (relatorios) {
-      encher_relatorios(relatorios, table)
-    }
 
   });
 
   sort_by_total_score_button?.addEventListener('click', async () => {
 
-    const linhas = container.querySelectorAll('.reports_table_row')
-
-    linhas.forEach(linha => {
-      linha.remove();
-    })
-
-    const { data: relatorios, error: pegarRelatoriosError } = await supabase
-      .rpc('obter_todos_relatorios', {
-        ascendente: score_ascendentes,
-        ordenar_por: 'score'
-      });
-
+    relatorios_por('score_final', table, score_ascendentes, container);
     score_ascendentes = !score_ascendentes;
-
-    if (pegarRelatoriosError) {
-      console.log("Erro relatorios em ordem de nascimento");
-      console.log(pegarRelatoriosError)
-    }
-
-    if (relatorios) {
-      encher_relatorios(relatorios, table)
-    }
 
   });
 
@@ -429,7 +294,6 @@ export async function init_relatorios_admin_page() {
       }
     }
 
-  
   }
 
 });
@@ -505,6 +369,29 @@ function encher_relatorios(relatorios: Relatorio[], table: HTMLTableElement) {
 
   }
   
+}
+
+async function relatorios_por(ordenar_por: string, table: HTMLTableElement, ascendente: boolean, container: HTMLDivElement) {
+  
+  const linhas = container.querySelectorAll('.reports_table_row')
+
+  linhas.forEach(linha => {
+    linha.remove();
+  })
+  
+  const { data: relatorios, error: pegarRelatoriosError } = await supabase
+  .rpc('obter_todos_relatorios', {
+    ascendente: ascendente,
+    ordenar_por: ordenar_por
+  });
+
+  if (pegarRelatoriosError) {
+    console.log("Erro ao pegar dados de relatorios")
+    console.log(pegarRelatoriosError)
+    return;
+  }
+
+  encher_relatorios(relatorios, table);
 }
 
 function ir_relatorio_especifico(relatorio_id: string) {
