@@ -19,9 +19,11 @@ export async function init_relatorios_admin_page() {
 
         <div class="search_and_pages_container">
 
-          <img class="icon_image" src="/node_modules/lucide-static/icons/book-search.svg" alt="Pesquisar relatorios"
-            style="height: 60%; margin-left: 10px; margin-right: 10px;" />
-          <input class="base_input_text" type="text" placeholder="Pesquisar">
+          <input id="search_bar" class="base_input_text" type="text" placeholder="Pesquisar Nome ou CPF" style="margin-left: 10px;">
+          <button class="base_table_button" id="search_button" title="Pesquisar" style="height: 50px; width: 75px; margin-left: 10px">
+            <img class="icon_image" src="/node_modules/lucide-static/icons/file-search-corner.svg"
+              style="height: 80%; width: auto;" alt="">
+          </button>
 
           <div class="report_pages_container">
 
@@ -378,7 +380,59 @@ export async function init_relatorios_admin_page() {
 
   });
 
-}
+  const search_input = container.querySelector<HTMLButtonElement>('#search_bar');
+  const search_button = container.querySelector<HTMLButtonElement>('#search_button');
+  
+  search_button?.addEventListener('click', async (_MouseEvent) => {
+  if (search_input?.value) {
+
+    console.log("Pesquisando por: " + search_input.value)
+
+    const { data: pacienteBuscado, error: pegarPacienteBuscadoError } = await supabase
+      .from('paciente').select('id').or(`nome.ilike.${search_input.value}%, cpf.ilike.${search_input.value}%`);
+
+    if (pegarPacienteBuscadoError) {
+      console.log("Erro ao pesquisar paciente")
+      console.log(pegarPacienteBuscadoError)
+      return;
+    }
+
+    if (!pacienteBuscado || pacienteBuscado.length === 0) {
+      console.log("Nenhum paciente encontrado com esse nome ou cpf")
+      return;
+    }
+
+    const linhas = container.querySelectorAll('.reports_table_row')
+
+    linhas.forEach(linha => {
+      linha.remove();
+    })
+
+    console.log(pacienteBuscado)
+
+    for (let i = 0; i < pacienteBuscado.length; i++) {
+
+      const { data: relatoriosBuscados, error: pegarRelatoriosError } = await supabase
+      .rpc('obter_relatorios_do_paciente', {
+        paciente_id_param: pacienteBuscado.at(i)!.id,
+        ascendente: true,
+        ordenar_por: 'nome'
+      });
+
+      if (pegarRelatoriosError) {
+        console.log("Erro relatorios buscados por paciente");
+        console.log(pegarRelatoriosError)
+      }
+
+      if (relatoriosBuscados) {
+        encher_relatorios(relatoriosBuscados, table)
+      }
+    }
+
+  
+  }
+
+});
 
 interface Relatorio {
   avaliacao_id: string;
@@ -387,7 +441,7 @@ interface Relatorio {
   data_nascimento: string;
   sexo: string;
   data_avaliacao: string;
-  score_total: number;
+  score_final: number;
 };
 
 
@@ -422,7 +476,7 @@ function encher_relatorios(relatorios: Relatorio[], table: HTMLTableElement) {
     avaliacao_data.className = "reports_table_cell"
 
     const score_total = document.createElement('td');
-    score_total.textContent = relatorios.at(i)!.score_total.toString();
+    score_total.textContent = relatorios.at(i)!.score_final.toString();
     score_total.className = "reports_table_cell"
 
     const botao_container = document.createElement('td');
@@ -451,11 +505,12 @@ function encher_relatorios(relatorios: Relatorio[], table: HTMLTableElement) {
 
   }
   
-  }
+}
 
 function ir_relatorio_especifico(relatorio_id: string) {
 
   navigateTo("/relatorio")
   window.history.pushState(null, '', "/relatorio/" + relatorio_id);
 
+}
 }

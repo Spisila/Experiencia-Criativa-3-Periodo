@@ -58,8 +58,8 @@
 
 .reports_table {
   width: 100%;
-  min-height: 2rem;
-  max-height: 2rem;
+  min-height: 3rem;
+  max-height: 3rem;
 
 
   background-color: var(--card-border)
