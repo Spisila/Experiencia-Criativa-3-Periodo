@@ -10,7 +10,6 @@ import { init_cadastro_paciente_page } from './pages/cadastro_paciente/cadastro_
 import { init_opcoes_usuario_page } from './pages/opcoes_usuario/opcoes_usuario.ts';
 import { init_opcoes_admin_page } from './pages/opcoes_admin/opcoes_admin.ts';
 
-import { init_lista_usuarios_page } from './pages/lista_usuarios/lista_usuarios.ts';
 import { init_lista_pacientes_page } from './pages/lista_pacientes/lista_pacientes.ts';
 
 import { init_relatorios_admin_page } from './pages/relatorios_admin/relatorios_admin.ts';
@@ -51,7 +50,6 @@ const Paginas: Pagina[] = [
   { path: '/opcoes_admin', init: init_opcoes_admin_page, perfil_necessario: "administrador", titulo: "OPÇÕES DO ADMINISTRADOR" },
 
   { path: '/lista_pacientes', init: init_lista_pacientes_page, perfil_necessario: "medico", titulo: "LISTA DE PACIENTES" },
-  { path: '/lista_usuarios', init: init_lista_usuarios_page, perfil_necessario: "administrador", titulo: "LISTA DE USUARIOS" },
 
   { path: '/relatorios_usuario', init: init_relatorios_usuario_page, perfil_necessario: "medico", titulo: "RELATORIOS DO USUARIO" },
   { path: '/relatorios_admin', init: init_relatorios_admin_page, perfil_necessario: "administrador", titulo: "RELATORIOS DO ADMINISTRADOR" },
