@@ -99,26 +99,20 @@ export async function init_lista_usuarios_page() {
 
   `
 
-
   const register_button = container.querySelector<HTMLButtonElement>('#register');
 
   const email_input = container.querySelector<HTMLInputElement>('#email');
   const password_input = container.querySelector<HTMLInputElement>('#password');
 
-  register_button?.addEventListener('click', (_event) => {
-    register_button_press();
-  })
-
-  async function register_button_press() {
+  register_button?.addEventListener('click', async (_event) => {
 
     let email = email_input?.value
     let password = password_input?.value
-
+  
     if (!email || !password) {
       return;
     }
-
-
+  
     const { data, error } = await supabase.auth.signUp({
       email: email,
       password: password,
@@ -128,17 +122,16 @@ export async function init_lista_usuarios_page() {
         }
       }
     })
-
+  
     if (error) {
       console.log("ERRO = " + error);
       return;
     }
-
+  
     if (data) {
       console.log("Cadastro de admin");
     }
-
-  }
-
+  })
 
 }
+

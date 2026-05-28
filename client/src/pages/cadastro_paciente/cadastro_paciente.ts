@@ -27,7 +27,6 @@ export async function init_cadastro_paciente_page() {
             <input class="base_input_text" placeholder="Observação" id="observation">
 
           </div>
-
           
           <div class="patient_sex_container">
         
@@ -96,7 +95,6 @@ export async function init_cadastro_paciente_page() {
   const cpf_input = container.querySelector<HTMLInputElement>('#cpf');
   const birth_day_input = container.querySelector<HTMLInputElement>('#birth_date');
   const observation_input = container.querySelector<HTMLInputElement>('#observation');
-  // Adicionar observacao
 
   const toggleMaleButton = container.querySelector<HTMLButtonElement>('#toggle_male');
   const toggleFemaleButton = container.querySelector<HTMLButtonElement>('#toggle_female');

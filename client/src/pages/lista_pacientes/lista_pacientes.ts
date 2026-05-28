@@ -35,14 +35,14 @@ export async function init_lista_pacientes_page() {
 
           <div class="report_pages_container">
 
-            <button class="icon-btn" id="btn-back" title="Pagina anterior">
+            <button class="icon-btn" id="pagina_anterior" title="Pagina anterior">
               <img class="icon_image" src="/node_modules/lucide-static/icons/arrow-left.svg"
                 style="height: 100%; width: 100%;" alt="">
             </button>
 
-            <p>1</p>
+            <p id="current_page">1</p>
 
-            <button class="icon-btn" id="btn-back" title="Proxima pagina">
+            <button class="icon-btn" id="pagina_proxima" title="Proxima pagina">
               <img class="icon_image" src="/node_modules/lucide-static/icons/arrow-right.svg"
                 style="height: 100%; width: 100%;" alt="">
             </button>
@@ -320,6 +320,19 @@ export async function init_lista_pacientes_page() {
     }
 
   })
+
+  const pagina_anterior_button = container.querySelector<HTMLButtonElement>('#pagina_anterior');
+  const pagina_proxima_button = container.querySelector<HTMLButtonElement>('#pagina_proxima');
+
+  pagina_anterior_button!.style.display = "none";
+
+  pagina_anterior_button?.addEventListener('click', async () => {
+    trocar_pagina(-1, user_id!, table, container, 'nome', nomes_ascendentes);
+  });
+
+  pagina_proxima_button?.addEventListener('click', async () => {
+    trocar_pagina(1, user_id!, table, container, 'nome', nomes_ascendentes);
+  });
   
 }
 
@@ -371,6 +384,62 @@ function encher_relatorios(paciente: Paciente[], table: HTMLTableElement) {
 
 
   }
+
+  
+}
+
+async function trocar_pagina(pagina: number, user_id: string, table: HTMLTableElement, container: HTMLDivElement, ordenar_por: string, ascendente: boolean) {
+
+  
+  const contador_pagina = container.querySelector<HTMLParagraphElement>('#current_page')
+  const antes_button = container.querySelector<HTMLButtonElement>('#pagina_anterior')
+  const proxima_button = container.querySelector<HTMLButtonElement>('#pagina_proxima')
+  
+  if (!contador_pagina) { return; }
+  const pagina_atual = parseInt(contador_pagina.textContent || "1");
+  const nova_pagina = pagina_atual + pagina;
+  
+  if (nova_pagina === 1) {
+    antes_button!.style.display = "none";
+  }
+  else {
+    antes_button!.style.display = "block";
+  }
+
+  if (nova_pagina < 1) {
+    contador_pagina.textContent = "1";
+    return;
+  }
+  contador_pagina.textContent = (nova_pagina).toString();
+
+  const linhas = container.querySelectorAll('.reports_table_row')
+
+  linhas.forEach(linha => {
+    linha.remove();
+  })
+  
+  const { data: relatorios, error: pegarRelatoriosError } = await supabase
+    .rpc('obter_pacientes_do_usuario', {
+      medico_id_param: user_id,
+      ascendente: ascendente,
+      ordenar_por: ordenar_por,
+      pagina: nova_pagina,
+    });
+
+  if (pegarRelatoriosError) {
+    console.log("Erro ao pegar dados de relatorios")
+    console.log(pegarRelatoriosError)
+    return;
+  }
+
+  if (relatorios.length < 24) { 
+    proxima_button!.style.display = "none";
+  }
+  else {
+    proxima_button!.style.display = "block";
+  }
+
+  encher_relatorios(relatorios, table);
 
 }
 

@@ -41,28 +41,18 @@ export function init_opcoes_usuario_page() {
   const cadastrar_paciente_button = container.querySelector<HTMLButtonElement>("#cadastrar_paciente_button")
 
   relatorios_button?.addEventListener('click', (_event) => {
-    relatorios_button_press();
+    navigateTo('/relatorios_usuario')
   });
 
   pacientes_usuario_button?.addEventListener('click', (_event) => {
-    pacientes_usuario_button_press();
+    navigateTo('/lista_pacientes')
   });
 
   cadastrar_paciente_button?.addEventListener('click', (_event) => {
-    cadastrar_paciente_button_press();
+    navigateTo('/cadastro_paciente')
   })
 
-  function relatorios_button_press() {
-    navigateTo('/relatorios_usuario')
-  }
 
-  function cadastrar_paciente_button_press() {
-    navigateTo('cadastro_paciente')
-  }
-
-  function pacientes_usuario_button_press() {
-    navigateTo('/lista_pacientes')
-  }
 
 }
 

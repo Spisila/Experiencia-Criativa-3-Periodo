@@ -38,28 +38,18 @@ export function init_opcoes_admin_page() {
   const cadastrar_admin_button = container.querySelector<HTMLInputElement>('#cadastrar_admin_btn');
 
   relatorios_button?.addEventListener('click', (_event) => {
-    relatorios_button_press();
+    navigateTo("/relatorios_admin");
   })
 
   usuarios_button?.addEventListener('click', (_event) => {
-    usuarios_button_press();
+    navigateTo("/cadastro_medico");
   })
 
   cadastrar_admin_button?.addEventListener('click', (_event) => {
-    cadastrar_admin_press();
+    navigateTo("/cadastro_admin");
   })
 
-  function relatorios_button_press() {
-    navigateTo("/relatorios_admin");
-  }
 
-  function usuarios_button_press() {
-    navigateTo("/cadastro_medico");
-  }
-
-  function cadastrar_admin_press() {
-    navigateTo("/cadastro_admin");
-  }
 }
 
 

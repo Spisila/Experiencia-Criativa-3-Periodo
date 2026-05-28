@@ -4,7 +4,6 @@ import "../../components/input_boxes.css"
 
 import { supabase } from "../../lib/supabase"
 
-
 export async function init_cadastro_medico_page() {
 
   const container = document.querySelector<HTMLDivElement>('#app');
@@ -54,7 +53,7 @@ export async function init_cadastro_medico_page() {
 
   async function register_button_press() {
 
-    let name = cpf_input?.value
+    let name = name_input?.value
     let cpf = cpf_input?.value
     let email = email_input?.value
     let password = password_input?.value
