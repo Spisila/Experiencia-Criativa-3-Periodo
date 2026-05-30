@@ -3,6 +3,7 @@ import "../../components/base_button.css"
 import "../../components/input_boxes.css"
 
 import { supabase } from "../../lib/supabase"
+import { trigger_notification_popup } from '../../components/notification_popup';
 
 export async function init_cadastro_admin_page() {
 
@@ -29,7 +30,6 @@ export async function init_cadastro_admin_page() {
       </div>
 
     </div>
-  
 
   `
 
@@ -53,7 +53,7 @@ export async function init_cadastro_admin_page() {
     let password = password_input?.value;
 
     if (!name || !cpf || !email || !password) {
-      window.alert("Prencha todos os campos");
+      trigger_notification_popup("Preencha todos os campos");
       return;
     }
 
@@ -70,11 +70,13 @@ export async function init_cadastro_admin_page() {
     })
 
     if (error) {
+      trigger_notification_popup("Erro ao cadastrar administrador");
       console.log("ERRO = " + error);
       return;
     }
 
     if (data) {
+      trigger_notification_popup("Administrador cadastrado com sucesso");
       console.log("Cadastro de admin");
     }
 

@@ -4,6 +4,7 @@ import "../../components/input_boxes.css"
 
 import { supabase } from "../../lib/supabase"
 import { sintomas_atuais_masculinas, sintomas_atuais_feminino } from '../../lib/sintoma_pesos'
+import { trigger_notification_popup } from '../../components/notification_popup'
 
 export async function init_cadastro_paciente_page() {
 
@@ -241,7 +242,6 @@ export async function init_cadastro_paciente_page() {
 
   const id_sintomas_selecionados: number[] = [];
 
-  // Inverti os pesos
   async function cadastrarButtonPress() {
 
     const nome = name_input?.value;
@@ -251,36 +251,39 @@ export async function init_cadastro_paciente_page() {
 
     let score = 0;
 
-    if (nome && data_nascimento && cpf) {
+    if (!nome || !cpf || !data_nascimento) {
+      trigger_notification_popup("Preencha os campos obrigatórios");
+      return;
+    }
 
-      const sintomas_selecionados = Object.keys(temSintomas)
+    const sintomas_selecionados = Object.keys(temSintomas)
 
-      for (let i = 0; i < sintomas_selecionados.length; i++) {
+    for (let i = 0; i < sintomas_selecionados.length; i++) {
 
-        if (is_male == true) {
+      if (is_male == true) {
 
-          if (temSintomas[sintomas_selecionados[i]] == true) {
+        if (temSintomas[sintomas_selecionados[i]] == true) {
 
-            score += sintomas_atuais_masculinas[sintomas_selecionados[i]];
+          score += sintomas_atuais_masculinas[sintomas_selecionados[i]];
 
-            id_sintomas_selecionados.push(i)
+          id_sintomas_selecionados.push(i)
 
-          }
+        }
 
-        } else {
+      } else {
 
-          if (temSintomas[sintomas_selecionados[i]] == true) {
+        if (temSintomas[sintomas_selecionados[i]] == true) {
 
-            score += sintomas_atuais_feminino[sintomas_selecionados[i]];
+          score += sintomas_atuais_feminino[sintomas_selecionados[i]];
 
-            id_sintomas_selecionados.push(i)
-
-          }
+          id_sintomas_selecionados.push(i)
 
         }
 
       }
-    }
+
+      }
+
 
     let sexo;    
 
@@ -326,6 +329,7 @@ export async function init_cadastro_paciente_page() {
       .single();
 
     if (insertPacienteError) {
+      trigger_notification_popup("Erro ao cadastrar paciente");
       console.log("Erro ao criar paciente");
       console.log(insertPacienteError);
       return;
@@ -352,12 +356,14 @@ export async function init_cadastro_paciente_page() {
       .single()
 
     if (insertAvaliacaoError) {
+      trigger_notification_popup("Erro ao criar avaliação");
       console.log("Erro ao criar avaliação");
       console.log(insertAvaliacaoError);
       return;
     }
 
     if (!novaAvaliacao) {
+      trigger_notification_popup("Erro ao criar avaliação");
       console.log("Avaliação não criada?");
       return;
     }
@@ -386,12 +392,15 @@ export async function init_cadastro_paciente_page() {
       )
 
     if (insertItemAvaliacaoError) {
+      trigger_notification_popup("Erro ao criar item avaliação");
       console.log("Erro ao criar item avaliação");
       console.log(insertItemAvaliacaoError);
       return;
     }
 
     console.log("Item avaliação criados");
+
+    trigger_notification_popup("Paciente cadastrado com sucesso");
 
   }
 

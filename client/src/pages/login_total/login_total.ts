@@ -7,6 +7,8 @@ import { supabase } from "../../lib/supabase"
 import { navigateTo } from '../../main'
 import { atualizar_botao_log_out } from '../../components/logout_button'
 
+import { trigger_notification_popup } from '../../components/notification_popup'
+
 export function init_login_total_page() {
 
   const container = document.querySelector<HTMLDivElement>('#app');
@@ -34,6 +36,8 @@ export function init_login_total_page() {
   const password_input = container.querySelector<HTMLInputElement>('#password');
   const login_button = container.querySelector<HTMLButtonElement>('#login_button');
 
+
+
   login_button?.addEventListener('click', e => {
     e.preventDefault()
     login_button_press();
@@ -45,6 +49,9 @@ export function init_login_total_page() {
     let password = password_input?.value;
 
     if (!email || !password) {
+
+      trigger_notification_popup("Preencha todos os campos");
+
       return;
     }
 
@@ -55,6 +62,8 @@ export function init_login_total_page() {
       if (error.code == 'invalid_credentials') {
         console.log("Email ou senha incorretos");
       }
+
+      trigger_notification_popup("Email ou senha incorretos");
 
       return;
     }

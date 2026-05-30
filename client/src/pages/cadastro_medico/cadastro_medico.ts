@@ -3,6 +3,7 @@ import "../../components/base_button.css"
 import "../../components/input_boxes.css"
 
 import { supabase } from "../../lib/supabase"
+import { trigger_notification_popup } from '../../components/notification_popup';
 
 export async function init_cadastro_medico_page() {
 
@@ -24,9 +25,6 @@ export async function init_cadastro_medico_page() {
         <input type="text" class="base_input_text" placeholder="CPF" id="cpf" />
         <input type="email" class="base_input_text" placeholder="Email" id="email" />
         <input type="password" class="base_input_text" placeholder="Senha" id="password" />
-        <div class=cadastro_status>
-          <h3 id="status">Status de cadastro<h3>
-        </div>
         <button id="register" class="base_button">Registrar</button>
 
       </div>
@@ -35,11 +33,6 @@ export async function init_cadastro_medico_page() {
   
 
   `
-  const mensagem_cadastro_feito = "Cadastro realizado";
-  const mensagem_cadastro_nao = "Erro no cadastro";
-
-  const status = container.querySelector<HTMLTextAreaElement>('#status');
-
   const register_button = container.querySelector<HTMLButtonElement>('#register');
 
   const name_input = container.querySelector<HTMLInputElement>('#name');
@@ -59,7 +52,7 @@ export async function init_cadastro_medico_page() {
     let password = password_input?.value
 
     if (!name || !cpf || !email || !password) {
-      window.alert("Preencha todos os campos");
+      trigger_notification_popup("Preencha todos os campos");
       return;
     }
 
@@ -76,18 +69,14 @@ export async function init_cadastro_medico_page() {
     })
 
     if (error) {
+      trigger_notification_popup("Erro no cadastro");
       console.log("ERRO = " + error);
-      if (status) {
-        status.textContent = mensagem_cadastro_nao;
-      }
       return;
     }
 
     if (data) {
+      trigger_notification_popup("Médico cadastrado com sucesso");
       console.log("Cadastro de usuario");
-      if (status) {
-        status.textContent = mensagem_cadastro_feito;
-      }
     }
 
 

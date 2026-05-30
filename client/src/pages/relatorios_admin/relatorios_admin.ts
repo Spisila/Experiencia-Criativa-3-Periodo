@@ -172,8 +172,6 @@ export async function init_relatorios_admin_page() {
   
   `
 
-  console.log("Init relatorios admin")
-
   const { data: user_session } = await supabase.auth.getSession();
   
   if (!user_session) {
@@ -187,8 +185,6 @@ export async function init_relatorios_admin_page() {
   let sexo_ascendentes = true;
   let realizadas_ascendentes = true;
   let score_ascendentes = true;
-
-  const user_id = user_session.session?.user.id
 
   const table = container.querySelector<HTMLTableElement>('#reports_table')
 
@@ -326,9 +322,7 @@ interface Relatorio {
 
 
 function encher_relatorios(relatorios: Relatorio[], table: HTMLTableElement) {
-
-  console.log(relatorios)
-
+  
   for (let i = 0; i < relatorios.length; i++) {
 
     const linha = document.createElement('tr');
