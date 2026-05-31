@@ -273,6 +273,13 @@ export async function init_cadastro_paciente_page() {
       return;
     }
 
+    const { data: cpf_exists } = await supabase.from('paciente').select('cpf').eq('cpf', cpf).single();
+
+    if (cpf_exists) {
+      trigger_notification_popup("CPF já cadastrado");
+      return;
+    }
+
     const sintomas_selecionados = Object.keys(temSintomas)
 
     for (let i = 0; i < sintomas_selecionados.length; i++) {

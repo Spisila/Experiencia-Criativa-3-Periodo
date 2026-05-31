@@ -236,7 +236,7 @@ export async function init_relatorios_admin_page() {
 
   sort_by_total_score_button?.addEventListener('click', async () => {
 
-    relatorios_por('score_final', table, score_ascendentes, container);
+    relatorios_por('score', table, score_ascendentes, container);
     score_ascendentes = !score_ascendentes;
 
   });

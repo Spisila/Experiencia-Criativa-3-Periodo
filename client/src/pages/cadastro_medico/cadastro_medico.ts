@@ -74,6 +74,13 @@ export async function init_cadastro_medico_page() {
       return;
     }
 
+    const { data: cpf_exists } = await supabase.from('usuario').select('cpf').eq('cpf', cpf).single();
+
+    if (cpf_exists) {
+      trigger_notification_popup("CPF já cadastrado");
+      return;
+    }
+
     try {
 
       const { data: sessionData } = await supabase.auth.getSession();
