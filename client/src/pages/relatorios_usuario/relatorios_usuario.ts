@@ -212,7 +212,7 @@ export async function init_relatorios_usuario_page() {
 
   sort_by_total_score_button?.addEventListener('click', async () => {
 
-    relatorios_por('score_final', user_id!, table, score_ascendentes, container);
+    relatorios_por('score', user_id!, table, score_ascendentes, container);
     score_ascendentes = !score_ascendentes;
   });
 
@@ -220,9 +220,20 @@ export async function init_relatorios_usuario_page() {
   const search_button = container.querySelector<HTMLButtonElement>('#search_button');
 
   search_button?.addEventListener('click', async (_MouseEvent) => {
+
+    console.log(search_input?.value.length)
+
+    if (search_input?.value.length === 0) {
+
+      relatorios_por('nome', user_id!, table, realizadas_ascendentes, container);
+      return;
+    }
+
+
     if (search_input?.value) {
 
-      console.log("Pesquisando por: " + search_input.value)
+
+
 
       const { data: pacienteBuscado, error: pegarPacienteBuscadoError } = await supabase
         .from('paciente').select('id').or(`nome.ilike.${search_input.value}%, cpf.ilike.${search_input.value}%`);
@@ -367,15 +378,15 @@ async function relatorios_por(ordenar_por: string, user_id: string, table: HTMLT
 
 async function trocar_pagina(pagina: number, user_id: string, table: HTMLTableElement, container: HTMLDivElement, ordenar_por: string, ascendente: boolean) {
 
-  
+
   const contador_pagina = container.querySelector<HTMLParagraphElement>('#current_page')
   const antes_button = container.querySelector<HTMLButtonElement>('#pagina_anterior')
   const proxima_button = container.querySelector<HTMLButtonElement>('#pagina_proxima')
-  
+
   if (!contador_pagina) { return; }
   const pagina_atual = parseInt(contador_pagina.textContent || "1");
   const nova_pagina = pagina_atual + pagina;
-  
+
   if (nova_pagina === 1) {
     antes_button!.style.display = "none";
   }
@@ -394,7 +405,7 @@ async function trocar_pagina(pagina: number, user_id: string, table: HTMLTableEl
   linhas.forEach(linha => {
     linha.remove();
   })
-  
+
   const { data: relatorios, error: pegarRelatoriosError } = await supabase
     .rpc('obter_relatorios_ordenados', {
       medico_id_param: user_id,
@@ -409,7 +420,7 @@ async function trocar_pagina(pagina: number, user_id: string, table: HTMLTableEl
     return;
   }
 
-  if (relatorios.length < 24) { 
+  if (relatorios.length < 24) {
     proxima_button!.style.display = "none";
   }
   else {

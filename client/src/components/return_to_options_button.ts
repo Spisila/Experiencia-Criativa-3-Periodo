@@ -9,7 +9,8 @@ const show_options_button_path = [
   '/lista_pacientes',
   '/relatorios_usuario',
   '/relatorios_admin',
-  '/relatorio'
+  '/relatorio',
+  '/nova_avaliacao'
 ];
 
 export async function return_to_options() {
@@ -61,8 +62,10 @@ function atualizar_botao_voltar(estado: "escondido" | "visivel") {
 }
 
 export function should_hide_return_button(path: string) {
-    
-  if (show_options_button_path.includes(path)) {
+
+  if (show_options_button_path.includes(path)
+    || path.startsWith("/relatorio/")
+    || path.startsWith("/nova_avaliacao/")) {
     atualizar_botao_voltar("visivel");
   }
   else {

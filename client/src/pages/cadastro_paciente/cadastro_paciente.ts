@@ -126,7 +126,6 @@ export async function init_cadastro_paciente_page() {
     cadastrarButtonPress();
   });
 
-  //Remover funcoes inuteis depois
   symptomButtonDeficienciaIntelectual?.addEventListener('click', (_event) => {
     toggle_symptom('deficiencia_intelectual', symptomButtonDeficienciaIntelectual);
   });
@@ -143,7 +142,7 @@ export async function init_cadastro_paciente_page() {
     toggle_symptom('dificuldade_de_aprendizagem', symptomButtonDificuldadeAprendizagem);
   });
   symptomButtonDeficitAtencao?.addEventListener('click', (_event) => {
-    toggle_symptom('deficit_de_atenção', symptomButtonDeficitAtencao);
+    toggle_symptom('deficit_de_atencao', symptomButtonDeficitAtencao);
   });
   symptomButtonMovimentosRepetitivos?.addEventListener('click', (_event) => {
     toggle_symptom('movimentos_repetitivos', symptomButtonMovimentosRepetitivos);
@@ -419,6 +418,27 @@ export async function init_cadastro_paciente_page() {
     console.log("Item avaliação criados");
 
     trigger_notification_popup("Paciente cadastrado com sucesso");
+
+    const chaves = Object.keys(temSintomas);
+
+    for (let i = 0; i < chaves.length; i++) {
+      temSintomas[chaves[i]] = false;
+    }
+
+    id_sintomas_selecionados.length = 0;
+
+    symptomButtonDeficienciaIntelectual?.classList.remove("is_active");
+    symptomButtonFaceOrelhasAlongadas?.classList.remove("is_active");
+    symptomButtonMacroorquidismo?.classList.remove("is_active");
+    symptomButtonHipermobilidadeArticular?.classList.remove("is_active");
+    symptomButtonDificuldadeAprendizagem?.classList.remove("is_active");
+    symptomButtonDeficitAtencao?.classList.remove("is_active");
+    symptomButtonMovimentosRepetitivos?.classList.remove("is_active");
+    symptomButtonAtrasoFala?.classList.remove("is_active");
+    symptomButtonHiperatividade?.classList.remove("is_active");
+    symptomButtonEvitaContatoVisual?.classList.remove("is_active");
+    symptomButtonEvitaContatoFisico?.classList.remove("is_active");
+    symptomButtonAgressividade?.classList.remove("is_active");
 
   }
 

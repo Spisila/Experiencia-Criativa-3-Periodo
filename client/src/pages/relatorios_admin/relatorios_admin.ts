@@ -173,14 +173,14 @@ export async function init_relatorios_admin_page() {
   `
 
   const { data: user_session } = await supabase.auth.getSession();
-  
+
   if (!user_session) {
     console.log("Sem seção de usuário")
     return;
   }
 
-  let nomes_pacientes_ascendentes= true;
-  let nomes_medicos_ascendentes= true;
+  let nomes_pacientes_ascendentes = true;
+  let nomes_medicos_ascendentes = true;
   let nascimentos_ascendentes = true;
   let sexo_ascendentes = true;
   let realizadas_ascendentes = true;
@@ -189,7 +189,7 @@ export async function init_relatorios_admin_page() {
   const table = container.querySelector<HTMLTableElement>('#reports_table')
 
   if (!table) { return; }
-  
+
   relatorios_por('nome', table, realizadas_ascendentes, container);
 
   const sort_by_patient_name_button = container.querySelector<HTMLButtonElement>('#sort_by_patient_name_button');
@@ -243,8 +243,19 @@ export async function init_relatorios_admin_page() {
 
   const search_input = container.querySelector<HTMLButtonElement>('#search_bar');
   const search_button = container.querySelector<HTMLButtonElement>('#search_button');
-  
+
   search_button?.addEventListener('click', async (_MouseEvent) => {
+
+    console.log(search_input?.value.length)
+
+    if (search_input?.value.length === 0) {
+
+      console.log("Campo de pesquisa vazio, mostrando todos os relatorios")
+      relatorios_por('nome', table, realizadas_ascendentes, container);
+      return;
+
+    }
+
     if (search_input?.value) {
 
       console.log("Pesquisando por: " + search_input.value)
@@ -274,11 +285,11 @@ export async function init_relatorios_admin_page() {
       for (let i = 0; i < pacienteBuscado.length; i++) {
 
         const { data: relatoriosBuscados, error: pegarRelatoriosError } = await supabase
-        .rpc('obter_relatorios_do_paciente', {
-          paciente_id_param: pacienteBuscado.at(i)!.id,
-          ascendente: true,
-          ordenar_por: 'nome'
-        });
+          .rpc('obter_relatorios_do_paciente', {
+            paciente_id_param: pacienteBuscado.at(i)!.id,
+            ascendente: true,
+            ordenar_por: 'nome'
+          });
 
         if (pegarRelatoriosError) {
           console.log("Erro relatorios buscados por paciente");
@@ -291,7 +302,7 @@ export async function init_relatorios_admin_page() {
       }
     }
   });
-  
+
   console.log("Clicou no botao de pesquisa")
 
   const pagina_anterior_button = container.querySelector<HTMLButtonElement>('#pagina_anterior');
@@ -322,7 +333,7 @@ interface Relatorio {
 
 
 function encher_relatorios(relatorios: Relatorio[], table: HTMLTableElement) {
-  
+
   for (let i = 0; i < relatorios.length; i++) {
 
     const linha = document.createElement('tr');
@@ -378,20 +389,20 @@ function encher_relatorios(relatorios: Relatorio[], table: HTMLTableElement) {
 
 
   }
-  
+
 }
 
 async function trocar_pagina(pagina: number, table: HTMLTableElement, container: HTMLDivElement, ordenar_por: string, ascendente: boolean) {
 
-  
+
   const contador_pagina = container.querySelector<HTMLParagraphElement>('#current_page')
   const antes_button = container.querySelector<HTMLButtonElement>('#pagina_anterior')
   const proxima_button = container.querySelector<HTMLButtonElement>('#pagina_proxima')
-  
+
   if (!contador_pagina) { return; }
   const pagina_atual = parseInt(contador_pagina.textContent || "1");
   const nova_pagina = pagina_atual + pagina;
-  
+
   if (nova_pagina === 1) {
     antes_button!.style.display = "none";
   }
@@ -410,7 +421,7 @@ async function trocar_pagina(pagina: number, table: HTMLTableElement, container:
   linhas.forEach(linha => {
     linha.remove();
   })
-  
+
   const { data: relatorios, error: pegarRelatoriosError } = await supabase
     .rpc('obter_todos_relatorios', {
       ascendente: ascendente,
@@ -424,7 +435,7 @@ async function trocar_pagina(pagina: number, table: HTMLTableElement, container:
     return;
   }
 
-  if (relatorios.length < 24) { 
+  if (relatorios.length < 24) {
     proxima_button!.style.display = "none";
   }
   else {
@@ -436,18 +447,18 @@ async function trocar_pagina(pagina: number, table: HTMLTableElement, container:
 }
 
 async function relatorios_por(ordenar_por: string, table: HTMLTableElement, ascendente: boolean, container: HTMLDivElement) {
-  
+
   const linhas = container.querySelectorAll('.reports_table_row')
 
   linhas.forEach(linha => {
     linha.remove();
   })
-  
+
   const { data: relatorios, error: pegarRelatoriosError } = await supabase
-  .rpc('obter_todos_relatorios', {
-    ascendente: ascendente,
-    ordenar_por: ordenar_por
-  });
+    .rpc('obter_todos_relatorios', {
+      ascendente: ascendente,
+      ordenar_por: ordenar_por
+    });
 
   if (pegarRelatoriosError) {
     console.log("Erro ao pegar dados de relatorios")
