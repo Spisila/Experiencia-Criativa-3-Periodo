@@ -260,6 +260,8 @@ body {
 
   font-size: 1.25rem;
 
+  text-align: center;
+
   z-index: 20;
 
   transform: translate(-50%, -50%);

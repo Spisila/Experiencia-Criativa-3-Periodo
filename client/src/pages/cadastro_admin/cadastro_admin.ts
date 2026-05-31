@@ -5,6 +5,8 @@ import "../../components/input_boxes.css"
 import { supabase } from "../../lib/supabase"
 import { trigger_notification_popup } from '../../components/notification_popup';
 
+import { cadastro_usuario_schema } from '../../schemas/cadastro_usuario_schema';
+
 export async function init_cadastro_admin_page() {
 
   const container = document.querySelector<HTMLDivElement>('#app');
@@ -54,6 +56,22 @@ export async function init_cadastro_admin_page() {
 
     if (!name || !cpf || !email || !password) {
       trigger_notification_popup("Preencha todos os campos");
+      return;
+    }
+
+    const dadosFormulario = {
+      nome: name,
+      cpf: cpf,
+      email: email,
+      senha: password
+    }
+
+    const resultado = cadastro_usuario_schema.safeParse(dadosFormulario);
+
+    if (!resultado.success) {
+      const messages = resultado.error.issues.map(issue => issue.message);
+      console.log(messages[0]);
+      trigger_notification_popup(messages[0]);
       return;
     }
 

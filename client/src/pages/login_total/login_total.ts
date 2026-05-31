@@ -9,6 +9,8 @@ import { atualizar_botao_log_out } from '../../components/logout_button'
 
 import { trigger_notification_popup } from '../../components/notification_popup'
 
+import { login_schema } from '../../schemas/login_schema';
+
 export function init_login_total_page() {
 
   const container = document.querySelector<HTMLDivElement>('#app');
@@ -53,6 +55,22 @@ export function init_login_total_page() {
       trigger_notification_popup("Preencha todos os campos");
 
       return;
+    }
+
+    const dadosFormulario = {
+      email: email,
+      senha: password
+    }
+
+    const resultado = login_schema.safeParse(dadosFormulario);
+
+    if (!resultado.success) {
+
+      const messages = resultado.error.issues.map(issue => issue.message);
+      console.log(messages[0]);
+      trigger_notification_popup(messages[0]);
+      return;
+
     }
 
     const { data, error } = await supabase.auth.signInWithPassword({ email: email, password: password });

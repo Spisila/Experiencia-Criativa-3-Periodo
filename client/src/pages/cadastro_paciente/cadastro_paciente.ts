@@ -6,6 +6,8 @@ import { supabase } from "../../lib/supabase"
 import { sintomas_atuais_masculinas, sintomas_atuais_feminino } from '../../lib/sintoma_pesos'
 import { trigger_notification_popup } from '../../components/notification_popup'
 
+import { cadastro_paciente_schema } from '../../schemas/cadastro_pacientes_schema';
+
 export async function init_cadastro_paciente_page() {
 
   const container = document.querySelector<HTMLDivElement>('#app');
@@ -246,13 +248,29 @@ export async function init_cadastro_paciente_page() {
 
     const nome = name_input?.value;
     const cpf = cpf_input?.value;
-    const data_nascimento = birth_day_input?.value;
+    const data_nascimento = birth_day_input?.valueAsDate;
     const observacao = observation_input?.value;
 
     let score = 0;
 
     if (!nome || !cpf || !data_nascimento) {
       trigger_notification_popup("Preencha os campos obrigatórios");
+      return;
+    }
+
+    const dadosFormulario = {
+      nome: nome,
+      cpf: cpf,
+      data_nascimento: data_nascimento,
+      observacao: observacao
+    }
+
+    const resultado = cadastro_paciente_schema.safeParse(dadosFormulario);
+
+    if (!resultado.success) {
+      const messages = resultado.error.issues.map(issue => issue.message);
+      console.log(messages[0]);
+      trigger_notification_popup(messages[0]);
       return;
     }
 
@@ -282,10 +300,10 @@ export async function init_cadastro_paciente_page() {
 
       }
 
-      }
+    }
 
 
-    let sexo;    
+    let sexo;
 
     if (is_male == true) {
       sexo = "masculino";
@@ -385,7 +403,7 @@ export async function init_cadastro_paciente_page() {
       sintoma_id: sintomaId
     }));
 
-    const {error: insertItemAvaliacaoError } = await supabase
+    const { error: insertItemAvaliacaoError } = await supabase
       .from("item_avaliacao").
       insert(
         sintomasAssociativos
