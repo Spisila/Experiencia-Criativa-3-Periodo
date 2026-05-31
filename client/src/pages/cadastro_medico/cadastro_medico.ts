@@ -65,38 +65,53 @@ export async function init_cadastro_medico_page() {
       senha: password
     }
 
-    const resultado = cadastro_usuario_schema.safeParse(dadosFormulario);
+    const resultado_validacao = cadastro_usuario_schema.safeParse(dadosFormulario);
 
-    if (!resultado.success) {
-      const messages = resultado.error.issues.map(issue => issue.message);
+    if (!resultado_validacao.success) {
+      const messages = resultado_validacao.error.issues.map(issue => issue.message);
       console.log(messages[0]);
       trigger_notification_popup(messages[0]);
       return;
     }
 
-    const { data, error } = await supabase.auth.signUp({
-      email: email,
-      password: password,
-      options: {
-        data: {
+    try {
+
+      const { data: sessionData } = await supabase.auth.getSession();
+      const token = sessionData.session?.access_token;
+
+      if (!token) {
+        trigger_notification_popup("Usuário não autenticado");
+        return;
+      }
+
+      const response = await fetch('http://localhost:3000/api/usuarios', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          email: email,
+          password: password,
           nome: name,
           cpf: cpf,
-          perfil: "medico"
-        }
+          perfil: 'medico' 
+        })
+      });
+
+      const resultado = await response.json();
+
+      if (!response.ok) {
+        trigger_notification_popup('Erro ao cadastrar');
+        throw new Error(resultado.error || 'Erro ao cadastrar');
       }
-    })
 
-    if (error) {
-      trigger_notification_popup("Erro no cadastro");
-      console.log("ERRO = " + error);
-      return;
+      trigger_notification_popup("Usuário cadastrado com sucesso");
+
+    } catch (error) {
+      console.log(error);
+      trigger_notification_popup("Erro ao cadastrar usuário");
     }
-
-    if (data) {
-      trigger_notification_popup("Médico cadastrado com sucesso");
-      console.log("Cadastro de usuario");
-    }
-
 
   }
 

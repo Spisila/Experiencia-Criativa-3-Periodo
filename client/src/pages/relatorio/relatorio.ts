@@ -311,7 +311,7 @@ export async function init_relatorio_page() {
     macroorquidismo_container,
     hipermobilidade_articular_container,
     dificuldades_aprendizagem_container,
-    deficiencia_intelectual_container,
+    deficit_atencao_container,
     movimentos_repetitivos_container,
     atraso_fala_container,
     hiperatividade_container,
