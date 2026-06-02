@@ -30,6 +30,11 @@ export function init_opcoes_admin_page() {
         <img class="icon_image" src="/node_modules/lucide-static/icons/user-cog.svg" alt="Relatorio" style="height: 30%;" />
       </button>
 
+      <button class="big_ass_button" id="lista_usuarios_btn">
+        Lista de usuarios
+        <img class="icon_image" src="/node_modules/lucide-static/icons/user-cog.svg" alt="Relatorio" style="height: 30%;" />
+      </button>
+
     </div>
   `
 
