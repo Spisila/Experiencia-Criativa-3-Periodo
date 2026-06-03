@@ -41,6 +41,8 @@ export function init_opcoes_admin_page() {
   const relatorios_button = container.querySelector<HTMLInputElement>('#admin_relatorios_btn');
   const usuarios_button = container.querySelector<HTMLInputElement>('#admin_usuarios_btn');
   const cadastrar_admin_button = container.querySelector<HTMLInputElement>('#cadastrar_admin_btn');
+  const lista_usuarios_button = container.querySelector<HTMLInputElement>('#lista_usuarios_btn');
+
 
   relatorios_button?.addEventListener('click', (_event) => {
     navigateTo("/relatorios_admin");
@@ -54,6 +56,10 @@ export function init_opcoes_admin_page() {
     navigateTo("/cadastro_admin");
   })
 
+
+  lista_usuarios_button?.addEventListener('click', (_event) => {
+    navigateTo("/lista_usuarios");
+  })
 
 }
 

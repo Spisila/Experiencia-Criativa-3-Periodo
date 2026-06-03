@@ -5,11 +5,12 @@ import "../../components/input_boxes.css"
 import { supabase } from "../../lib/supabase"
 import { navigateTo } from '../../main';
 
-interface Usuario {
-  id: string,
-  nome_usuario: string,
-  cpf: string
-}
+import { encher_tabela_usuarios, sort_table_by_name, setup_table_sorting, setup_fill_table } from '../../components/table_functions';
+import type { Usuario, sort_table_options } from '../../components/table_functions';
+
+import { get_auth_user } from '../../components/auth_functions';
+import { search_users } from '../../components/search_bar';
+import { object } from 'zod';
 
 export async function init_lista_usuarios_page() {
 
@@ -105,112 +106,35 @@ export async function init_lista_usuarios_page() {
   
   `
 
-  const { data: user_session } = await supabase.auth.getSession();
-  
-  if (!user_session) {
-    return;
-  }
+  const user_session = await get_auth_user();
 
   let nomes_ascendentes = true;
 
-  const user_id = user_session.session?.user.id
+  const user_id = user_session!.session?.user.id
 
   const table = container.querySelector<HTMLTableElement>('#reports_table')
 
   if (!table) { return; }
 
-  const { data: usuarios, error: pegarUsuariosError } = await supabase.from('usuario').select('*').eq('permissao', 'medico');
+  const sort_name_button = container.querySelector<HTMLButtonElement>('#sort_by_user_name_button');
 
-  if (pegarUsuariosError) {
-    console.log("Erro ao pegar dados de usuarios")
-    console.log(pegarUsuariosError)
-    return;
-  }
+  setup_table_sorting({
+    button: sort_name_button,
+    fetch_data: async (nomes_ascendentes) => {
 
-  encher_relatorios(usuarios, table);
+      return await get_usuarios('nome', nomes_ascendentes)
 
-  const sort_by_user_name_button = container.querySelector<HTMLButtonElement>('#sort_by_user_name_button');
+    },
 
-  sort_by_user_name_button?.addEventListener('click', async () => {
-   
-    const linhas = container.querySelectorAll('.reports_table_row')
-    
-    linhas.forEach(linha => {
-      linha.remove();
-    })
-
-    const { data: usuarios, error: pegarUsuariosError } = await supabase
-      .rpc('obter_usuarios_ordenados', {
-        ascendente: nomes_ascendentes
-      });
-
-    nomes_ascendentes = !nomes_ascendentes;
-
-    if (pegarUsuariosError) {
-      console.log("Erro usuarios em ordem de nome");
-      console.log(pegarUsuariosError)
+    render_data: (usuarios) => {
+      setup_fill_table(usuarios, table, go_to_user_page);
     }
 
-    if (usuarios) {
-      encher_relatorios(usuarios, table)
-    }
   });
 
-  const search_input = container.querySelector<HTMLButtonElement>('#search_bar');
-  const search_button = container.querySelector<HTMLButtonElement>('#search_button');
-  
-  search_button?.addEventListener('click', async (_MouseEvent) => {
-    if (search_input?.value) {
+  const usuarios = await get_usuarios('nome', nomes_ascendentes);
 
-      console.log("Pesquisando por: " + search_input.value)
-
-      const { data: usuariosBuscados, error: pegarPacienteBuscadoError } = await supabase
-        .from('usuario').select('id').or(`nome.ilike.${search_input.value}%, cpf.ilike.${search_input.value}%`);
-
-      if (pegarPacienteBuscadoError) {
-        console.log("Erro ao pesquisar paciente")
-        console.log(pegarPacienteBuscadoError)
-        return;
-      }
-
-      if (!usuariosBuscados || usuariosBuscados.length === 0) {
-        console.log("Nenhum usuario encontrado com esse nome ou cpf")
-        return;
-      }
-
-      const linhas = container.querySelectorAll('.reports_table_row')
-
-      linhas.forEach(linha => {
-        linha.remove();
-      })
-
-      console.log(usuariosBuscados)
-
-      for (let i = 0; i < usuariosBuscados.length; i++) {
-
-        const { data: usuarioEncontrado, error: pegarUsuarioEncontradoError } = await supabase
-          .from('usuario').select('*').eq('id', usuariosBuscados.at(i)!.id).eq('permissao', 'medico').single();
-        
-        if (pegarUsuarioEncontradoError) {
-          console.log("Erro ao pegar usuario encontrado")
-          console.log(pegarUsuarioEncontradoError)  
-          continue;
-        }
-
-        if (usuarioEncontrado) {
-          const usuarioArray: Usuario[] = [{
-            id: usuarioEncontrado.id,
-            nome_usuario: usuarioEncontrado.nome,
-            cpf: usuarioEncontrado.cpf
-          }]
-         
-          encher_relatorios(usuarioArray, table);
-        }
-      }
-
-    }
-
-  })
+  setup_fill_table(usuarios, table, go_to_user_page)
 
   const pagina_anterior_button = container.querySelector<HTMLButtonElement>('#pagina_anterior');
   const pagina_proxima_button = container.querySelector<HTMLButtonElement>('#pagina_proxima');
@@ -224,49 +148,25 @@ export async function init_lista_usuarios_page() {
   pagina_proxima_button?.addEventListener('click', async () => {
     trocar_pagina(1, user_id!, table, container, 'nome', nomes_ascendentes);
   });
-  
+
 }
 
-function encher_relatorios(usuarios: Usuario[], table: HTMLTableElement) {
+async function get_usuarios<T extends object>(ordenar_por: string, ascendente: boolean): Promise<T[]> {
 
-  console.log(usuarios)
+  const { data: usuarios, error: pegarUsuariosError } = await supabase.
+    from('usuario')
+    .select('nome, cpf, id')
+    .eq('permissao', 'medico')
+    .order(ordenar_por, { ascending: ascendente });;
 
-  for (let i = 0; i < usuarios.length; i++) {
-
-    const linha = document.createElement('tr');
-    linha.className = "reports_table_row"
-
-    const nome_usuario = document.createElement('td');
-    nome_usuario.textContent = usuarios.at(i)!.nome_usuario;
-    nome_usuario.className = "reports_table_cell"
-
-    const cpf = document.createElement('td');
-    cpf.textContent = usuarios.at(i)!.cpf;
-    cpf.className = "reports_table_cell"
-
-    const botao_container = document.createElement('td');
-    botao_container.className = "reports_table_cell"
-
-    const botao_abrir_perfil_usuario = document.createElement("button");
-    botao_abrir_perfil_usuario.textContent = "Abrir"
-    botao_abrir_perfil_usuario.className = "base_table_button"
-
-    botao_abrir_perfil_usuario.addEventListener('click', () => {
-      go_to_user_page(usuarios.at(i)!.id)
-    })
-
-    table.appendChild(linha)
-
-    linha.appendChild(nome_usuario)
-    linha.appendChild(cpf)
-
-    botao_container.appendChild(botao_abrir_perfil_usuario)
-    linha.appendChild(botao_container)
-
-
+  if (pegarUsuariosError) {
+    console.log("Erro ao pegar dados de usuarios")
+    console.log(pegarUsuariosError)
+    return [];
   }
 
-  
+  return usuarios as T[];
+
 }
 
 function go_to_user_page(user_id: string) {
@@ -277,15 +177,15 @@ function go_to_user_page(user_id: string) {
 
 async function trocar_pagina(pagina: number, user_id: string, table: HTMLTableElement, container: HTMLDivElement, ordenar_por: string, ascendente: boolean) {
 
-  
+
   const contador_pagina = container.querySelector<HTMLParagraphElement>('#current_page')
   const antes_button = container.querySelector<HTMLButtonElement>('#pagina_anterior')
   const proxima_button = container.querySelector<HTMLButtonElement>('#pagina_proxima')
-  
+
   if (!contador_pagina) { return; }
   const pagina_atual = parseInt(contador_pagina.textContent || "1");
   const nova_pagina = pagina_atual + pagina;
-  
+
   if (nova_pagina === 1) {
     antes_button!.style.display = "none";
   }
@@ -304,7 +204,7 @@ async function trocar_pagina(pagina: number, user_id: string, table: HTMLTableEl
   linhas.forEach(linha => {
     linha.remove();
   })
-  
+
   const { data: relatorios, error: pegarRelatoriosError } = await supabase
     .rpc('obter_pacientes_do_usuario', {
       medico_id_param: user_id,
@@ -319,13 +219,13 @@ async function trocar_pagina(pagina: number, user_id: string, table: HTMLTableEl
     return;
   }
 
-  if (relatorios.length < 24) { 
+  if (relatorios.length < 24) {
     proxima_button!.style.display = "none";
   }
   else {
     proxima_button!.style.display = "block";
   }
 
-  encher_relatorios(relatorios, table);
+  encher_tabela_usuarios(relatorios, table, go_to_user_page);
 
 }

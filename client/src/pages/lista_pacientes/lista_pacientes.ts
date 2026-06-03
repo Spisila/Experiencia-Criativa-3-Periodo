@@ -5,13 +5,12 @@ import "../../components/input_boxes.css"
 import { supabase } from "../../lib/supabase"
 import { navigateTo } from '../../main';
 
-interface Paciente {
-  paciente_id: string,
-  nome_paciente: string,
-  data_nascimento: string,
-  sexo: string,
-  paciente_cpf: string
-}
+import { get_auth_user } from '../../components/auth_functions';
+
+import { encher_tabela_pacientes } from '../../components/table_functions';
+import type { Paciente } from '../../components/table_functions';
+
+import { setup_table_sorting, setup_fill_table, switch_page, clear_table } from '../../components/table_functions';
 
 export async function init_lista_pacientes_page() {
 
@@ -142,306 +141,236 @@ export async function init_lista_pacientes_page() {
   
   `
 
-  const { data: user_session } = await supabase.auth.getSession();
-  
-  if (!user_session) {
-    return;
-  }
+  const user_session = await get_auth_user();
 
-  let nomes_ascendentes = true;
-  let nascimentos_ascendentes = true;
-  let sexo_ascendentes = true;
-  let cpf_ascendentes = true;
+  // let nomes_ascendentes = true;
+  // let nascimentos_ascendentes = true;
+  // let sexo_ascendentes = true;
 
-  const user_id = user_session.session?.user.id
+  const user_id = String(user_session!.session?.user.id)
 
   const table = container.querySelector<HTMLTableElement>('#reports_table')
 
   if (!table) { return; }
 
-  const { data: pacientes, error: pegarRelatoriosError } = await supabase
-    .rpc('obter_pacientes_do_usuario', {
-      medico_id_param: user_id,
-      ascendente: nomes_ascendentes,
-      ordenar_por: 'nome'
-    });
 
-  if (pegarRelatoriosError) {
-    console.log("Erro ao pegar dados de relatorios")
-    console.log(pegarRelatoriosError)
-    return;
-  }
 
-  encher_relatorios(pacientes, table);
+  const pacientes = await get_pacientes('nome', true, user_id, 1);
+  const pacientes_entradas = pacientes.length;
+  // const data = await get_pacientes('nome', true, user_id, (pagina - 1) * 24, (pagina * 24) - 1);
+
+  let current_sort;
+
+
+  setup_fill_table(pacientes, table, criar_novo_atendimento);
+
+  current_sort = 'nome';
 
   const sort_by_patient_name_button = container.querySelector<HTMLButtonElement>('#sort_by_patient_name_button');
   const sort_by_date_of_birth_button = container.querySelector<HTMLButtonElement>('#sort_by_date_of_birth_button');
   const sort_by_sex_button = container.querySelector<HTMLButtonElement>('#sort_by_sex_button');
 
-  sort_by_patient_name_button?.addEventListener('click', async () => {
-
-    const linhas = container.querySelectorAll('.reports_table_row')
-
-    linhas.forEach(linha => {
-      linha.remove();
-    })
-
-    const { data: relatorios, error: pegarRelatoriosError } = await supabase
-      .rpc('obter_pacientes_do_usuario', {
-        medico_id_param: user_id,
-        ascendente: nomes_ascendentes,
-        ordenar_por: 'nome'
-      });
-
-    nomes_ascendentes = !nomes_ascendentes;
-
-    if (pegarRelatoriosError) {
-      console.log("Erro relatorios em ordem de nome");
-      console.log(pegarRelatoriosError)
-    }
-
-    if (relatorios) {
-      encher_relatorios(relatorios, table)
-    }
-
-  });
-
-  sort_by_date_of_birth_button?.addEventListener('click', async () => {
-
-    const linhas = container.querySelectorAll('.reports_table_row')
-
-    linhas.forEach(linha => {
-      linha.remove();
-    })
-
-    const { data: relatorios, error: pegarRelatoriosError } = await supabase
-      .rpc('obter_pacientes_do_usuario', {
-        medico_id_param: user_id,
-        ascendente: nascimentos_ascendentes,
-        ordenar_por: 'nascimento'
-      });
-
-    nascimentos_ascendentes = !nascimentos_ascendentes;
-
-    if (pegarRelatoriosError) {
-      console.log("Erro relatorios em ordem de nascimento");
-      console.log(pegarRelatoriosError)
-    }
-
-    if (relatorios) {
-      encher_relatorios(relatorios, table)
-    }
-
-  });
-
-  sort_by_sex_button?.addEventListener('click', async () => {
-
-    const linhas = container.querySelectorAll('.reports_table_row')
-
-    linhas.forEach(linha => {
-      linha.remove();
-    })
-
-    const { data: relatorios, error: pegarRelatoriosError } = await supabase
-      .rpc('obter_pacientes_do_usuario', {
-        medico_id_param: user_id,
-        ascendente: sexo_ascendentes,
-        ordenar_por: 'sexo'
-      });
-
-    sexo_ascendentes = !sexo_ascendentes;
-
-    if (pegarRelatoriosError) {
-      console.log("Erro relatorios em ordem de sexo");
-      console.log(pegarRelatoriosError)
-    }
-
-    if (relatorios) {
-      encher_relatorios(relatorios, table)
-    }
-
-  });
-
-
-  const search_input = container.querySelector<HTMLButtonElement>('#search_bar');
-  const search_button = container.querySelector<HTMLButtonElement>('#search_button');
-  
-  search_button?.addEventListener('click', async (_MouseEvent) => {
-    if (search_input?.value) {
-
-      console.log("Pesquisando por: " + search_input.value)
-
-      const { data: pacienteBuscado, error: pegarPacienteBuscadoError } = await supabase
-        .from('paciente').select('id').or(`nome.ilike.${search_input.value}%, cpf.ilike.${search_input.value}%`);
-
-      if (pegarPacienteBuscadoError) {
-        console.log("Erro ao pesquisar paciente")
-        console.log(pegarPacienteBuscadoError)
-        return;
-      }
-
-      if (!pacienteBuscado || pacienteBuscado.length === 0) {
-        console.log("Nenhum paciente encontrado com esse nome ou cpf")
-        return;
-      }
-
-      const linhas = container.querySelectorAll('.reports_table_row')
-
-      linhas.forEach(linha => {
-        linha.remove();
-      })
-
-      console.log(pacienteBuscado)
-
-      for (let i = 0; i < pacienteBuscado.length; i++) {
-
-        const { data: pacienteEncontrado, error: pegarPacienteEncontradoError } = await supabase
-          .from('paciente').select('*').eq('id', pacienteBuscado.at(i)!.id).single();
-        
-        if (pegarPacienteEncontradoError) {
-          console.log("Erro ao pegar paciente encontrado")
-          console.log(pegarPacienteEncontradoError)
-          continue;
-        }
-
-        if (pacienteEncontrado) {
-          const pacienteArray: Paciente[] = [{
-            paciente_id: pacienteEncontrado.id,
-            nome_paciente: pacienteEncontrado.nome,
-            data_nascimento: pacienteEncontrado.data_nascimento,
-            sexo: pacienteEncontrado.sexo,
-            paciente_cpf: pacienteEncontrado.cpf
-          }]
-         
-          encher_relatorios(pacienteArray, table);
-        }
-      }
-
-    }
-
+  sort_by_patient_name_button?.addEventListener('click', (_event) => {
+    current_sort = 'nome';
   })
+
+  sort_by_date_of_birth_button?.addEventListener('click', (_event) => {
+    current_sort = 'data_nascimento';
+  })
+
+  sort_by_sex_button?.addEventListener('click', (_event) => {
+    current_sort = 'sexo';
+  })
+
+
+  setup_table_sorting({
+    button: sort_by_patient_name_button,
+    fetch_data: async (nomes_ascendentes) => {
+      return await get_pacientes('nome', nomes_ascendentes, user_id, 1)
+    },
+    render_data: (pacientes) => {
+      setup_fill_table(pacientes, table, criar_novo_atendimento);
+    }
+  })
+
+  setup_table_sorting({
+    button: sort_by_date_of_birth_button,
+    fetch_data: async (nascimentos_ascendentes) => {
+      return await get_pacientes('data_nascimento', nascimentos_ascendentes, user_id, 1)
+    },
+    render_data: (pacientes) => {
+      setup_fill_table(pacientes, table, criar_novo_atendimento);
+    }
+  })
+
+  setup_table_sorting({
+    button: sort_by_sex_button,
+    fetch_data: async (sexo_ascendentes) => {
+      return await get_pacientes('sexo', sexo_ascendentes, user_id, 1)
+    },
+    render_data: (pacientes) => {
+      setup_fill_table(pacientes, table, criar_novo_atendimento);
+    }
+  })
+
+  let page = 1;
 
   const pagina_anterior_button = container.querySelector<HTMLButtonElement>('#pagina_anterior');
   const pagina_proxima_button = container.querySelector<HTMLButtonElement>('#pagina_proxima');
 
+  const current_page = container.querySelector<HTMLParagraphElement>('#current_page');
+
   pagina_anterior_button!.style.display = "none";
 
   pagina_anterior_button?.addEventListener('click', async () => {
-    trocar_pagina(-1, user_id!, table, container, 'nome', nomes_ascendentes);
+
+    if (page === 1) {
+      pagina_anterior_button!.style.display = "block";
+    }
+    else if (page > 1) {
+      page--;
+      pagina_anterior_button!.style.display = "none";
+      pagina_proxima_button!.style.display = "block";
+    }
+    else {
+      pagina_anterior_button!.style.display = "none";
+      pagina_proxima_button!.style.display = "block";
+    }
+
+    current_page!.textContent = page.toString();
+
+    const data = await get_pacientes('nome', true, user_id, page);
+
+    clear_table(container)
+
+    setup_fill_table(data, table, criar_novo_atendimento)
+
+
   });
 
   pagina_proxima_button?.addEventListener('click', async () => {
-    trocar_pagina(1, user_id!, table, container, 'nome', nomes_ascendentes);
+
+    page++;
+    console.log("pagina: " + page)
+
+    if (pacientes_entradas > 24) {
+      pagina_proxima_button!.style.display = "block";
+    }
+    else {
+      pagina_proxima_button!.style.display = "none";
+      pagina_anterior_button!.style.display = "block";
+    }
+
+    current_page!.textContent = page.toString();
+
+    const data = await get_pacientes('nome', true, user_id, page);
+
+    clear_table(container)
+
+    setup_fill_table(data, table, criar_novo_atendimento)
+
   });
-  
+
 }
 
-function encher_relatorios(paciente: Paciente[], table: HTMLTableElement) {
+async function get_pacientes<T extends object>(ordenar_por: string, ascendente: boolean, usuario_id: string, page: number): Promise<T[]> {
 
-  console.log(paciente)
+  const from = (page - 1) * 24
+  const to = (page * 24) - 1
 
-  for (let i = 0; i < paciente.length; i++) {
-
-    const linha = document.createElement('tr');
-    linha.className = "reports_table_row"
-
-    const nome_paciente = document.createElement('td');
-    nome_paciente.textContent = paciente.at(i)!.nome_paciente;
-    nome_paciente.className = "reports_table_cell"
-
-    const data_nascimento = document.createElement('td');
-    data_nascimento.textContent = new Date(paciente.at(i)!.data_nascimento).toLocaleString('pt-BR');
-    data_nascimento.className = "reports_table_cell"
-
-    const sexo = document.createElement('td');
-    sexo.textContent = paciente.at(i)!.sexo;
-    sexo.className = "reports_table_cell"
-
-    const cpf = document.createElement('td');
-    cpf.textContent = paciente.at(i)!.paciente_cpf;
-    cpf.className = "reports_table_cell"
-
-    const botao_container = document.createElement('td');
-    botao_container.className = "reports_table_cell"
-
-    const botao_criar_novo_relatorio = document.createElement("button");
-    botao_criar_novo_relatorio.textContent = "Abrir"
-    botao_criar_novo_relatorio.className = "base_table_button"
-
-    botao_criar_novo_relatorio.addEventListener('click', (_MouseEvent) => {
-      criar_novo_atendimento(paciente.at(i)!.paciente_id)
-    })
-
-    table.appendChild(linha)
-
-    linha.appendChild(nome_paciente)
-    linha.appendChild(data_nascimento)
-    linha.appendChild(sexo)
-    linha.appendChild(cpf)
-
-    botao_container.appendChild(botao_criar_novo_relatorio)
-    linha.appendChild(botao_container)
-
-
-  }
-
-  
-}
-
-async function trocar_pagina(pagina: number, user_id: string, table: HTMLTableElement, container: HTMLDivElement, ordenar_por: string, ascendente: boolean) {
-
-  
-  const contador_pagina = container.querySelector<HTMLParagraphElement>('#current_page')
-  const antes_button = container.querySelector<HTMLButtonElement>('#pagina_anterior')
-  const proxima_button = container.querySelector<HTMLButtonElement>('#pagina_proxima')
-  
-  if (!contador_pagina) { return; }
-  const pagina_atual = parseInt(contador_pagina.textContent || "1");
-  const nova_pagina = pagina_atual + pagina;
-  
-  if (nova_pagina === 1) {
-    antes_button!.style.display = "none";
-  }
-  else {
-    antes_button!.style.display = "block";
-  }
-
-  if (nova_pagina < 1) {
-    contador_pagina.textContent = "1";
-    return;
-  }
-  contador_pagina.textContent = (nova_pagina).toString();
-
-  const linhas = container.querySelectorAll('.reports_table_row')
-
-  linhas.forEach(linha => {
-    linha.remove();
-  })
-  
-  const { data: relatorios, error: pegarRelatoriosError } = await supabase
-    .rpc('obter_pacientes_do_usuario', {
-      medico_id_param: user_id,
-      ascendente: ascendente,
-      ordenar_por: ordenar_por,
-      pagina: nova_pagina,
-    });
+  const { data: pacientes, error: pegarRelatoriosError } = await supabase
+    .from('paciente')
+    .select('nome, data_nascimento, sexo, cpf, id')
+    .eq('usuario_id', usuario_id)
+    .order(ordenar_por, { ascending: ascendente })
+    .range(from, to)
 
   if (pegarRelatoriosError) {
-    console.log("Erro ao pegar dados de relatorios")
+    console.log("Erro ao pegar dados de usuarios")
     console.log(pegarRelatoriosError)
-    return;
+    return [];
   }
 
-  if (relatorios.length < 24) { 
-    proxima_button!.style.display = "none";
-  }
-  else {
-    proxima_button!.style.display = "block";
-  }
+  console.log("Pacientes length = " + pacientes.length)
 
-  encher_relatorios(relatorios, table);
+  ascendente = !ascendente
+
+  return pacientes as T[];
 
 }
+
+async function get_relatorios<T extends object>(ordenar_por: string, ascendente: boolean, usuario_id: string): Promise<T[]> {
+
+  const { data: relatorios, error: pegarRelatoriosError } = await supabase
+    .rpc("pegar_dados_relatorios", {
+      usuario_id: usuario_id,
+      ordenar_por: ordenar_por,
+      ascendente: ascendente
+    })
+
+  if (pegarRelatoriosError) {
+    console.log("Erro ao pegar dados de usuarios")
+    console.log(pegarRelatoriosError)
+    return [];
+  }
+
+  return relatorios as T[];
+
+}
+
+// async function trocar_pagina(pagina: number, user_id: string, table: HTMLTableElement, container: HTMLDivElement, ordenar_por: string, ascendente: boolean) {
+
+//   const contador_pagina = container.querySelector<HTMLParagraphElement>('#current_page')
+//   const antes_button = container.querySelector<HTMLButtonElement>('#pagina_anterior')
+//   const proxima_button = container.querySelector<HTMLButtonElement>('#pagina_proxima')
+
+//   if (!contador_pagina) { return; }
+//   const pagina_atual = parseInt(contador_pagina.textContent || "1");
+//   const nova_pagina = pagina_atual + pagina;
+
+//   if (nova_pagina === 1) {
+//     antes_button!.style.display = "none";
+//   }
+//   else {
+//     antes_button!.style.display = "block";
+//   }
+
+//   if (nova_pagina < 1) {
+//     contador_pagina.textContent = "1";
+//     return;
+//   }
+//   contador_pagina.textContent = (nova_pagina).toString();
+
+//   const linhas = container.querySelectorAll('.reports_table_row')
+
+//   linhas.forEach(linha => {
+//     linha.remove();
+//   })
+
+//   const { data: relatorios, error: pegarRelatoriosError } = await supabase
+//     .rpc('obter_pacientes_do_usuario', {
+//       medico_id_param: user_id,
+//       ascendente: ascendente,
+//       ordenar_por: ordenar_por,
+//       pagina: nova_pagina,
+//     });
+
+//   if (pegarRelatoriosError) {
+//     console.log("Erro ao pegar dados de relatorios")
+//     console.log(pegarRelatoriosError)
+//     return;
+//   }
+
+//   if (relatorios.length < 24) {
+//     proxima_button!.style.display = "none";
+//   }
+//   else {
+//     proxima_button!.style.display = "block";
+//   }
+
+//   encher_tabela_pacientes(relatorios, table, criar_novo_atendimento);
+
+// }
 
 function criar_novo_atendimento(paciente_id: string) {
 
