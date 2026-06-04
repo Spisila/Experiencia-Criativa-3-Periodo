@@ -153,11 +153,11 @@ export interface sort_table_options<T> {
 }
 
 
-export function setup_table_sorting<T extends object>({
-  button,
-  fetch_data,
-  render_data
-}: sort_table_options<T>) {
+export function setup_table_sorting<T extends object>(
+  button : HTMLButtonElement | null,
+  fetch_data: (ascendente: boolean) => Promise<T[] | null>,
+  render_data: (data: T[]) => void,
+) {
 
   if (!button) {
 
@@ -185,7 +185,6 @@ export function setup_table_sorting<T extends object>({
   });
 }
 
-// Recebe os dados e enche a tabela
 export function setup_fill_table<T extends object>(row: T[], table: HTMLTableElement, botao_callback: (id: string) => void) {
 
   for (let i = 0; i < row.length; i++) {
@@ -236,140 +235,81 @@ export function setup_fill_table<T extends object>(row: T[], table: HTMLTableEle
 
 }
 
-// export async function setup_pages<T extends object>(
-//   container : HTMLDivElement,
-//   fetch_data : () => Promise<T[] | null>,
-//   render_data : () => void
-// ) {
-
-//   const pagina_anterior_button = container.querySelector<HTMLButtonElement>('#pagina_anterior');
-//   const pagina_proxima_button = container.querySelector<HTMLButtonElement>('#pagina_proxima');
-  
-//   const current_page = container.querySelector<HTMLParagraphElement>('#current_page');
-  
-//   let pagina = 1;
-
-//   let current_from;
-//   let current_to;
-  
-//   pagina_anterior_button!.style.display = "none";
-  
-//   pagina_anterior_button?.addEventListener('click', async () => {
-  
-//     if (pagina === 1) {
-//       pagina_anterior_button!.style.display = "block";
-//     }
-//     else if (pagina > 1) {
-//       pagina--;
-//       pagina_anterior_button!.style.display = "none";
-//       pagina_proxima_button!.style.display = "block";
-//     }
-//     else {
-//       pagina_anterior_button!.style.display = "none";
-//       pagina_proxima_button!.style.display = "block";
-//     }
-  
-//     current_page!.textContent = pagina.toString();
-  
-//     current_from = (pagina - 1) * 24;
-//     current_to = (pagina * 24) - 1
-  
-//     const data = await get_pacientes('nome', true, user_id, current_from, current_to);
-  
-//     clear_table(container)
-  
-//     setup_fill_table(data, table, criar_novo_atendimento)
-  
-  
-//   });
-  
-//   pagina_proxima_button?.addEventListener('click', async () => {
-  
-//     pagina++;
-//     console.log("pagina: " + pagina)
-  
-//     if (pacientes_entradas > 24) {
-//       pagina_proxima_button!.style.display = "block";
-//     }
-//     else {
-//       pagina_proxima_button!.style.display = "none";
-//       pagina_anterior_button!.style.display = "block";
-//     }
-  
-//     current_page!.textContent = pagina.toString();
-  
-//     current_from = (pagina - 1) * 24;
-//     current_to = (pagina * 24) - 1
-  
-//     const data = await get_pacientes('nome', true, user_id, current_from, current_to);
-  
-//     clear_table(container)
-  
-//     setup_fill_table(data, table, criar_novo_atendimento)
-  
-//   });
-  
-// }
-
-
-
-
-// Tem que retornar um valor pro limite que vai ser passado pra outra função la
-export function switch_page(
+export function update_page<T extends object>(
   container: HTMLDivElement,
-  entries_per_page: number) {
+  current_page_number: number,
+  max_page: number,
+  fetch_data: (p: number) => Promise<T[] | null>,
+  render_data: (data: object[]) => void) {
 
-  const contador_pagina = container.querySelector<HTMLParagraphElement>('#current_page')
-  const antes_button = container.querySelector<HTMLButtonElement>('#pagina_anterior')
-  const proxima_button = container.querySelector<HTMLButtonElement>('#pagina_proxima')
+  const pagina_anterior_button = container.querySelector<HTMLButtonElement>('#pagina_anterior');
+  const pagina_proxima_button = container.querySelector<HTMLButtonElement>('#pagina_proxima');
 
-  let pagina = 1;
+  const current_page = container.querySelector<HTMLParagraphElement>('#current_page');
 
-  if (!contador_pagina) { return 0; }
+  pagina_anterior_button!.style.display = "none";
 
-  antes_button?.addEventListener('click', () => {
-    if (pagina > 1) {
-      pagina = pagina - 1;
-      contador_pagina.textContent = pagina.toString();
+  pagina_anterior_button?.addEventListener('click', async () => {
+
+    if (current_page_number === 1) {
+      pagina_anterior_button!.style.display = "block";
     }
+    else if (current_page_number > 1) {
+      current_page_number--;
+      pagina_anterior_button!.style.display = "none";
+      pagina_proxima_button!.style.display = "block";
+    }
+    else {
+      pagina_anterior_button!.style.display = "none";
+      pagina_proxima_button!.style.display = "block";
+    }
+
+    current_page!.textContent = current_page_number.toString();
+
+    clear_table(container);
+
+    const dados = await fetch_data(current_page_number)
+
+    if (dados) {
+      render_data(dados);
+    }
+
   });
 
-  proxima_button?.addEventListener('click', () => {
-    pagina = pagina + 1;
-    contador_pagina.textContent = pagina.toString();
+  pagina_proxima_button?.addEventListener('click', async () => {
+
+    current_page_number++;
+
+    if (current_page_number < max_page) {
+      pagina_proxima_button!.style.display = "block";
+    }
+    else {
+      pagina_proxima_button!.style.display = "none";
+      pagina_anterior_button!.style.display = "block";
+    }
+
+    current_page!.textContent = current_page_number.toString();
+
+    clear_table(container);
+
+    const dados = await fetch_data(current_page_number)
+
+    if (dados) {
+      render_data(dados);
+    }
+
   });
 
-  const pagina_atual = parseInt(contador_pagina.textContent || "1");
+}
 
-  const nova_pagina = pagina_atual + pagina;
+export function get_max_pages(entradas: number, entradas_por_pagina: number): number {
 
-  if (nova_pagina === 1) {
-    antes_button!.style.display = "none";
-  }
-  else {
-    antes_button!.style.display = "block";
-  }
-
-  if (nova_pagina < 1) {
-    contador_pagina.textContent = "1";
+  if (entradas == null) {
     return 0;
   }
-  contador_pagina.textContent = (nova_pagina).toString();
 
-  const linhas = container.querySelectorAll('.reports_table_row')
+  return Math.ceil(entradas / entradas_por_pagina)
 
-  linhas.forEach(linha => {
-    linha.remove();
-  })
-
-  // if (data.length < entries_per_page) {
-  //   proxima_button!.style.display = "none";
-  // }
-  // else {
-  //   proxima_button!.style.display = "block";
-  // }
-
-  return nova_pagina * entries_per_page;
 }
 
 export function clear_table(container: HTMLDivElement) {

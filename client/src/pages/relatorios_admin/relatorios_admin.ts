@@ -5,6 +5,8 @@ import "../../components/input_boxes.css"
 import { supabase } from "../../lib/supabase"
 import { navigateTo } from '../../main';
 
+import { setup_fill_table, update_page, get_max_pages, setup_table_sorting } from '../../components/table_functions';
+
 export async function init_relatorios_admin_page() {
 
   const container = document.querySelector<HTMLDivElement>('#app');
@@ -179,18 +181,18 @@ export async function init_relatorios_admin_page() {
     return;
   }
 
-  let nomes_pacientes_ascendentes = true;
-  let nomes_medicos_ascendentes = true;
-  let nascimentos_ascendentes = true;
-  let sexo_ascendentes = true;
-  let realizadas_ascendentes = true;
-  let score_ascendentes = true;
 
   const table = container.querySelector<HTMLTableElement>('#reports_table')
 
   if (!table) { return; }
 
-  relatorios_por('nome', table, realizadas_ascendentes, container);
+  const qnt = await get_entradas_todos_relatorios()
+
+  let page = 1;
+
+  let relatorios = await get_todos_relatorios('nome', true, 1);
+
+  setup_fill_table(relatorios, table, ir_relatorio_especifico);
 
   const sort_by_patient_name_button = container.querySelector<HTMLButtonElement>('#sort_by_patient_name_button');
   const sort_by_doctor_name_button = container.querySelector<HTMLButtonElement>('#sort_by_doctor_name_button');
@@ -200,265 +202,128 @@ export async function init_relatorios_admin_page() {
   const sort_by_total_score_button = container.querySelector<HTMLButtonElement>('#sort_by_total_score_button');
 
 
-  sort_by_patient_name_button?.addEventListener('click', async () => {
+  setup_table_sorting(
+    sort_by_patient_name_button,
+    (ascendente) => get_todos_relatorios('nome', ascendente, 1),
+    (dados) => setup_fill_table(dados, table, ir_relatorio_especifico)
+  )
 
-    relatorios_por('nome', table, nomes_pacientes_ascendentes, container);
-    nomes_pacientes_ascendentes = !nomes_pacientes_ascendentes;
+  setup_table_sorting(
+    sort_by_doctor_name_button,
+    (ascendente) => get_todos_relatorios('usuario', ascendente, 1),
+    (dados) => setup_fill_table(dados, table, ir_relatorio_especifico)
+  )
 
-  });
+  setup_table_sorting(
+    sort_by_date_of_birth_button,
+    (ascendente) => get_todos_relatorios('data_nascimento', ascendente, 1),
+    (dados) => setup_fill_table(dados, table, ir_relatorio_especifico)
+  )
 
-  sort_by_doctor_name_button?.addEventListener('click', async () => {
+  setup_table_sorting(
+    sort_by_sex_button,
+    (ascendente) => get_todos_relatorios('sexo', ascendente, 1),
+    (dados) => setup_fill_table(dados, table, ir_relatorio_especifico)
+  )
 
-    relatorios_por('medico', table, nomes_medicos_ascendentes, container);
-    nomes_medicos_ascendentes = !nomes_medicos_ascendentes;
-  });
+  setup_table_sorting(
+    sort_by_avaliacao_date_button,
+    (ascendente) => get_todos_relatorios('data_avaliacao', ascendente, 1),
+    (dados) => setup_fill_table(dados, table, ir_relatorio_especifico)
+  )
 
-  sort_by_date_of_birth_button?.addEventListener('click', async () => {
+  setup_table_sorting(
+    sort_by_total_score_button,
+    (ascendente) => get_todos_relatorios('score', ascendente, 1),
+    (dados) => setup_fill_table(dados, table, ir_relatorio_especifico)
+  )
 
-    relatorios_por('nascimento', table, nascimentos_ascendentes, container);
-    nascimentos_ascendentes = !nascimentos_ascendentes;
 
-  });
+  //#region SEARCH
 
-  sort_by_sex_button?.addEventListener('click', async () => {
+  // const search_input = container.querySelector<HTMLButtonElement>('#search_bar');
+  // const search_button = container.querySelector<HTMLButtonElement>('#search_button');
 
-    relatorios_por('sexo', table, sexo_ascendentes, container);
-    sexo_ascendentes = !sexo_ascendentes;
+  // search_button?.addEventListener('click', async (_MouseEvent) => {
 
-  });
+  //   console.log(search_input?.value.length)
 
-  sort_by_avaliacao_date_button?.addEventListener('click', async () => {
+  //   if (search_input?.value.length === 0) {
 
-    relatorios_por('realizada', table, realizadas_ascendentes, container);
-    realizadas_ascendentes = !realizadas_ascendentes;
+  //     console.log("Campo de pesquisa vazio, mostrando todos os relatorios")
+  //     relatorios_por('nome', table, realizadas_ascendentes, container);
+  //     return;
 
-  });
+  //   }
 
-  sort_by_total_score_button?.addEventListener('click', async () => {
+  //   if (search_input?.value) {
 
-    relatorios_por('score', table, score_ascendentes, container);
-    score_ascendentes = !score_ascendentes;
+  //     console.log("Pesquisando por: " + search_input.value)
 
-  });
+  //     const { data: pacienteBuscado, error: pegarPacienteBuscadoError } = await supabase
+  //       .from('paciente').select('id').or(`nome.ilike.${search_input.value}%, cpf.ilike.${search_input.value}%`);
 
-  const search_input = container.querySelector<HTMLButtonElement>('#search_bar');
-  const search_button = container.querySelector<HTMLButtonElement>('#search_button');
+  //     if (pegarPacienteBuscadoError) {
+  //       console.log("Erro ao pesquisar paciente")
+  //       console.log(pegarPacienteBuscadoError)
+  //       return;
+  //     }
 
-  search_button?.addEventListener('click', async (_MouseEvent) => {
+  //     if (!pacienteBuscado || pacienteBuscado.length === 0) {
+  //       console.log("Nenhum paciente encontrado com esse nome ou cpf")
+  //       return;
+  //     }
 
-    console.log(search_input?.value.length)
+  //     const linhas = container.querySelectorAll('.reports_table_row')
 
-    if (search_input?.value.length === 0) {
+  //     linhas.forEach(linha => {
+  //       linha.remove();
+  //     })
 
-      console.log("Campo de pesquisa vazio, mostrando todos os relatorios")
-      relatorios_por('nome', table, realizadas_ascendentes, container);
-      return;
+  //     console.log(pacienteBuscado)
 
-    }
+  //     for (let i = 0; i < pacienteBuscado.length; i++) {
 
-    if (search_input?.value) {
+  //       const { data: relatoriosBuscados, error: pegarRelatoriosError } = await supabase
+  //         .rpc('obter_relatorios_do_paciente', {
+  //           paciente_id_param: pacienteBuscado.at(i)!.id,
+  //           ascendente: true,
+  //           ordenar_por: 'nome'
+  //         });
 
-      console.log("Pesquisando por: " + search_input.value)
+  //       if (pegarRelatoriosError) {
+  //         console.log("Erro relatorios buscados por paciente");
+  //         console.log(pegarRelatoriosError)
+  //       }
 
-      const { data: pacienteBuscado, error: pegarPacienteBuscadoError } = await supabase
-        .from('paciente').select('id').or(`nome.ilike.${search_input.value}%, cpf.ilike.${search_input.value}%`);
+  //       if (relatoriosBuscados) {
+  //         encher_relatorios(relatoriosBuscados, table)
+  //       }
+  //     }
+  //   }
+  // });
 
-      if (pegarPacienteBuscadoError) {
-        console.log("Erro ao pesquisar paciente")
-        console.log(pegarPacienteBuscadoError)
-        return;
-      }
+  //#endregion
 
-      if (!pacienteBuscado || pacienteBuscado.length === 0) {
-        console.log("Nenhum paciente encontrado com esse nome ou cpf")
-        return;
-      }
-
-      const linhas = container.querySelectorAll('.reports_table_row')
-
-      linhas.forEach(linha => {
-        linha.remove();
-      })
-
-      console.log(pacienteBuscado)
-
-      for (let i = 0; i < pacienteBuscado.length; i++) {
-
-        const { data: relatoriosBuscados, error: pegarRelatoriosError } = await supabase
-          .rpc('obter_relatorios_do_paciente', {
-            paciente_id_param: pacienteBuscado.at(i)!.id,
-            ascendente: true,
-            ordenar_por: 'nome'
-          });
-
-        if (pegarRelatoriosError) {
-          console.log("Erro relatorios buscados por paciente");
-          console.log(pegarRelatoriosError)
-        }
-
-        if (relatoriosBuscados) {
-          encher_relatorios(relatoriosBuscados, table)
-        }
-      }
-    }
-  });
-
-  console.log("Clicou no botao de pesquisa")
-
-  const pagina_anterior_button = container.querySelector<HTMLButtonElement>('#pagina_anterior');
-  const pagina_proxima_button = container.querySelector<HTMLButtonElement>('#pagina_proxima');
-
-  pagina_anterior_button!.style.display = "none";
-
-  pagina_anterior_button?.addEventListener('click', async () => {
-    trocar_pagina(-1, table, container, 'nome', nomes_pacientes_ascendentes);
-  });
-
-  pagina_proxima_button?.addEventListener('click', async () => {
-    trocar_pagina(1, table, container, 'nome', nomes_pacientes_ascendentes);
-    console.log("Pagina proxima")
-  });
+  update_page(
+    container,
+    page,
+    get_max_pages(qnt!, 23),
+    (p) => get_todos_relatorios('nome', true, p),
+    (dados) => setup_fill_table(dados, table, ir_relatorio_especifico))
 
 }
 
-interface Relatorio {
-  avaliacao_id: string;
-  nome_medico: string;
-  nome_paciente: string;
-  data_nascimento: string;
-  sexo: string;
-  data_avaliacao: string;
-  score_final: number;
-};
+async function get_todos_relatorios(ordenar_por: string, ascendente: boolean, page: number) {
 
-
-function encher_relatorios(relatorios: Relatorio[], table: HTMLTableElement) {
-
-  for (let i = 0; i < relatorios.length; i++) {
-
-    const linha = document.createElement('tr');
-    linha.className = "reports_table_row"
-
-    const nome_paciente = document.createElement('td');
-    nome_paciente.textContent = relatorios.at(i)!.nome_paciente;
-    nome_paciente.className = "reports_table_cell"
-
-    const nome_medico = document.createElement('td');
-    nome_medico.textContent = relatorios.at(i)!.nome_medico;
-    nome_medico.className = "reports_table_cell"
-
-
-    const data_nascimento = document.createElement('td');
-    data_nascimento.textContent = new Date(relatorios.at(i)!.data_nascimento).toLocaleString('pt-BR');
-    data_nascimento.className = "reports_table_cell"
-
-    const sexo = document.createElement('td');
-    sexo.textContent = relatorios.at(i)!.sexo;
-    sexo.className = "reports_table_cell"
-
-    const avaliacao_data = document.createElement('td');
-    avaliacao_data.textContent = new Date(relatorios.at(i)!.data_avaliacao).toLocaleString('pt-BR');
-    avaliacao_data.className = "reports_table_cell"
-
-    const score_total = document.createElement('td');
-    score_total.textContent = relatorios.at(i)!.score_final.toString();
-    score_total.className = "reports_table_cell"
-
-    const botao_container = document.createElement('td');
-    botao_container.className = "reports_table_cell"
-
-    const botao_abrir_relatorio = document.createElement("button");
-    botao_abrir_relatorio.textContent = "Abrir"
-    botao_abrir_relatorio.className = "base_table_button"
-
-    botao_abrir_relatorio.addEventListener('click', (_MouseEvent) => {
-      ir_relatorio_especifico(relatorios.at(i)!.avaliacao_id)
-    })
-
-    table.appendChild(linha)
-
-    linha.appendChild(nome_paciente)
-    linha.appendChild(nome_medico)
-    linha.appendChild(data_nascimento)
-    linha.appendChild(sexo)
-    linha.appendChild(avaliacao_data)
-    linha.appendChild(score_total)
-
-    botao_container.appendChild(botao_abrir_relatorio)
-    linha.appendChild(botao_container)
-
-
-  }
-
-}
-
-async function trocar_pagina(pagina: number, table: HTMLTableElement, container: HTMLDivElement, ordenar_por: string, ascendente: boolean) {
-
-
-  const contador_pagina = container.querySelector<HTMLParagraphElement>('#current_page')
-  const antes_button = container.querySelector<HTMLButtonElement>('#pagina_anterior')
-  const proxima_button = container.querySelector<HTMLButtonElement>('#pagina_proxima')
-
-  if (!contador_pagina) { return; }
-  const pagina_atual = parseInt(contador_pagina.textContent || "1");
-  const nova_pagina = pagina_atual + pagina;
-
-  if (nova_pagina === 1) {
-    antes_button!.style.display = "none";
-  }
-  else {
-    antes_button!.style.display = "block";
-  }
-
-  if (nova_pagina < 1) {
-    contador_pagina.textContent = "1";
-    return;
-  }
-  contador_pagina.textContent = (nova_pagina).toString();
-
-  const linhas = container.querySelectorAll('.reports_table_row')
-
-  linhas.forEach(linha => {
-    linha.remove();
-  })
+  const from = (page - 1) * 24
+  const to = (page * 24) - 1
 
   const { data: relatorios, error: pegarRelatoriosError } = await supabase
-    .rpc('obter_todos_relatorios', {
-      ascendente: ascendente,
-      ordenar_por: ordenar_por,
-      pagina: nova_pagina,
-    });
-
-  if (pegarRelatoriosError) {
-    console.log("Erro ao pegar dados de relatorios")
-    console.log(pegarRelatoriosError)
-    return;
-  }
-
-  if (relatorios.length < 24) {
-    proxima_button!.style.display = "none";
-  }
-  else {
-    proxima_button!.style.display = "block";
-  }
-
-  encher_relatorios(relatorios, table);
-
-}
-
-async function relatorios_por(ordenar_por: string, table: HTMLTableElement, ascendente: boolean, container: HTMLDivElement) {
-
-  const linhas = container.querySelectorAll('.reports_table_row')
-
-  linhas.forEach(linha => {
-    linha.remove();
-  })
-
-  const { data: relatorios, error: pegarRelatoriosError } = await supabase
-    .rpc('obter_todos_relatorios', {
+    .rpc('pegar_dados_todos_relatorios', {
       ascendente: ascendente,
       ordenar_por: ordenar_por
-    });
+    }).range(from, to);
 
   if (pegarRelatoriosError) {
     console.log("Erro ao pegar dados de relatorios")
@@ -466,7 +331,24 @@ async function relatorios_por(ordenar_por: string, table: HTMLTableElement, asce
     return;
   }
 
-  encher_relatorios(relatorios, table);
+  return relatorios
+
+}
+
+async function get_entradas_todos_relatorios() {
+
+  const { count, error: pegarRelatoriosError } = await supabase
+    .from('avaliacao')
+    .select('*', { count: 'exact', head: true })
+
+  if (pegarRelatoriosError) {
+    console.log("Erro ao pegar dados de usuarios")
+    console.log(pegarRelatoriosError)
+    return 0;
+  }
+
+  return count;
+
 }
 
 function ir_relatorio_especifico(relatorio_id: string) {

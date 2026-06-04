@@ -6,7 +6,7 @@ import { supabase } from "../../lib/supabase"
 import { navigateTo } from '../../main';
 
 import { encher_tabela_usuarios, sort_table_by_name, setup_table_sorting, setup_fill_table } from '../../components/table_functions';
-import type { Usuario, sort_table_options } from '../../components/table_functions';
+import { update_page, type Usuario, type sort_table_options } from '../../components/table_functions';
 
 import { get_auth_user } from '../../components/auth_functions';
 import { search_users } from '../../components/search_bar';
@@ -118,36 +118,16 @@ export async function init_lista_usuarios_page() {
 
   const sort_name_button = container.querySelector<HTMLButtonElement>('#sort_by_user_name_button');
 
-  setup_table_sorting({
-    button: sort_name_button,
-    fetch_data: async (nomes_ascendentes) => {
-
-      return await get_usuarios('nome', nomes_ascendentes)
-
-    },
-
-    render_data: (usuarios) => {
-      setup_fill_table(usuarios, table, go_to_user_page);
-    }
-
-  });
+  setup_table_sorting(
+    sort_name_button,
+    (ascendente) => get_usuarios('nome', ascendente),
+    (usuarios) => setup_fill_table(usuarios, table, go_to_user_page)
+  );
 
   const usuarios = await get_usuarios('nome', nomes_ascendentes);
 
   setup_fill_table(usuarios, table, go_to_user_page)
 
-  const pagina_anterior_button = container.querySelector<HTMLButtonElement>('#pagina_anterior');
-  const pagina_proxima_button = container.querySelector<HTMLButtonElement>('#pagina_proxima');
-
-  pagina_anterior_button!.style.display = "none";
-
-  pagina_anterior_button?.addEventListener('click', async () => {
-    trocar_pagina(-1, user_id!, table, container, 'nome', nomes_ascendentes);
-  });
-
-  pagina_proxima_button?.addEventListener('click', async () => {
-    trocar_pagina(1, user_id!, table, container, 'nome', nomes_ascendentes);
-  });
 
 }
 
@@ -175,57 +155,3 @@ function go_to_user_page(user_id: string) {
 
 }
 
-async function trocar_pagina(pagina: number, user_id: string, table: HTMLTableElement, container: HTMLDivElement, ordenar_por: string, ascendente: boolean) {
-
-
-  const contador_pagina = container.querySelector<HTMLParagraphElement>('#current_page')
-  const antes_button = container.querySelector<HTMLButtonElement>('#pagina_anterior')
-  const proxima_button = container.querySelector<HTMLButtonElement>('#pagina_proxima')
-
-  if (!contador_pagina) { return; }
-  const pagina_atual = parseInt(contador_pagina.textContent || "1");
-  const nova_pagina = pagina_atual + pagina;
-
-  if (nova_pagina === 1) {
-    antes_button!.style.display = "none";
-  }
-  else {
-    antes_button!.style.display = "block";
-  }
-
-  if (nova_pagina < 1) {
-    contador_pagina.textContent = "1";
-    return;
-  }
-  contador_pagina.textContent = (nova_pagina).toString();
-
-  const linhas = container.querySelectorAll('.reports_table_row')
-
-  linhas.forEach(linha => {
-    linha.remove();
-  })
-
-  const { data: relatorios, error: pegarRelatoriosError } = await supabase
-    .rpc('obter_pacientes_do_usuario', {
-      medico_id_param: user_id,
-      ascendente: ascendente,
-      ordenar_por: ordenar_por,
-      pagina: nova_pagina,
-    });
-
-  if (pegarRelatoriosError) {
-    console.log("Erro ao pegar dados de relatorios")
-    console.log(pegarRelatoriosError)
-    return;
-  }
-
-  if (relatorios.length < 24) {
-    proxima_button!.style.display = "none";
-  }
-  else {
-    proxima_button!.style.display = "block";
-  }
-
-  encher_tabela_usuarios(relatorios, table, go_to_user_page);
-
-}
