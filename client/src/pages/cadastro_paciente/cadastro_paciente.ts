@@ -18,26 +18,33 @@ export async function init_cadastro_paciente_page() {
 
   container.innerHTML = /* html */`
       
-    <div class="card_container">
+    <div class="patient_sign_up_card">
 
         <div class="patient_data_input_container">
           
           <div class="patient_input_container">
         
-            <input class="base_input_text" placeholder="Nome" id="name">
-            <input class="base_input_text" placeholder="CPF" id="cpf">
-            <input class="base_input_text" placeholder="Data nascimento" type="date" id="birth_date">
-            <input class="base_input_text" placeholder="Observação" id="observation">
+            <input class="base_small_input_text" placeholder="Nome do Paciente" id="name">
+            <input class="base_small_input_text" placeholder="CPF do paciente" id="cpf">
+            <input class="base_small_input_text" placeholder="Data nascimento do paciente" type="date" id="birth_date">
+            <input class="base_small_input_text" placeholder="Nome da mãe" id="mother_name">
+            <input class="base_small_input_text" placeholder="Responsavel pelo paciente" id="responsible_name">
+            <input class="base_small_input_text" placeholder="CPF do responsavel" id="cpf_responsible">
+            <input class="base_small_input_text" placeholder="Telefone" id="phone_number">
+            <input class="base_small_input_text" placeholder="Pais" id="country">
+            <input class="base_small_input_text" placeholder="Estado" id="state">
+            <input class="base_small_input_text" placeholder="Cidade" id="city">
+            <input class="base_small_input_text" placeholder="Observação" id="observation">
 
           </div>
           
           <div class="patient_sex_container">
         
-            <button class="toggle_base_button" id="toggle_male">
+            <button class="toggle_small_base_button" id="toggle_male" >
               Masculino 
             </button> 
           
-            <button class="toggle_base_button" id="toggle_female">
+            <button class="toggle_small_base_button" id="toggle_female">
               Feminino
             </button>
           
@@ -47,6 +54,104 @@ export async function init_cadastro_paciente_page() {
             Cadastrar
           </button>
         
+        </div>
+
+        <div class="patient_extra_data_input_container"> 
+
+          <div class="yes_no_questions_container"> 
+          
+            <div class="yes_no_container"> 
+            
+              <p>Possui diagnostico de autismo</p>
+
+              <div class="yes_no_button_container">
+            
+                <button class="toggle_small_base_button" id="toggle_male" >
+                  Sim
+                </button> 
+              
+                <button class="toggle_small_base_button" id="toggle_female">
+                  Não
+                </button>
+              
+              </div>
+            
+            </div>
+
+
+            <div class="yes_no_container"> 
+            
+              <p>Possui diagnostico de autismo</p>
+
+              <div class="yes_no_button_container">
+            
+                <button class="toggle_small_base_button" id="toggle_male" >
+                  Sim
+                </button> 
+              
+                <button class="toggle_small_base_button" id="toggle_female">
+                  Não
+                </button>
+              
+              </div>
+            
+            </div>
+
+            <div class="yes_no_container"> 
+            
+              <p>Possui diagnostico de autismo</p>
+
+              <div class="yes_no_button_container">
+            
+                <button class="toggle_small_base_button" id="toggle_male" >
+                  Sim
+                </button> 
+              
+                <button class="toggle_small_base_button" id="toggle_female">
+                  Não
+                </button>
+              
+              </div>
+            
+            </div>
+
+            <div class="yes_no_container"> 
+            
+              <p>Possui diagnostico de autismo</p>
+
+              <div class="yes_no_button_container">
+            
+                <button class="toggle_small_base_button" id="toggle_male" >
+                  Sim
+                </button> 
+              
+                <button class="toggle_small_base_button" id="toggle_female">
+                  Não
+                </button>
+              
+              </div>
+            
+            </div>
+
+          </div>
+
+          <div class="photo_upload_container"> 
+          
+            <div class="photo_container">
+              Rosto frente
+            </div>
+
+            <div class="photo_container">
+              Rosto 3/4
+            </div>
+
+            <div class="photo_container">
+              Rosto Perfil
+            </div>
+
+          </div>
+          
+
         </div>
 
         <div class="symptoms_checklist_container">
