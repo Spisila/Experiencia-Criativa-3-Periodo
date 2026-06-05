@@ -6,7 +6,11 @@ import { supabase } from "../../lib/supabase"
 import { sintomas_atuais_masculinas, sintomas_atuais_feminino } from '../../lib/sintoma_pesos'
 import { trigger_notification_popup } from '../../components/notification_popup'
 
+import { get_auth_user } from '../../components/auth_functions';
+
 import { cadastro_paciente_schema } from '../../schemas/cadastro_pacientes_schema';
+
+import { switch_pair_button } from '../../components/switch_pair_button';
 
 export async function init_cadastro_paciente_page() {
 
@@ -62,15 +66,15 @@ export async function init_cadastro_paciente_page() {
           
             <div class="yes_no_container"> 
             
-              <p>Possui diagnostico de autismo</p>
+              <p>Possui diagnostico de autismo?</p>
 
               <div class="yes_no_button_container">
             
-                <button class="toggle_small_base_button" id="toggle_male" >
+                <button class="toggle_small_base_button" id="autism_diagnosis_yes" >
                   Sim
                 </button> 
               
-                <button class="toggle_small_base_button" id="toggle_female">
+                <button class="toggle_small_base_button" id="autism_diagnosis_no">
                   Não
                 </button>
               
@@ -81,15 +85,15 @@ export async function init_cadastro_paciente_page() {
 
             <div class="yes_no_container"> 
             
-              <p>Possui diagnostico de autismo</p>
+              <p>Tem irmãos?</p>
 
               <div class="yes_no_button_container">
             
-                <button class="toggle_small_base_button" id="toggle_male" >
+                <button class="toggle_small_base_button" id="has_siblings_yes" >
                   Sim
                 </button> 
               
-                <button class="toggle_small_base_button" id="toggle_female">
+                <button class="toggle_small_base_button" id="has_siblings_no">
                   Não
                 </button>
               
@@ -99,15 +103,15 @@ export async function init_cadastro_paciente_page() {
 
             <div class="yes_no_container"> 
             
-              <p>Possui diagnostico de autismo</p>
+              <p>Familiares com sintomas mentais?</p>
 
               <div class="yes_no_button_container">
             
-                <button class="toggle_small_base_button" id="toggle_male" >
+                <button class="toggle_small_base_button" id="family_with_mental_symptoms_yes" >
                   Sim
                 </button> 
               
-                <button class="toggle_small_base_button" id="toggle_female">
+                <button class="toggle_small_base_button" id="family_with_mental_symptoms_no">
                   Não
                 </button>
               
@@ -117,15 +121,15 @@ export async function init_cadastro_paciente_page() {
 
             <div class="yes_no_container"> 
             
-              <p>Possui diagnostico de autismo</p>
+              <p>Familiares com ataxia?</p>
 
               <div class="yes_no_button_container">
             
-                <button class="toggle_small_base_button" id="toggle_male" >
+                <button class="toggle_small_base_button" id="family_with_ataxia_yes" >
                   Sim
                 </button> 
               
-                <button class="toggle_small_base_button" id="toggle_female">
+                <button class="toggle_small_base_button" id="family_with_ataxia_no">
                   Não
                 </button>
               
@@ -137,16 +141,19 @@ export async function init_cadastro_paciente_page() {
 
           <div class="photo_upload_container"> 
           
-            <div class="photo_container">
+            <div class="photo_container" id="face_front_container">
               Rosto frente
+              <input type="file" id="face_front_input" accept="image/*" style="display: none;" />
             </div>
 
-            <div class="photo_container">
+            <div class="photo_container" id="face_three_four_container">
               Rosto 3/4
+              <input type="file" id="face_three_four_input" accept="image/*" style="display: none;" />
             </div>
 
-            <div class="photo_container">
+            <div class="photo_container" id="face_profile_container">
               Rosto Perfil
+              <input type="file" id="face_profile_input" accept="image/*" style="display: none;" />
             </div>
 
           </div>
@@ -202,11 +209,88 @@ export async function init_cadastro_paciente_page() {
   const name_input = container.querySelector<HTMLInputElement>('#name');
   const cpf_input = container.querySelector<HTMLInputElement>('#cpf');
   const birth_day_input = container.querySelector<HTMLInputElement>('#birth_date');
+
+  const mother_name_input = container.querySelector<HTMLInputElement>('#mother_name');
+  const responsible_name_input = container.querySelector<HTMLInputElement>('#responsible_name');
+  const cpf_responsible_input = container.querySelector<HTMLInputElement>('#cpf_responsible');
+  const phone_number_input = container.querySelector<HTMLInputElement>('#phone_number');
+
+  const country_input = container.querySelector<HTMLInputElement>('#country');
+  const state_input = container.querySelector<HTMLInputElement>('#state');
+  const city_input = container.querySelector<HTMLInputElement>('#city');
+
   const observation_input = container.querySelector<HTMLInputElement>('#observation');
+
+  //#region Yes no buttons
 
   const toggleMaleButton = container.querySelector<HTMLButtonElement>('#toggle_male');
   const toggleFemaleButton = container.querySelector<HTMLButtonElement>('#toggle_female');
+
+  const autismDiagnosisYesButton = container.querySelector<HTMLButtonElement>('#autism_diagnosis_yes');
+  const autismDiagnosisNoButton = container.querySelector<HTMLButtonElement>('#autism_diagnosis_no');
+
+  const hasSiblingsYesButton = container.querySelector<HTMLButtonElement>('#has_siblings_yes');
+  const hasSiblingsNoButton = container.querySelector<HTMLButtonElement>('#has_siblings_no');
+
+  const familyWithMentalSymptomsYesButton = container.querySelector<HTMLButtonElement>('#family_with_mental_symptoms_yes');
+  const familyWithMentalSymptomsNoButton = container.querySelector<HTMLButtonElement>('#family_with_mental_symptoms_no');
+
+  const familyWithAtaxiaYesButton = container.querySelector<HTMLButtonElement>('#family_with_ataxia_yes');
+  const familyWithAtaxiaNoButton = container.querySelector<HTMLButtonElement>('#family_with_ataxia_no');
+
+  let has_autism_diagnosis = false;
+  let has_siblings = false;
+  let family_with_mental_symptoms = false;
+  let family_with_ataxia = false;
+
+  autismDiagnosisYesButton?.addEventListener('click', (_event) => {
+    has_autism_diagnosis = switch_pair_button(autismDiagnosisNoButton!, autismDiagnosisYesButton!, has_autism_diagnosis);
+  });
+
+  autismDiagnosisNoButton?.addEventListener('click', (_event) => {
+    has_autism_diagnosis = switch_pair_button(autismDiagnosisNoButton!, autismDiagnosisYesButton!, has_autism_diagnosis);
+  });
+
+  hasSiblingsYesButton?.addEventListener('click', (_event) => {
+    has_siblings = switch_pair_button(hasSiblingsNoButton!, hasSiblingsYesButton!, has_siblings);
+  });
+
+  hasSiblingsNoButton?.addEventListener('click', (_event) => {
+    has_siblings = switch_pair_button(hasSiblingsNoButton!, hasSiblingsYesButton!, has_siblings);
+  });
+
+  familyWithMentalSymptomsYesButton?.addEventListener('click', (_event) => {
+    family_with_mental_symptoms = switch_pair_button(familyWithMentalSymptomsNoButton!, familyWithMentalSymptomsYesButton!, family_with_mental_symptoms);
+  });
+
+  familyWithMentalSymptomsNoButton?.addEventListener('click', (_event) => {
+    family_with_mental_symptoms = switch_pair_button(familyWithMentalSymptomsNoButton!, familyWithMentalSymptomsYesButton!, family_with_mental_symptoms);
+  });
+
+  familyWithAtaxiaYesButton?.addEventListener('click', (_event) => {
+    family_with_ataxia = switch_pair_button(familyWithAtaxiaNoButton!, familyWithAtaxiaYesButton!, family_with_ataxia);
+  });
+
+  familyWithAtaxiaNoButton?.addEventListener('click', (_event) => {
+    family_with_ataxia = switch_pair_button(familyWithAtaxiaNoButton!, familyWithAtaxiaYesButton!, family_with_ataxia);
+  });
+
+
+  toggleMaleButton?.addEventListener('click', (_event) => {
+    toggle_sex();
+  });
+  toggleFemaleButton?.addEventListener('click', (_event) => {
+    toggle_sex();
+  });
+
   const cadastrarButton = container.querySelector<HTMLButtonElement>('#cadastrar');
+  cadastrarButton?.addEventListener('click', (_event) => {
+    cadastrarButtonPress();
+  });
+
+  //#endregion
+
+  //#region Symptoms buttons
 
   const symptomButtonDeficienciaIntelectual = container.querySelector<HTMLButtonElement>('#symptom_button_deficiência_intelectual');
   const symptomButtonFaceOrelhasAlongadas = container.querySelector<HTMLButtonElement>('#symptom_button_face_orelhas_alongadas');
@@ -220,16 +304,6 @@ export async function init_cadastro_paciente_page() {
   const symptomButtonEvitaContatoVisual = container.querySelector<HTMLButtonElement>('#symptom_button_evita_contato_visual');
   const symptomButtonEvitaContatoFisico = container.querySelector<HTMLButtonElement>('#symptom_button_evita_contato_fisico');
   const symptomButtonAgressividade = container.querySelector<HTMLButtonElement>('#symptom_button_agressividade');
-
-  toggleMaleButton?.addEventListener('click', (_event) => {
-    toggleMaleButtonPress();
-  });
-  toggleFemaleButton?.addEventListener('click', (_event) => {
-    toggleFemaleButtonPress();
-  });
-  cadastrarButton?.addEventListener('click', (_event) => {
-    cadastrarButtonPress();
-  });
 
   symptomButtonDeficienciaIntelectual?.addEventListener('click', (_event) => {
     toggle_symptom('deficiencia_intelectual', symptomButtonDeficienciaIntelectual);
@@ -268,35 +342,103 @@ export async function init_cadastro_paciente_page() {
     toggle_symptom('agressividade', symptomButtonAgressividade);
   });
 
-  let is_male = true;
+  //#endregion
 
-  function toggleMaleButtonPress(): void { toggle_sex() }
-  function toggleFemaleButtonPress(): void { toggle_sex() }
+  const uploadFaceFrontInput = container.querySelector<HTMLInputElement>('#face_front_input');
+  const uploadFaceThreeFourInput = container.querySelector<HTMLInputElement>('#face_three_four_input');
+  const uploadFaceProfileInput = container.querySelector<HTMLInputElement>('#face_profile_input');
+
+  let uploadFaceFrontContainer = container.querySelector<HTMLDivElement>('#face_front_container');
+  let uploadFaceThreeFourContainer = container.querySelector<HTMLDivElement>('#face_three_four_container');
+  let uploadFaceProfileContainer = container.querySelector<HTMLDivElement>('#face_profile_container');
+
+  uploadFaceFrontContainer?.addEventListener('click', () => {
+    uploadFaceFrontInput?.click();
+  });
+
+  uploadFaceThreeFourContainer?.addEventListener('click', () => {
+    uploadFaceThreeFourInput?.click();
+  });
+
+  uploadFaceProfileContainer?.addEventListener('click', () => {
+    uploadFaceProfileInput?.click();
+  });
+
+  let photo_face_front_preview: HTMLImageElement | null = null;
+  let photo_face_three_four_preview: HTMLImageElement | null = null;
+  let photo_face_profile_preview: HTMLImageElement | null = null;
+
+  uploadFaceFrontInput?.addEventListener('change', (event) => {
+    const file = event.target instanceof HTMLInputElement ? event.target.files?.[0] : null;
+    if (!file) return;
+
+    photo_face_front_preview = document.createElement('img');
+    photo_face_front_preview.src = URL.createObjectURL(file);
+    photo_face_front_preview.style.maxWidth = '100%';
+    photo_face_front_preview.style.maxHeight = '100%';
+    photo_face_front_preview.style.objectFit = 'cover';
+
+    uploadFaceFrontContainer!.innerHTML = '';
+    uploadFaceFrontContainer!.appendChild(photo_face_front_preview);
+  });
+
+  uploadFaceThreeFourContainer?.addEventListener('change', (event) => {
+    const file = event.target instanceof HTMLInputElement ? event.target.files?.[0] : null;
+    if (!file) return;
+
+    photo_face_three_four_preview = document.createElement('img');
+    photo_face_three_four_preview.src = URL.createObjectURL(file);
+    photo_face_three_four_preview.style.maxWidth = '100%';
+    photo_face_three_four_preview.style.maxHeight = '100%';
+    photo_face_three_four_preview.style.objectFit = 'cover';
+
+    uploadFaceThreeFourContainer!.innerHTML = '';
+    uploadFaceThreeFourContainer!.appendChild(photo_face_three_four_preview);
+  });
+
+  uploadFaceProfileContainer?.addEventListener('change', (event) => {
+    const file = event.target instanceof HTMLInputElement ? event.target.files?.[0] : null;
+    if (!file) return;
+
+    photo_face_profile_preview = document.createElement('img');
+    photo_face_profile_preview.src = URL.createObjectURL(file);
+    photo_face_profile_preview.style.maxWidth = '100%';
+    photo_face_profile_preview.style.maxHeight = '100%';
+    photo_face_profile_preview.style.objectFit = 'cover';
+
+    uploadFaceProfileContainer!.innerHTML = '';
+    uploadFaceProfileContainer!.appendChild(photo_face_profile_preview);
+  });
+
+  let is_male = true;
 
   function init_sex() {
     if (toggleMaleButton && toggleFemaleButton && symptomButtonMacroorquidismo) {
       is_male = true;
-      toggleMaleButton.classList.add('is_active');
-      toggleFemaleButton.classList.remove('is_active');
+      switch_pair_button(toggleMaleButton, toggleFemaleButton, is_male);
       symptomButtonMacroorquidismo.disabled = false;
     }
   }
 
   function toggle_sex() {
+
     if (toggleMaleButton && toggleFemaleButton && symptomButtonMacroorquidismo) {
       if (is_male == true) {
         is_male = false;
-        toggleMaleButton.classList.remove('is_active');
-        toggleFemaleButton.classList.add('is_active');
+        switch_pair_button(toggleMaleButton, toggleFemaleButton, is_male);
         symptomButtonMacroorquidismo.disabled = true;
       }
       else {
         is_male = true;
-        toggleMaleButton.classList.add('is_active');
-        toggleFemaleButton.classList.remove('is_active');
+        switch_pair_button(toggleMaleButton, toggleFemaleButton, is_male);
         symptomButtonMacroorquidismo.disabled = false;
       }
     }
+
+    clear_symptoms();
+  }
+
+  function clear_symptoms() {
 
     const chaves = Object.keys(temSintomas);
 
@@ -316,9 +458,8 @@ export async function init_cadastro_paciente_page() {
     symptomButtonEvitaContatoVisual?.classList.remove("is_active");
     symptomButtonEvitaContatoFisico?.classList.remove("is_active");
     symptomButtonAgressividade?.classList.remove("is_active");
-  }
 
-  init_sex();
+  }
 
   const temSintomas: Record<string, boolean> = {
     'deficiencia_intelectual': false,
@@ -345,7 +486,6 @@ export async function init_cadastro_paciente_page() {
     }
   }
 
-
   const id_sintomas_selecionados: number[] = [];
 
   async function cadastrarButtonPress() {
@@ -353,11 +493,27 @@ export async function init_cadastro_paciente_page() {
     const nome = name_input?.value;
     const cpf = cpf_input?.value;
     const data_nascimento = birth_day_input?.valueAsDate;
+    const mother_name = mother_name_input?.value;
+    const responsible_name = responsible_name_input?.value;
+    const cpf_responsible = cpf_responsible_input?.value;
+    const phone_number = phone_number_input?.value;
+    const country = country_input?.value;
+    const state = state_input?.value;
+    const city = city_input?.value;
     const observacao = observation_input?.value;
 
     let score = 0;
 
-    if (!nome || !cpf || !data_nascimento) {
+    if (!nome ||
+      !cpf ||
+      !data_nascimento ||
+      !mother_name ||
+      !responsible_name ||
+      !cpf_responsible ||
+      !phone_number ||
+      !country ||
+      !state ||
+      !city) {
       trigger_notification_popup("Preencha os campos obrigatórios");
       return;
     }
@@ -413,7 +569,6 @@ export async function init_cadastro_paciente_page() {
 
     }
 
-
     let sexo;
 
     if (is_male == true) {
@@ -423,135 +578,46 @@ export async function init_cadastro_paciente_page() {
       sexo = "feminino";
     }
 
-    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    const user = await get_auth_user();
 
-    if (authError) {
-      console.log("Erro de autenticação = " + authError)
-      return;
-    }
+    const id_medico = user!.session!.user.id;
 
-    if (!user) {
-      console.log("Nenhum usuario")
-      return;
-    }
+    const { data, error } = await supabase.rpc('cadastrar_paciente_transacao', {
+      nome_paciente: nome,
+      data_nascimento_paciente: data_nascimento,
+      sexo_paciente: sexo,
+      cpf_paciente: cpf,
+      nome_mae_paciente: mother_name,
+      responsavel_paciente: responsible_name,
+      cpf_responsavel_paciente: cpf_responsible,
+      pais_paciente: country,
+      estado_paciente: state,
+      cidade_paciente: city,
+      telefone_paciente: phone_number,
+      observacao_avaliacao: observacao,
+      diagnostico_autismo_avaliacao: has_autism_diagnosis,
+      tem_irmaos_avaliacao: has_siblings,
+      familia_sintomas_mentais_avaliacao: family_with_mental_symptoms,
+      familiares_ataxia_avaliacao: family_with_ataxia,
+      avaliacao_sintomas: id_sintomas_selecionados,
+      usuario_id: id_medico,
+      score_fina_avaliacao: score
+    });
 
-    const id_medico = user?.id;
-
-    interface Paciente {
-      id: number,
-      nome: string,
-      cpf: string,
-      sexo: string,
-      id_usuario: number
-    }
-
-    const { data: novoPaciente, error: insertPacienteError } = await supabase
-      .from("paciente")
-      .insert({
-        nome: nome,
-        data_nascimento: data_nascimento,
-        cpf: cpf,
-        sexo: sexo,
-        usuario_id: id_medico
-      })
-      .select()
-      .single();
-
-    if (insertPacienteError) {
+    if (error) {
+      console.error('Erro na transação:', error.message);
       trigger_notification_popup("Erro ao cadastrar paciente");
-      console.log("Erro ao criar paciente");
-      console.log(insertPacienteError);
       return;
+    } else {
+      console.log('Paciente, avaliação e itens cadastrados com sucesso!');
     }
-
-    if (!novoPaciente) {
-      console.log("Paciente não criado?");
-      return;
-    }
-
-    console.log("Paciente criado");
-
-    const id_paciente = (novoPaciente as Paciente).id;
-
-    const { data: novaAvaliacao, error: insertAvaliacaoError } = await supabase
-      .from("avaliacao")
-      .insert({
-        usuario_id: id_medico,
-        paciente_id: id_paciente,
-        resultado_final: observacao,
-        score_final: score
-      })
-      .select()
-      .single()
-
-    if (insertAvaliacaoError) {
-      trigger_notification_popup("Erro ao criar avaliação");
-      console.log("Erro ao criar avaliação");
-      console.log(insertAvaliacaoError);
-      return;
-    }
-
-    if (!novaAvaliacao) {
-      trigger_notification_popup("Erro ao criar avaliação");
-      console.log("Avaliação não criada?");
-      return;
-    }
-
-    console.log("Avaliação criada");
-
-    interface Avaliacao {
-      id: number,
-      usuario_id: number,
-      paciente_id: number,
-      resultado_final: string,
-      score_final: number
-    }
-
-    const id_avaliacao = (novaAvaliacao as Avaliacao).id;
-
-    const sintomasAssociativos = id_sintomas_selecionados.map((sintomaId) => ({
-      avaliacao_id: id_avaliacao,
-      sintoma_id: sintomaId
-    }));
-
-    const { error: insertItemAvaliacaoError } = await supabase
-      .from("item_avaliacao").
-      insert(
-        sintomasAssociativos
-      )
-
-    if (insertItemAvaliacaoError) {
-      trigger_notification_popup("Erro ao criar item avaliação");
-      console.log("Erro ao criar item avaliação");
-      console.log(insertItemAvaliacaoError);
-      return;
-    }
-
-    console.log("Item avaliação criados");
 
     trigger_notification_popup("Paciente cadastrado com sucesso");
 
-    const chaves = Object.keys(temSintomas);
-
-    for (let i = 0; i < chaves.length; i++) {
-      temSintomas[chaves[i]] = false;
-    }
-
-    id_sintomas_selecionados.length = 0;
-
-    symptomButtonDeficienciaIntelectual?.classList.remove("is_active");
-    symptomButtonFaceOrelhasAlongadas?.classList.remove("is_active");
-    symptomButtonMacroorquidismo?.classList.remove("is_active");
-    symptomButtonHipermobilidadeArticular?.classList.remove("is_active");
-    symptomButtonDificuldadeAprendizagem?.classList.remove("is_active");
-    symptomButtonDeficitAtencao?.classList.remove("is_active");
-    symptomButtonMovimentosRepetitivos?.classList.remove("is_active");
-    symptomButtonAtrasoFala?.classList.remove("is_active");
-    symptomButtonHiperatividade?.classList.remove("is_active");
-    symptomButtonEvitaContatoVisual?.classList.remove("is_active");
-    symptomButtonEvitaContatoFisico?.classList.remove("is_active");
-    symptomButtonAgressividade?.classList.remove("is_active");
+    clear_symptoms();
 
   }
+
+  init_sex();
 
 }

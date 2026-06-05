@@ -141,14 +141,14 @@
 
 }
 
-.toggle_base_button:hover {
+.toggle_small_base_button:hover {
 
   transform: translateY(-5px);
   box-shadow: 0px 15px var(--button_shadow);
 
 }
 
-.toggle_base_button.is_active {
+.toggle_small_base_button.is_active {
   color: var(--toggled_text_color);
   background-color: var(--toggled_button_color);
   transform: translateY(9px);
