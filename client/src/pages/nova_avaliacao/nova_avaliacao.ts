@@ -21,10 +21,20 @@ export async function init_nova_avaliacao_page() {
           
           <div class="patient_input_container">
 
-            <h5 id="patient_name"> Nome : Paciente</h5>
-            <h5 id="patient_birthdate"> Data de nascimento : dd/mm/YYYY </h5>
-            <h5 id="patient_sex"> Sexo : Masculino/Feminino </h5>
-            <input class="base_input_text" placeholder="Observação" id="observation">
+          
+          <h5 id="patient_name">Nome:</h5>
+          <h5 id="patient_sex">Sexo:</h5>
+          <h5 id="patient_cpf">CPF:</h5>
+          <h5 id="patient_birthdate">Data de nascimento:</h5>
+          <h5 id="patient_mother_name">Nome da mãe:</h5>
+          <h5 id="patient_responsible_name">Responsável pelo paciente:</h5>
+          <h5 id="patient_cpf_responsible">CPF do responsável:</h5>
+          <h5 id="patient_phone_number">Telefone:</h5>
+          <h5 id="patient_country">País:</h5>
+          <h5 id="patient_state">Estado:</h5>
+          <h5 id="patient_city">Cidade:</h5>
+
+          <input class="base_input_text" placeholder="Observação" id="observation">
 
           </div>
         
@@ -34,6 +44,107 @@ export async function init_nova_avaliacao_page() {
         
         </div>
 
+        <div class="patient_extra_data_input_container"> 
+
+          <div class="yes_no_questions_container"> 
+          
+            <div class="yes_no_container"> 
+            
+              <p>Possui diagnostico de autismo?</p>
+
+              <div class="yes_no_button_container">
+            
+                <button class="toggle_small_base_button" id="autism_diagnosis_yes" >
+                  Sim
+                </button> 
+              
+                <button class="toggle_small_base_button" id="autism_diagnosis_no">
+                  Não
+                </button>
+              
+              </div>
+            
+            </div>
+
+
+            <div class="yes_no_container"> 
+            
+              <p>Tem irmãos?</p>
+
+              <div class="yes_no_button_container">
+            
+                <button class="toggle_small_base_button" id="has_siblings_yes" >
+                  Sim
+                </button> 
+              
+                <button class="toggle_small_base_button" id="has_siblings_no">
+                  Não
+                </button>
+              
+              </div>
+            
+            </div>
+
+            <div class="yes_no_container"> 
+            
+              <p>Familiares com sintomas mentais?</p>
+
+              <div class="yes_no_button_container">
+            
+                <button class="toggle_small_base_button" id="family_with_mental_symptoms_yes" >
+                  Sim
+                </button> 
+              
+                <button class="toggle_small_base_button" id="family_with_mental_symptoms_no">
+                  Não
+                </button>
+              
+              </div>
+            
+            </div>
+
+            <div class="yes_no_container"> 
+            
+              <p>Familiares com ataxia?</p>
+
+              <div class="yes_no_button_container">
+            
+                <button class="toggle_small_base_button" id="family_with_ataxia_yes" >
+                  Sim
+                </button> 
+              
+                <button class="toggle_small_base_button" id="family_with_ataxia_no">
+                  Não
+                </button>
+              
+              </div>
+            
+            </div>
+
+          </div>
+
+          <div class="photo_upload_container"> 
+          
+            <div class="photo_container" id="face_front_container">
+              Rosto frente
+              <input type="file" id="face_front_input" accept="image/*" style="display: none;" />
+            </div>
+
+            <div class="photo_container" id="face_three_four_container">
+              Rosto 3/4
+              <input type="file" id="face_three_four_input" accept="image/*" style="display: none;" />
+            </div>
+
+            <div class="photo_container" id="face_profile_container">
+              Rosto Perfil
+              <input type="file" id="face_profile_input" accept="image/*" style="display: none;" />
+            </div>
+
+          </div>
+          
+
+        </div>
+
         <div class="symptoms_checklist_container">
           <button class="toggle_base_button" id="symptom_button_deficiência_intelectual" aria-pressed="false">
             Deficiência Intelectual
@@ -41,10 +152,6 @@ export async function init_nova_avaliacao_page() {
           <button class="toggle_base_button" id="symptom_button_face_orelhas_alongadas" aria-pressed="false">
             Face/orelhas alongadas
           </button>
-          <div id="macroorquidismo_div">
-        
-
-          </div>
           <button class="toggle_base_button" id="symptom_button_macroorquidismo" aria-pressed="false">
             Macroorquidismo
           </button>
@@ -83,10 +190,6 @@ export async function init_nova_avaliacao_page() {
 
   `
 
-  // Pegar id do paciente na URL
-  // Colocar informação do paciente nos campos de nome, data de nascimento e sexo
-  // Colocar os sintomas atuais do paciente como ativos ou inativos de acordo com a base de dados
-
 
   const paciente_id = window.location.pathname.replace("/nova_avaliacao/", "")
 
@@ -100,21 +203,67 @@ export async function init_nova_avaliacao_page() {
     return;
   }
 
-  // Preencher os campos do paciente
   const patientName = container.querySelector<HTMLHeadingElement>('#patient_name');
+  const patientCpf = container.querySelector<HTMLHeadingElement>('#patient_cpf');
   const patientBirthdate = container.querySelector<HTMLHeadingElement>('#patient_birthdate');
   const patientSex = container.querySelector<HTMLHeadingElement>('#patient_sex');
+  const patientMotherName = container.querySelector<HTMLHeadingElement>('#patient_mother_name');
+  const patientResponsibleName = container.querySelector<HTMLHeadingElement>('#patient_responsible_name');
+  const patientCpfResponsible = container.querySelector<HTMLHeadingElement>('#patient_cpf_responsible');
+  const patientPhoneNumber = container.querySelector<HTMLHeadingElement>('#patient_phone_number');
+  const patientCountry = container.querySelector<HTMLHeadingElement>('#patient_country');
+  const patientState = container.querySelector<HTMLHeadingElement>('#patient_state');
+  const patientCity = container.querySelector<HTMLHeadingElement>('#patient_city');
 
   if (patientName) {
-    patientName.textContent = `Nome : ${pacienteDados.nome}`;
+  patientName.textContent = `Nome: ${pacienteDados.nome}`;
+  }
+
+  if (patientCpf) {
+    patientCpf.textContent = `CPF: ${pacienteDados.cpf}`;
   }
 
   if (patientBirthdate) {
-    patientBirthdate.textContent = `Data de nascimento : ${new Date(pacienteDados.data_nascimento).toLocaleString('pt-BR')}`;
+    patientBirthdate.textContent =
+      `Data de nascimento: ${new Date(pacienteDados.data_nascimento).toLocaleDateString('pt-BR')}`;
   }
 
   if (patientSex) {
-    patientSex.textContent = `Sexo : ${pacienteDados.sexo}`;
+    patientSex.textContent = `Sexo: ${pacienteDados.sexo}`;
+  }
+
+  if (patientMotherName) {
+    patientMotherName.textContent = `Nome da mãe: ${pacienteDados.nome_mae}`;
+  }
+
+  if (patientResponsibleName) {
+    patientResponsibleName.textContent =
+      `Responsável pelo paciente: ${pacienteDados.nome_responsavel}`;
+  }
+
+  if (patientCpfResponsible) {
+    patientCpfResponsible.textContent =
+      `CPF do responsável: ${pacienteDados.cpf_responsavel}`;
+  }
+
+  if (patientPhoneNumber) {
+    patientPhoneNumber.textContent =
+      `Telefone: ${pacienteDados.telefone}`;
+  }
+
+  if (patientCountry) {
+    patientCountry.textContent =
+      `País: ${pacienteDados.pais}`;
+  }
+
+  if (patientState) {
+    patientState.textContent =
+      `Estado: ${pacienteDados.estado}`;
+  }
+
+  if (patientCity) {
+    patientCity.textContent =
+      `Cidade: ${pacienteDados.cidade}`;
   }
 
   const observation_input = container.querySelector<HTMLInputElement>('#observation');

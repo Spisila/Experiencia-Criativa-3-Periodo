@@ -16,192 +16,215 @@ export async function init_relatorio_page() {
 
   container.innerHTML = /* html */`
       
-    <div class="report_container">
+    <div class="report_and_images_container"> 
+    
+      <div class="images_container">
 
-        <div class="report_info_container">
-
-          <div class="patient_info">
-            
-            <p id="nome_paciente_texto" >Nome Paciente : Paciente Teste</p>
-            <p id="data_nascimento_texto" >Data Nascimento : dd/mm/YYYY</p>
-            <p id="sexo_texto" >Sexo : Masculino/Feminino </p>
-
-          </div>
-
-          <div class="doctor_info">
-
-            <p id="nome_medico_texto" >Nome medico : Medico Teste </p>
-            <p id="data_avaliacao_texto" >Data avaliação : dd/mm/YYYY </p>
-            <p id="indicacao_texto" >Indicação : Fazer teste genetico </p>
-
-          </div>
-
-
+        Rosto frente
+        <div class="photo_report_container" id="face_front_container">
+          <img src="" id="face_front_image" style=" width: auto; max-height: 100%; object-fit: cover;" />
         </div>
 
-        <div class="report_data_container">
-
-          <div class="report_conclusion_container">
-
-            <div class="extra_report_info"> 
-
-              <p id="tem_irmaos_texto" >Paciente tem irmãos :</p>
-              <p id="tem_autismo_texto" >Paciente tem diagnostico de autismo :</p>
-              <p id="tem_familia_sintomas_mentais_texto" >Paciente tem familiares com sintomas mentais :</p>
-              <p id="tem_familia_ataxia_texto" >Familiares com ataxia :</p>
-
-            </div>
-
-            <div class="report_conclusion"">
-              
-              <p id="observacoes_texto" >Observações :</p>
-
-            </div>
-
-          </div>
-
-          <table class="report_symptoms_table">
-            
-            <tr class="symptoms_table_header">
-              <td class="symptoms_table_header_cell">
-                Sintoma
-              </td>
-              <td class="symptoms_table_header_cell">
-                Presente
-              </td>
-            </tr>
-
-            <tr class="symptoms_table_row">
-              <td class="symptoms_table_cell">
-                Deficiência Intelectual
-              </td>
-              <td id="deficiencia_intelectual_texto" class="symptoms_table_cell">
-                Nao
-              </td>
-            </tr>
-
-            <tr class="symptoms_table_row">
-              <td class="symptoms_table_cell">
-                Face alongada/orelhas
-              </td>
-              <td id="face_alongada_orelhas_texto" class="symptoms_table_cell">
-                Nao
-              </td>
-            </tr>
-
-            <tr class="symptoms_table_row">
-              <td class="symptoms_table_cell">
-                Macroorquidismo
-              </td>
-              <td id="macroorquidismo_texto" class="symptoms_table_cell">
-                Nao
-              </td>
-            </tr>
-
-            <tr class="symptoms_table_row">
-              <td class="symptoms_table_cell">
-                Hipermobilidade articular
-              </td>
-              <td id="hipermobilidade_articular_texto" class="symptoms_table_cell">
-                Nao
-              </td>
-            </tr>
-
-            <tr class="symptoms_table_row">
-              <td class="symptoms_table_cell">
-                Dificuldades de aprendizagem
-              </td> 
-              <td id="dificuldades_aprendizagem_texto" class="symptoms_table_cell">
-                Nao
-              </td>
-            </tr>
-
-            <tr class="symptoms_table_row">
-              <td class="symptoms_table_cell">
-                Déficit de atenção
-              </td>
-              <td id="deficit_atencao_texto" class="symptoms_table_cell">
-                Nao
-              </td>
-            </tr>
-
-            <tr class="symptoms_table_row">
-              <td class="symptoms_table_cell">
-                Movimentos repetitivos
-              </td>
-              <td id="movimentos_repetitivos_texto" class="symptoms_table_cell">
-                Nao
-              </td>
-            </tr>
-
-            <tr class="symptoms_table_row">
-              <td class="symptoms_table_cell">
-                Atraso na fala
-              </td>
-              <td id="atraso_fala_texto" class="symptoms_table_cell">
-                Nao
-              </td>
-            </tr>
-
-            <tr class="symptoms_table_row">
-              <td class="symptoms_table_cell">
-                Hiperatividade 
-              </td>
-              <td id="hiperatividade_texto" class="symptoms_table_cell">
-                Nao
-              </td>
-            </tr>
-
-            <tr class="symptoms_table_row">
-              <td class="symptoms_table_cell">
-                Evita contato visual 
-              </td>
-              <td id="evita_contato_visual_texto" class="symptoms_table_cell">
-                Nao
-              </td>
-            </tr>
-
-            <tr class="symptoms_table_row">
-              <td class="symptoms_table_cell">
-                Evita contato físico 
-              </td>
-              <td id="evita_contato_fisico_texto" class="symptoms_table_cell">
-                Nao
-              </td>
-            </tr>
-
-            <tr class="symptoms_table_row">
-              <td class="symptoms_table_cell">
-                Agressividade 
-              </td>
-              <td id="agressividade_texto" class="symptoms_table_cell">
-                Nao
-              </td>
-            </tr>
-
-          </table>
-
-
+        Rosto 3/4
+        <div class="photo_report_container" id="face_three_four_container">
+          <img src="" id="face_three_four_image" style=" width: auto; max-height: 100%; object-fit: cover;" />
         </div>
 
-        <div class="report_buttons_container">
-        
-          <button id="editar_button" class="base_small_button" style="margin-top: 15px;">
-            Editar
-          </button>
-        
-          <button id="imprimir_button" class="base_small_button" style="margin-top: 15px;">
-            Imprimir
-          </button>
-
-          <button id="deletar_button" class="base_small_button" style="margin-top: 15px;">
-            Deletar
-          </button>
-
-          </div>
-
-
+        Rosto Perfil
+        <div class="photo_report_container" id="face_profile_container">
+          <img src="" id="face_profile_image" style=" width: auto; max-height: 100%; object-fit: cover;" />
+        </div>
       </div>
+    
+      <div class="report_container">
+
+          <div class="report_info_container">
+
+            <div class="patient_info">
+              
+              <p id="nome_paciente_texto" >Nome Paciente : Paciente Teste</p>
+              <p id="data_nascimento_texto" >Data Nascimento : dd/mm/YYYY</p>
+              <p id="sexo_texto" >Sexo : Masculino/Feminino </p>
+
+            </div>
+
+            <div class="doctor_info">
+
+              <p id="nome_medico_texto" >Nome medico : Medico Teste </p>
+              <p id="data_avaliacao_texto" >Data avaliação : dd/mm/YYYY </p>
+              <p id="indicacao_texto" >Indicação : Fazer teste genetico </p>
+
+            </div>
+
+
+          </div>
+
+          <div class="report_data_container">
+
+            <div class="report_conclusion_container">
+
+              <div class="extra_report_info"> 
+
+                <p id="tem_irmaos_texto" >Paciente tem irmãos :</p>
+                <p id="tem_autismo_texto" >Paciente tem diagnostico de autismo :</p>
+                <p id="tem_familia_sintomas_mentais_texto" >Paciente tem familiares com sintomas mentais :</p>
+                <p id="tem_familia_ataxia_texto" >Familiares com ataxia :</p>
+
+              </div>
+
+              <div class="report_conclusion"">
+                
+                <p id="observacoes_texto" >Observações :</p>
+
+              </div>
+
+            </div>
+
+            <table class="report_symptoms_table">
+              
+              <tr class="symptoms_table_header">
+                <td class="symptoms_table_header_cell">
+                  Sintoma
+                </td>
+                <td class="symptoms_table_header_cell">
+                  Presente
+                </td>
+              </tr>
+
+              <tr class="symptoms_table_row">
+                <td class="symptoms_table_cell">
+                  Deficiência Intelectual
+                </td>
+                <td id="deficiencia_intelectual_texto" class="symptoms_table_cell">
+                  Nao
+                </td>
+              </tr>
+
+              <tr class="symptoms_table_row">
+                <td class="symptoms_table_cell">
+                  Face alongada/orelhas
+                </td>
+                <td id="face_alongada_orelhas_texto" class="symptoms_table_cell">
+                  Nao
+                </td>
+              </tr>
+
+              <tr class="symptoms_table_row">
+                <td class="symptoms_table_cell">
+                  Macroorquidismo
+                </td>
+                <td id="macroorquidismo_texto" class="symptoms_table_cell">
+                  Nao
+                </td>
+              </tr>
+
+              <tr class="symptoms_table_row">
+                <td class="symptoms_table_cell">
+                  Hipermobilidade articular
+                </td>
+                <td id="hipermobilidade_articular_texto" class="symptoms_table_cell">
+                  Nao
+                </td>
+              </tr>
+
+              <tr class="symptoms_table_row">
+                <td class="symptoms_table_cell">
+                  Dificuldades de aprendizagem
+                </td> 
+                <td id="dificuldades_aprendizagem_texto" class="symptoms_table_cell">
+                  Nao
+                </td>
+              </tr>
+
+              <tr class="symptoms_table_row">
+                <td class="symptoms_table_cell">
+                  Déficit de atenção
+                </td>
+                <td id="deficit_atencao_texto" class="symptoms_table_cell">
+                  Nao
+                </td>
+              </tr>
+
+              <tr class="symptoms_table_row">
+                <td class="symptoms_table_cell">
+                  Movimentos repetitivos
+                </td>
+                <td id="movimentos_repetitivos_texto" class="symptoms_table_cell">
+                  Nao
+                </td>
+              </tr>
+
+              <tr class="symptoms_table_row">
+                <td class="symptoms_table_cell">
+                  Atraso na fala
+                </td>
+                <td id="atraso_fala_texto" class="symptoms_table_cell">
+                  Nao
+                </td>
+              </tr>
+
+              <tr class="symptoms_table_row">
+                <td class="symptoms_table_cell">
+                  Hiperatividade 
+                </td>
+                <td id="hiperatividade_texto" class="symptoms_table_cell">
+                  Nao
+                </td>
+              </tr>
+
+              <tr class="symptoms_table_row">
+                <td class="symptoms_table_cell">
+                  Evita contato visual 
+                </td>
+                <td id="evita_contato_visual_texto" class="symptoms_table_cell">
+                  Nao
+                </td>
+              </tr>
+
+              <tr class="symptoms_table_row">
+                <td class="symptoms_table_cell">
+                  Evita contato físico 
+                </td>
+                <td id="evita_contato_fisico_texto" class="symptoms_table_cell">
+                  Nao
+                </td>
+              </tr>
+
+              <tr class="symptoms_table_row">
+                <td class="symptoms_table_cell">
+                  Agressividade 
+                </td>
+                <td id="agressividade_texto" class="symptoms_table_cell">
+                  Nao
+                </td>
+              </tr>
+
+            </table>
+
+
+          </div>
+
+          <div class="report_buttons_container">
+          
+            <button id="editar_button" class="base_small_button" style="margin-top: 15px;">
+              Editar
+            </button>
+          
+            <button id="imprimir_button" class="base_small_button" style="margin-top: 15px;">
+              Imprimir
+            </button>
+
+            <button id="deletar_button" class="base_small_button" style="margin-top: 15px;">
+              Deletar
+            </button>
+
+            </div>
+
+
+        </div>
+    
+        </div>
+
   
   `
 
@@ -382,6 +405,39 @@ export async function init_relatorio_page() {
     containers.at(itemAvaliacaoDados.at(i)?.sintoma_id)!.textContent = "Sim"
 
   }
+
+  const front_view_url = `${medico_id}/${relatorio_id}/front_view`;
+  const three_four_view_url = `${medico_id}/${relatorio_id}/three_four_view`;
+  const profile_view_url = `${medico_id}/${relatorio_id}/profile_view`;
+
+  const { data: front_photo } = supabase.storage
+    .from('fotos_pacientes')
+    .getPublicUrl(front_view_url);
+
+  const { data: three_four_photo } = supabase.storage
+    .from('fotos_pacientes')
+    .getPublicUrl(three_four_view_url);
+
+  const { data: profile_photo } = supabase.storage
+    .from('fotos_pacientes')
+    .getPublicUrl(profile_view_url);
+
+  const front_image = container.querySelector<HTMLImageElement>('#face_front_image');
+  const three_four_image = container.querySelector<HTMLImageElement>('#face_three_four_image');
+  const profile_image = container.querySelector<HTMLImageElement>('#face_profile_image');
+
+  if (front_image) {
+    front_image.src = front_photo.publicUrl;
+  }
+
+  if (three_four_image) {
+    three_four_image.src = three_four_photo.publicUrl;
+  }
+
+  if (profile_image) {
+    profile_image.src = profile_photo.publicUrl;
+  }
+
 
   const imprimir = container.querySelector<HTMLButtonElement>('#imprimir_button');
 
