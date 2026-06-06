@@ -130,9 +130,6 @@ export async function init_lista_pacientes_page() {
                 Abrir
               </td>
               
-              <td class="reports_table_header_cell" colspan="2">
-              Nova avaliação
-              </td>
             </tr>
 
           </table>

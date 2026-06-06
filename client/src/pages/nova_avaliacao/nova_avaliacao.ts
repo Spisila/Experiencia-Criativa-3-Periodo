@@ -5,6 +5,12 @@ import "../../components/input_boxes.css"
 import { supabase } from "../../lib/supabase"
 import { sintomas_atuais_masculinas, sintomas_atuais_feminino } from '../../lib/sintoma_pesos'
 
+import { switch_pair_button } from '../../components/switch_pair_button'
+
+import { trigger_notification_popup } from '../../components/notification_popup'
+
+import { v4 as uuidv4 } from 'uuid';
+
 export async function init_nova_avaliacao_page() {
 
   const container = document.querySelector<HTMLDivElement>('#app');
@@ -216,7 +222,7 @@ export async function init_nova_avaliacao_page() {
   const patientCity = container.querySelector<HTMLHeadingElement>('#patient_city');
 
   if (patientName) {
-  patientName.textContent = `Nome: ${pacienteDados.nome}`;
+    patientName.textContent = `Nome: ${pacienteDados.nome}`;
   }
 
   if (patientCpf) {
@@ -270,6 +276,122 @@ export async function init_nova_avaliacao_page() {
 
   const nova_avaliacao_button = container.querySelector<HTMLButtonElement>('#nova_avaliacao');
 
+
+  const autismDiagnosisYesButton = container.querySelector<HTMLButtonElement>('#autism_diagnosis_yes');
+  const autismDiagnosisNoButton = container.querySelector<HTMLButtonElement>('#autism_diagnosis_no');
+
+  const hasSiblingsYesButton = container.querySelector<HTMLButtonElement>('#has_siblings_yes');
+  const hasSiblingsNoButton = container.querySelector<HTMLButtonElement>('#has_siblings_no');
+
+  const familyWithMentalSymptomsYesButton = container.querySelector<HTMLButtonElement>('#family_with_mental_symptoms_yes');
+  const familyWithMentalSymptomsNoButton = container.querySelector<HTMLButtonElement>('#family_with_mental_symptoms_no');
+
+  const familyWithAtaxiaYesButton = container.querySelector<HTMLButtonElement>('#family_with_ataxia_yes');
+  const familyWithAtaxiaNoButton = container.querySelector<HTMLButtonElement>('#family_with_ataxia_no');
+
+  let has_autism_diagnosis = false;
+  let has_siblings = false;
+  let family_with_mental_symptoms = false;
+  let family_with_ataxia = false;
+
+  autismDiagnosisYesButton?.addEventListener('click', (_event) => {
+    has_autism_diagnosis = switch_pair_button(autismDiagnosisNoButton!, autismDiagnosisYesButton!, has_autism_diagnosis);
+  });
+
+  autismDiagnosisNoButton?.addEventListener('click', (_event) => {
+    has_autism_diagnosis = switch_pair_button(autismDiagnosisNoButton!, autismDiagnosisYesButton!, has_autism_diagnosis);
+  });
+
+  hasSiblingsYesButton?.addEventListener('click', (_event) => {
+    has_siblings = switch_pair_button(hasSiblingsNoButton!, hasSiblingsYesButton!, has_siblings);
+  });
+
+  hasSiblingsNoButton?.addEventListener('click', (_event) => {
+    has_siblings = switch_pair_button(hasSiblingsNoButton!, hasSiblingsYesButton!, has_siblings);
+  });
+
+  familyWithMentalSymptomsYesButton?.addEventListener('click', (_event) => {
+    family_with_mental_symptoms = switch_pair_button(familyWithMentalSymptomsNoButton!, familyWithMentalSymptomsYesButton!, family_with_mental_symptoms);
+  });
+
+  familyWithMentalSymptomsNoButton?.addEventListener('click', (_event) => {
+    family_with_mental_symptoms = switch_pair_button(familyWithMentalSymptomsNoButton!, familyWithMentalSymptomsYesButton!, family_with_mental_symptoms);
+  });
+
+  familyWithAtaxiaYesButton?.addEventListener('click', (_event) => {
+    family_with_ataxia = switch_pair_button(familyWithAtaxiaNoButton!, familyWithAtaxiaYesButton!, family_with_ataxia);
+  });
+
+  familyWithAtaxiaNoButton?.addEventListener('click', (_event) => {
+    family_with_ataxia = switch_pair_button(familyWithAtaxiaNoButton!, familyWithAtaxiaYesButton!, family_with_ataxia);
+  });
+
+  const uploadFaceFrontInput = container.querySelector<HTMLInputElement>('#face_front_input');
+  const uploadFaceThreeFourInput = container.querySelector<HTMLInputElement>('#face_three_four_input');
+  const uploadFaceProfileInput = container.querySelector<HTMLInputElement>('#face_profile_input');
+
+  let uploadFaceFrontContainer = container.querySelector<HTMLDivElement>('#face_front_container');
+  let uploadFaceThreeFourContainer = container.querySelector<HTMLDivElement>('#face_three_four_container');
+  let uploadFaceProfileContainer = container.querySelector<HTMLDivElement>('#face_profile_container');
+
+  uploadFaceFrontContainer?.addEventListener('click', () => {
+    uploadFaceFrontInput?.click();
+  });
+
+  uploadFaceThreeFourContainer?.addEventListener('click', () => {
+    uploadFaceThreeFourInput?.click();
+  });
+
+  uploadFaceProfileContainer?.addEventListener('click', () => {
+    uploadFaceProfileInput?.click();
+  });
+
+  let photo_face_front_preview: HTMLImageElement | null = null;
+  let photo_face_three_four_preview: HTMLImageElement | null = null;
+  let photo_face_profile_preview: HTMLImageElement | null = null;
+
+  uploadFaceFrontInput?.addEventListener('change', (event) => {
+    const file = event.target instanceof HTMLInputElement ? event.target.files?.[0] : null;
+    if (!file) return;
+
+    photo_face_front_preview = document.createElement('img');
+    photo_face_front_preview.src = URL.createObjectURL(file);
+    photo_face_front_preview.style.maxWidth = '100%';
+    photo_face_front_preview.style.maxHeight = '100%';
+    photo_face_front_preview.style.objectFit = 'cover';
+
+    uploadFaceFrontContainer!.innerHTML = '';
+    uploadFaceFrontContainer!.appendChild(photo_face_front_preview);
+  });
+
+  uploadFaceThreeFourContainer?.addEventListener('change', (event) => {
+    const file = event.target instanceof HTMLInputElement ? event.target.files?.[0] : null;
+    if (!file) return;
+
+    photo_face_three_four_preview = document.createElement('img');
+    photo_face_three_four_preview.src = URL.createObjectURL(file);
+    photo_face_three_four_preview.style.maxWidth = '100%';
+    photo_face_three_four_preview.style.maxHeight = '100%';
+    photo_face_three_four_preview.style.objectFit = 'cover';
+
+    uploadFaceThreeFourContainer!.innerHTML = '';
+    uploadFaceThreeFourContainer!.appendChild(photo_face_three_four_preview);
+  });
+
+  uploadFaceProfileContainer?.addEventListener('change', (event) => {
+    const file = event.target instanceof HTMLInputElement ? event.target.files?.[0] : null;
+    if (!file) return;
+
+    photo_face_profile_preview = document.createElement('img');
+    photo_face_profile_preview.src = URL.createObjectURL(file);
+    photo_face_profile_preview.style.maxWidth = '100%';
+    photo_face_profile_preview.style.maxHeight = '100%';
+    photo_face_profile_preview.style.objectFit = 'cover';
+
+    uploadFaceProfileContainer!.innerHTML = '';
+    uploadFaceProfileContainer!.appendChild(photo_face_profile_preview);
+  });
+
   const symptomButtonDeficienciaIntelectual = container.querySelector<HTMLButtonElement>('#symptom_button_deficiência_intelectual');
   const symptomButtonFaceOrelhasAlongadas = container.querySelector<HTMLButtonElement>('#symptom_button_face_orelhas_alongadas');
   const symptomButtonMacroorquidismo = container.querySelector<HTMLButtonElement>('#symptom_button_macroorquidismo');
@@ -284,9 +406,7 @@ export async function init_nova_avaliacao_page() {
   const symptomButtonAgressividade = container.querySelector<HTMLButtonElement>('#symptom_button_agressividade');
 
   if (pacienteDados.sexo == "feminino") {
-
     symptomButtonMacroorquidismo!.disabled = true;
-  
   }
 
   nova_avaliacao_button?.addEventListener('click', (_event) => {
@@ -329,7 +449,7 @@ export async function init_nova_avaliacao_page() {
   symptomButtonAgressividade?.addEventListener('click', (_event) => {
     toggle_symptom('agressividade', symptomButtonAgressividade);
   });
-  
+
   symptomButtonDeficienciaIntelectual?.classList.remove("is_active");
   symptomButtonFaceOrelhasAlongadas?.classList.remove("is_active");
   symptomButtonMacroorquidismo?.classList.remove("is_active");
@@ -342,7 +462,7 @@ export async function init_nova_avaliacao_page() {
   symptomButtonEvitaContatoVisual?.classList.remove("is_active");
   symptomButtonEvitaContatoFisico?.classList.remove("is_active");
   symptomButtonAgressividade?.classList.remove("is_active");
-  
+
   const temSintomas: Record<string, boolean> = {
     'deficiencia_intelectual': false,
     'face_orelhas_alongadas': false,
@@ -378,7 +498,6 @@ export async function init_nova_avaliacao_page() {
 
   async function nova_avaliacao_press() {
 
-    // Pegar dados do paciente
 
     const { data: pacienteDados, error: getPacienteError } = await supabase.from("paciente").select("*").eq("id", paciente_id).single();
 
@@ -388,14 +507,19 @@ export async function init_nova_avaliacao_page() {
       return;
     }
 
-    // Pegar sintomas selecionados
-    // Calcular score
-    // Criar avaliação no banco de dados
 
     const nome = pacienteDados.nome;
     const sexo = pacienteDados.sexo;
     const cpf = pacienteDados.cpf;
     const data_nascimento = pacienteDados.data_nascimento;
+    const nome_mae = pacienteDados.nome_mae;
+    const nome_responsavel = pacienteDados.nome_responsavel;
+    const cpf_responsavel = pacienteDados.cpf_responsavel;
+    const telefone = pacienteDados.telefone;
+    const pais = pacienteDados.pais;
+    const estado = pacienteDados.estado;
+    const cidade = pacienteDados.cidade;
+
     const observacao = observation_input?.value;
 
     let is_male = true;
@@ -436,7 +560,7 @@ export async function init_nova_avaliacao_page() {
       }
 
     }
-    
+
 
     const { data: { user }, error: authError } = await supabase.auth.getUser();
 
@@ -450,71 +574,65 @@ export async function init_nova_avaliacao_page() {
       return;
     }
 
-    const id_medico = user?.id;
+    const usuario_id = user?.id;
+    const avaliacao_id = uuidv4();
 
-    interface Paciente {
-      id: number,
-      nome: string,
-      cpf: string,
-      sexo: string,
-      id_usuario: number
-    }
+    const front_path = `${usuario_id}/${avaliacao_id}/front_view`;
+    const three_four_path = `${usuario_id}/${avaliacao_id}/three_four_view`;
+    const profile_path = `${usuario_id}/${avaliacao_id}/profile_view`;
 
+    try {
 
-    const id_paciente = (pacienteDados as Paciente).id;
+      const { error: uploadFrontError } = await supabase.storage
+        .from('fotos_pacientes')
+        .upload(front_path, uploadFaceFrontInput?.files![0]);
 
-    const { data: novaAvaliacao, error: insertAvaliacaoError } = await supabase
-      .from("avaliacao")
-      .insert({
-        usuario_id: id_medico,
-        paciente_id: id_paciente,
-        resultado_final: observacao,
-        score_final: score
-      })
-      .select()
-      .single()
+      if (uploadFrontError) {
+        throw uploadFrontError;
+      }
 
-    if (insertAvaliacaoError) {
-      console.log("Erro ao criar avaliação");
-      console.log(insertAvaliacaoError);
+      const { error: uploadThreeFourError } = await supabase.storage
+        .from('fotos_pacientes')
+        .upload(three_four_path, uploadFaceThreeFourInput?.files![0]);
+
+      if (uploadThreeFourError) {
+        throw uploadThreeFourError;
+      }
+
+      const { error: uploadProfileError } = await supabase.storage
+        .from('fotos_pacientes')
+        .upload(profile_path, uploadFaceProfileInput?.files![0]);
+
+      if (uploadProfileError) {
+        throw uploadProfileError;
+      }
+
+      const { error } = await supabase.rpc('nova_avaliacao_transacao', {
+        p_observacao_avaliacao: observacao,
+        p_diagnostico_autismo_avaliacao: has_autism_diagnosis,
+        p_tem_irmaos_avaliacao: has_siblings,
+        p_familia_sintomas_mentais_avaliacao: family_with_mental_symptoms,
+        p_familiares_ataxia_avaliacao: family_with_ataxia,
+        p_avaliacao_sintomas: id_sintomas_selecionados,
+        p_score_final_avaliacao: score,
+
+        p_usuario_id: usuario_id,
+        p_avaliacao_id: avaliacao_id,
+        p_paciente_id: paciente_id
+      });
+
+      if (error) {
+        throw error;
+      } else {
+        console.log('Avaliação criada');
+      }
+
+    } catch (error) {
+      console.error('Erro no cadastro:', error instanceof Error ? error.message : error);
+      trigger_notification_popup("Erro ao criar nova avaliação");
       return;
     }
 
-    if (!novaAvaliacao) {
-      console.log("Avaliação não criada?");
-      return;
-    }
-
-    console.log("Avaliação criada");
-
-    interface Avaliacao {
-      id: number,
-      usuario_id: number,
-      paciente_id: number,
-      resultado_final: string,
-      score_final: number
-    }
-
-    const id_avaliacao = (novaAvaliacao as Avaliacao).id;
-
-    const sintomasAssociativos = id_sintomas_selecionados.map((sintomaId) => ({
-      avaliacao_id: id_avaliacao,
-      sintoma_id: sintomaId
-    }));
-
-    const { data: novoItemAvaliacao, error: insertItemAvaliacaoError } = await supabase
-      .from("item_avaliacao").
-      insert(
-        sintomasAssociativos
-      )
-
-    if (insertItemAvaliacaoError) {
-      console.log("Erro ao criar item avaliação");
-      console.log(insertItemAvaliacaoError);
-      return;
-    }
-
-    console.log("Item avaliação criados");
 
   }
 

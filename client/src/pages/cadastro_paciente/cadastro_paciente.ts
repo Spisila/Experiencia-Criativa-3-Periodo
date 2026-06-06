@@ -589,8 +589,6 @@ export async function init_cadastro_paciente_page() {
 
     const avaliacao_id = uuidv4();
 
-    console.log("Avaliacao id: " + avaliacao_id);
-
     const front_path = `${id_medico}/${avaliacao_id}/front_view`;
     const three_four_path = `${id_medico}/${avaliacao_id}/three_four_view`;
     const profile_path = `${id_medico}/${avaliacao_id}/profile_view`;
