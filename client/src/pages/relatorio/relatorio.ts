@@ -389,4 +389,32 @@ export async function init_relatorio_page() {
     window.print();
   })
 
+  const deletar = container.querySelector<HTMLButtonElement>('#deletar_button')
+
+  deletar?.addEventListener('click', async () => {
+
+    const confirmar = confirm(
+      "Tem certeza que deseja deletar este relatório?"
+    );
+
+    if (!confirmar) return;
+
+    const { error } = await supabase
+      .from("avaliacao")
+      .delete()
+      .eq("id", relatorio_id);
+
+    if (error) {
+      alert("Erro ao deletar relatório");
+      console.error(error);
+      return;
+    }
+
+    console.log(relatorio_id)
+
+    alert("Relatório deletado com sucesso");
+
+    navigateTo("/relatorios_usuario");
+  });
+
 }
