@@ -12,6 +12,9 @@ import { cadastro_paciente_schema } from '../../schemas/cadastro_pacientes_schem
 
 import { switch_pair_button } from '../../components/switch_pair_button';
 
+
+import { v4 as uuidv4 } from 'uuid';
+
 export async function init_cadastro_paciente_page() {
 
   const container = document.querySelector<HTMLDivElement>('#app');
@@ -518,6 +521,7 @@ export async function init_cadastro_paciente_page() {
       return;
     }
 
+    // TODO: validar cpf, telefone, data de nascimento e outros campos
     const dadosFormulario = {
       nome: nome,
       cpf: cpf,
@@ -578,39 +582,86 @@ export async function init_cadastro_paciente_page() {
       sexo = "feminino";
     }
 
+
     const user = await get_auth_user();
 
     const id_medico = user!.session!.user.id;
 
-    const { data, error } = await supabase.rpc('cadastrar_paciente_transacao', {
-      nome_paciente: nome,
-      data_nascimento_paciente: data_nascimento,
-      sexo_paciente: sexo,
-      cpf_paciente: cpf,
-      nome_mae_paciente: mother_name,
-      responsavel_paciente: responsible_name,
-      cpf_responsavel_paciente: cpf_responsible,
-      pais_paciente: country,
-      estado_paciente: state,
-      cidade_paciente: city,
-      telefone_paciente: phone_number,
-      observacao_avaliacao: observacao,
-      diagnostico_autismo_avaliacao: has_autism_diagnosis,
-      tem_irmaos_avaliacao: has_siblings,
-      familia_sintomas_mentais_avaliacao: family_with_mental_symptoms,
-      familiares_ataxia_avaliacao: family_with_ataxia,
-      avaliacao_sintomas: id_sintomas_selecionados,
-      usuario_id: id_medico,
-      score_fina_avaliacao: score
-    });
+    const avaliacao_id = uuidv4();
 
-    if (error) {
-      console.error('Erro na transação:', error.message);
+    console.log("Avaliacao id: " + avaliacao_id);
+
+    const front_path = `${id_medico}/${avaliacao_id}/front_view`;
+    const three_four_path = `${id_medico}/${avaliacao_id}/three_four_view`;
+    const profile_path = `${id_medico}/${avaliacao_id}/profile_view`;
+
+
+    try {
+      const { error: uploadFrontError } = await supabase.storage
+        .from('fotos_pacientes')
+        .upload(front_path, uploadFaceFrontInput?.files![0]);
+
+      if (uploadFrontError) {
+        throw uploadFrontError;
+      }
+
+      const { error: uploadThreeFourError } = await supabase.storage
+        .from('fotos_pacientes')
+        .upload(three_four_path, uploadFaceThreeFourInput?.files![0]);
+
+      if (uploadThreeFourError) {
+        throw uploadThreeFourError;
+      }
+
+      const { error: uploadProfileError } = await supabase.storage
+        .from('fotos_pacientes')
+        .upload(profile_path, uploadFaceProfileInput?.files![0]);
+
+      if (uploadProfileError) {
+        throw uploadProfileError;
+      }
+
+      const { data, error } = await supabase.rpc('cadastrar_paciente_transacao', {
+        p_nome_paciente: nome,
+        p_data_nascimento_paciente: data_nascimento,
+        p_sexo_paciente: sexo,
+        p_cpf_paciente: cpf,
+        p_nome_mae_paciente: mother_name,
+        p_responsavel_paciente: responsible_name,
+        p_cpf_responsavel_paciente: cpf_responsible,
+        p_pais_paciente: country,
+        p_estado_paciente: state,
+        p_cidade_paciente: city,
+        p_telefone_paciente: phone_number,
+
+        p_observacao_avaliacao: observacao,
+        p_diagnostico_autismo_avaliacao: has_autism_diagnosis,
+        p_tem_irmaos_avaliacao: has_siblings,
+        p_familia_sintomas_mentais_avaliacao: family_with_mental_symptoms,
+        p_familiares_ataxia_avaliacao: family_with_ataxia,
+        p_avaliacao_sintomas: id_sintomas_selecionados,
+        p_score_final_avaliacao: score,
+
+        p_usuario_id: id_medico,
+        p_avaliacao_id: avaliacao_id
+      });
+
+      console.log(data);
+
+      if (error) {
+        throw error;
+      } else {
+        console.log('Paciente, avaliação e itens cadastrados com sucesso!');
+      }
+
+    } catch (error) {
+      console.error('Erro no cadastro:', error instanceof Error ? error.message : error);
       trigger_notification_popup("Erro ao cadastrar paciente");
       return;
-    } else {
-      console.log('Paciente, avaliação e itens cadastrados com sucesso!');
     }
+
+
+
 
     trigger_notification_popup("Paciente cadastrado com sucesso");
 

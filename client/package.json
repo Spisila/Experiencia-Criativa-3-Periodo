@@ -17,6 +17,7 @@
     "@supabase/supabase-js": "^2.105.3",
     "dotenv": "^17.4.2",
     "lucide-static": "^1.14.0",
+    "uuid": "^14.0.0",
     "zod": "^4.4.3"
   }
 }
