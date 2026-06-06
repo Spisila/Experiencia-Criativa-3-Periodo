@@ -43,6 +43,15 @@ export async function init_relatorio_page() {
 
           <div class="report_conclusion_container">
 
+            <div class="extra_report_info"> 
+
+              <p id="tem_irmaos_texto" >Paciente tem irmãos :</p>
+              <p id="tem_autismo_texto" >Paciente tem diagnostico de autismo :</p>
+              <p id="tem_familia_sintomas_mentais_texto" >Paciente tem familiares com sintomas mentais :</p>
+              <p id="tem_familia_ataxia_texto" >Familiares com ataxia :</p>
+
+            </div>
+
             <div class="report_conclusion"">
               
               <p id="observacoes_texto" >Observações :</p>
@@ -178,11 +187,22 @@ export async function init_relatorio_page() {
 
         </div>
 
-        <button id="imprimir_button" class="base_button" style="margin-top: 15px;">
+        <div class="report_buttons_container">
+        
+          <button id="editar_button" class="base_small_button" style="margin-top: 15px;">
+            Editar
+          </button>
+        
+          <button id="imprimir_button" class="base_small_button" style="margin-top: 15px;">
+            Imprimir
+          </button>
 
-          Imprimir
+          <button id="deletar_button" class="base_small_button" style="margin-top: 15px;">
+            Deletar
+          </button>
 
-        </button>
+          </div>
+
 
       </div>
   
@@ -200,6 +220,8 @@ export async function init_relatorio_page() {
   if (!relatorioDados) {
     console.log("Fala ao pegar dados do relatorio");
   }
+
+  console.log(relatorioDados)
 
   const medico_id = relatorioDados?.at(0).usuario_id;
   const paciente_id = relatorioDados?.at(0).paciente_id;
@@ -219,6 +241,30 @@ export async function init_relatorio_page() {
   const data_avaliacao = relatorioDados?.at(0).data_realizada;
   const data_avaliacao_formatada = new Date(data_avaliacao).toLocaleString('pt-BR');
   const score_total = relatorioDados?.at(0).score_final;
+
+  let tem_irmaos = false;
+
+  if (relatorioDados?.at(0).tem_irmaos == true) {
+    tem_irmaos = true;
+  }
+
+  let tem_autismo = false;
+
+  if (relatorioDados?.at(0).tem_autismo == true) {
+    tem_autismo = true;
+  }
+
+  let familia_sintomas_mentais = false;
+
+  if (relatorioDados?.at(0).familia_sintomas_mentais == true) {
+    familia_sintomas_mentais = true;
+  }
+
+  let familia_ataxia = false;
+
+  if (relatorioDados?.at(0).familia_ataxia == true) {
+    familia_ataxia = true;
+  }
 
   let indicacao = "Nenhuma"
 
@@ -244,6 +290,11 @@ export async function init_relatorio_page() {
 
   const observacao_container = container.querySelector<HTMLTextAreaElement>('#observacoes_texto')
 
+  const tem_irmaos_container = container.querySelector<HTMLTextAreaElement>('#tem_irmaos_texto')
+  const tem_autismo_container = container.querySelector<HTMLTextAreaElement>('#tem_autismo_texto')
+  const tem_familia_sintomas_mentais_container = container.querySelector<HTMLTextAreaElement>('#tem_familia_sintomas_mentais_texto')
+  const tem_familia_ataxia_container = container.querySelector<HTMLTextAreaElement>('#tem_familia_ataxia_texto')
+
   if (
     !nome_paciente_container ||
     !data_nascimento_container ||
@@ -251,7 +302,11 @@ export async function init_relatorio_page() {
     !nome_medico_container ||
     !data_avaliacao_container ||
     !indicacao_container ||
-    !observacao_container) { return; }
+    !observacao_container ||
+    !tem_irmaos_container ||
+    !tem_autismo_container ||
+    !tem_familia_sintomas_mentais_container ||
+    !tem_familia_ataxia_container) { return; }
 
   nome_paciente_container.textContent = "Nome do paciente : " + nome_paciente;
   data_nascimento_container.textContent = "Data nascimento : " + nascimento_formatada;
@@ -262,6 +317,11 @@ export async function init_relatorio_page() {
   indicacao_container.textContent = "Indicação : " + indicacao;
 
   observacao_container.textContent = "Observação : " + observacao;
+
+  tem_irmaos_container.textContent = "Paciente tem irmãos : " + (tem_irmaos ? "Sim" : "Não");
+  tem_autismo_container.textContent = "Paciente tem diagnostico de autismo : " + (tem_autismo ? "Sim" : "Não");
+  tem_familia_sintomas_mentais_container.textContent = "Paciente tem familiares com sintomas mentais : " + (familia_sintomas_mentais ? "Sim" : "Não");
+  tem_familia_ataxia_container.textContent = "Familiares com ataxia : " + (familia_ataxia ? "Sim" : "Não");
 
   const { data: itemAvaliacaoDados, error: getItemAvaliacaoError } = await supabase.from("item_avaliacao").select("sintoma_id").eq("avaliacao_id", relatorio_id);
 

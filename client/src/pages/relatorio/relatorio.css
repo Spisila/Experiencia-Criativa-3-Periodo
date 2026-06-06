@@ -105,17 +105,34 @@
   justify-content: center;
   align-items: center;
 
+  flex-direction: column;
+
   width: 90%;
   height: 100%;
 
+  gap: 15px;
+
   background-color: var(--tertiary-card-bg);
+
+}
+
+.extra_report_info {
+
+  display: flex;
+
+  margin-top: 15px;
+
+  flex-direction: column;
+  width: 90%;
+  height: 50%;
+
 
 }
 
 .report_conclusion {
 
   width: 90%;
-  height: 90%;
+  height: 50%;
 
 }
 
@@ -172,11 +189,34 @@
   padding-left: 5px;
 }
 
+.report_buttons_container {
+
+  display: flex;
+
+  flex-direction: row;
+
+  gap: 20px;
+
+}
+
+@page {
+  size: A4;
+  margin: 1cm;
+}
+
 @media print {
 
   body {
     color: black;
     background-color: white;
+
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12pt;
+    color: black;
+  }
+
+  p {
+    margin: 4px 0;
   }
 
   .whole {
@@ -187,7 +227,7 @@
     display: none;
   }
 
-  .base_button {
+  .base_small_button {
     display: none;
   }
 
@@ -203,6 +243,11 @@
     height: 20%;
 
     gap: 0;
+    padding: 0;
+    padding-left: 10px;
+
+    display: grid;
+    grid-template-columns: 1fr 1fr;
 
     border: 3px solid black;
     border-bottom: 3px solid black;
@@ -263,12 +308,16 @@
     width: 100%;
     height: 70%;
 
+    page-break-inside: avoid;
+
     margin: 0;
     background-color: white;
   }
 
   .report_symptoms_table {
     border: 0;
+
+    page-break-inside: avoid;
   }
 
   .symptoms_table_header {
