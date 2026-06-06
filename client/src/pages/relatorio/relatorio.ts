@@ -60,130 +60,127 @@ export async function init_relatorio_page() {
 
           </div>
 
-          <div class="report_identified_symptoms_container">
+          <table class="report_symptoms_table">
+            
+            <tr class="symptoms_table_header">
+              <td class="symptoms_table_header_cell">
+                Sintoma
+              </td>
+              <td class="symptoms_table_header_cell">
+                Presente
+              </td>
+            </tr>
 
-            <table class="report_symptoms_table">
-              
-              <tr class="symptoms_table_header">
-                <td class="symptoms_table_header_cell">
-                  Sintoma
-                </td>
-                <td class="symptoms_table_header_cell">
-                  Presente
-                </td>
-              </tr>
+            <tr class="symptoms_table_row">
+              <td class="symptoms_table_cell">
+                Deficiência Intelectual
+              </td>
+              <td id="deficiencia_intelectual_texto" class="symptoms_table_cell">
+                Nao
+              </td>
+            </tr>
 
-              <tr class="symptoms_table_row">
-                <td class="symptoms_table_cell">
-                  Deficiência Intelectual
-                </td>
-                <td id="deficiencia_intelectual_texto" class="symptoms_table_cell">
-                  Nao
-                </td>
-              </tr>
+            <tr class="symptoms_table_row">
+              <td class="symptoms_table_cell">
+                Face alongada/orelhas
+              </td>
+              <td id="face_alongada_orelhas_texto" class="symptoms_table_cell">
+                Nao
+              </td>
+            </tr>
 
-              <tr class="symptoms_table_row">
-                <td class="symptoms_table_cell">
-                  Face alongada/orelhas
-                </td>
-                <td id="face_alongada_orelhas_texto" class="symptoms_table_cell">
-                  Nao
-                </td>
-              </tr>
+            <tr class="symptoms_table_row">
+              <td class="symptoms_table_cell">
+                Macroorquidismo
+              </td>
+              <td id="macroorquidismo_texto" class="symptoms_table_cell">
+                Nao
+              </td>
+            </tr>
 
-              <tr class="symptoms_table_row">
-                <td class="symptoms_table_cell">
-                  Macroorquidismo
-                </td>
-                <td id="macroorquidismo_texto" class="symptoms_table_cell">
-                  Nao
-                </td>
-              </tr>
+            <tr class="symptoms_table_row">
+              <td class="symptoms_table_cell">
+                Hipermobilidade articular
+              </td>
+              <td id="hipermobilidade_articular_texto" class="symptoms_table_cell">
+                Nao
+              </td>
+            </tr>
 
-              <tr class="symptoms_table_row">
-                <td class="symptoms_table_cell">
-                  Hipermobilidade articular
-                </td>
-                <td id="hipermobilidade_articular_texto" class="symptoms_table_cell">
-                  Nao
-                </td>
-              </tr>
+            <tr class="symptoms_table_row">
+              <td class="symptoms_table_cell">
+                Dificuldades de aprendizagem
+              </td> 
+              <td id="dificuldades_aprendizagem_texto" class="symptoms_table_cell">
+                Nao
+              </td>
+            </tr>
 
-              <tr class="symptoms_table_row">
-                <td class="symptoms_table_cell">
-                  Dificuldades de aprendizagem
-                </td> 
-                <td id="dificuldades_aprendizagem_texto" class="symptoms_table_cell">
-                  Nao
-                </td>
-              </tr>
+            <tr class="symptoms_table_row">
+              <td class="symptoms_table_cell">
+                Déficit de atenção
+              </td>
+              <td id="deficit_atencao_texto" class="symptoms_table_cell">
+                Nao
+              </td>
+            </tr>
 
-              <tr class="symptoms_table_row">
-                <td class="symptoms_table_cell">
-                  Déficit de atenção
-                </td>
-                <td id="deficit_atencao_texto" class="symptoms_table_cell">
-                  Nao
-                </td>
-              </tr>
+            <tr class="symptoms_table_row">
+              <td class="symptoms_table_cell">
+                Movimentos repetitivos
+              </td>
+              <td id="movimentos_repetitivos_texto" class="symptoms_table_cell">
+                Nao
+              </td>
+            </tr>
 
-              <tr class="symptoms_table_row">
-                <td class="symptoms_table_cell">
-                  Movimentos repetitivos
-                </td>
-                <td id="movimentos_repetitivos_texto" class="symptoms_table_cell">
-                  Nao
-                </td>
-              </tr>
+            <tr class="symptoms_table_row">
+              <td class="symptoms_table_cell">
+                Atraso na fala
+              </td>
+              <td id="atraso_fala_texto" class="symptoms_table_cell">
+                Nao
+              </td>
+            </tr>
 
-              <tr class="symptoms_table_row">
-                <td class="symptoms_table_cell">
-                  Atraso na fala
-                </td>
-                <td id="atraso_fala_texto" class="symptoms_table_cell">
-                  Nao
-                </td>
-              </tr>
+            <tr class="symptoms_table_row">
+              <td class="symptoms_table_cell">
+                Hiperatividade 
+              </td>
+              <td id="hiperatividade_texto" class="symptoms_table_cell">
+                Nao
+              </td>
+            </tr>
 
-              <tr class="symptoms_table_row">
-                <td class="symptoms_table_cell">
-                  Hiperatividade 
-                </td>
-                <td id="hiperatividade_texto" class="symptoms_table_cell">
-                  Nao
-                </td>
-              </tr>
+            <tr class="symptoms_table_row">
+              <td class="symptoms_table_cell">
+                Evita contato visual 
+              </td>
+              <td id="evita_contato_visual_texto" class="symptoms_table_cell">
+                Nao
+              </td>
+            </tr>
 
-              <tr class="symptoms_table_row">
-                <td class="symptoms_table_cell">
-                  Evita contato visual 
-                </td>
-                <td id="evita_contato_visual_texto" class="symptoms_table_cell">
-                  Nao
-                </td>
-              </tr>
+            <tr class="symptoms_table_row">
+              <td class="symptoms_table_cell">
+                Evita contato físico 
+              </td>
+              <td id="evita_contato_fisico_texto" class="symptoms_table_cell">
+                Nao
+              </td>
+            </tr>
 
-              <tr class="symptoms_table_row">
-                <td class="symptoms_table_cell">
-                  Evita contato físico 
-                </td>
-                <td id="evita_contato_fisico_texto" class="symptoms_table_cell">
-                  Nao
-                </td>
-              </tr>
+            <tr class="symptoms_table_row">
+              <td class="symptoms_table_cell">
+                Agressividade 
+              </td>
+              <td id="agressividade_texto" class="symptoms_table_cell">
+                Nao
+              </td>
+            </tr>
 
-              <tr class="symptoms_table_row">
-                <td class="symptoms_table_cell">
-                  Agressividade 
-                </td>
-                <td id="agressividade_texto" class="symptoms_table_cell">
-                  Nao
-                </td>
-              </tr>
+          </table>
 
-            </table>
-
-          </div>
 
         </div>
 
@@ -275,7 +272,7 @@ export async function init_relatorio_page() {
     indicacao = "Fazer teste genetico";
   }
   else {
-    indicacao == "Nenhuma";
+    indicacao = "Nenhuma";
   }
 
   const observacao = relatorioDados?.at(0).resultado_final;
