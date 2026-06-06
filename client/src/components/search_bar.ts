@@ -1,7 +1,6 @@
 
 import { supabase } from "../lib/supabase";
 import { navigateTo } from "../main";
-import { encher_tabela_usuarios } from "./table_functions";
 import type { Usuario } from "./table_functions";
 
 export function search_users(container: HTMLElement, table: HTMLTableElement) {
@@ -55,7 +54,6 @@ export function search_users(container: HTMLElement, table: HTMLTableElement) {
             cpf: usuarioEncontrado.cpf
           }]
 
-          encher_tabela_usuarios(usuarioArray, table, go_to_user_page);
         }
       }
 

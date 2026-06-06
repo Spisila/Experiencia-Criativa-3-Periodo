@@ -5,7 +5,7 @@ import "../../components/input_boxes.css"
 import { supabase } from "../../lib/supabase"
 import { navigateTo } from '../../main';
 
-import { encher_tabela_usuarios, sort_table_by_name, setup_table_sorting, setup_fill_table } from '../../components/table_functions';
+import { setup_table_sorting, setup_fill_table } from '../../components/table_functions';
 import { update_page, type Usuario, type sort_table_options } from '../../components/table_functions';
 
 import { get_auth_user } from '../../components/auth_functions';

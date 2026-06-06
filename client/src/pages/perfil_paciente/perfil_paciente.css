@@ -1,0 +1,65 @@
+.paciente_perfil_container{
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  flex-direction: column;
+
+  gap: 15px;
+
+  width: 40%;
+  height: 100%;
+
+  z-index: 5;
+
+  padding: 20px;
+
+  box-sizing: border-box;
+
+  border: 3px solid var(--card-border);
+  background-color: var(--card-bg);
+
+}
+
+.paciente_perfil_inputs{
+
+  display: flex;
+  justify-content: start;
+  align-items: left;
+
+  flex-direction: column;
+
+  gap: 3px;
+
+  text-align: left;
+
+  width: 75%;
+  height: 90%;
+
+  z-index: 5;
+
+  box-sizing: border-box;
+
+
+}
+
+.paciente_perfil_buttons {
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  flex-direction: row;
+
+  gap: 15px;
+
+  width: 75%;
+  height: 20%;
+
+  text-align: center;
+
+  z-index: 5;
+
+  box-sizing: border-box;
+}

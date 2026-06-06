@@ -2,8 +2,6 @@ import './opcoes_usuario.css'
 import '../../components/base_button.css'
 
 import { navigateTo } from '../../main';
-import { _nativeEnum } from 'zod/v4/core';
-
 
 export function init_opcoes_usuario_page() {
 
@@ -28,7 +26,7 @@ export function init_opcoes_usuario_page() {
 
       <button class="big_ass_button" id="pacientes_usuario_button">
         <img class="icon_image" src="/node_modules/lucide-static/icons/heart-handshake.svg" alt="Paciente" style="height: 30%;" />
-        Nova avaliação
+        Lista de pacientes
       </button>
 
     </div>

@@ -7,47 +7,6 @@ export interface Usuario {
   cpf: string
 }
 
-export function encher_tabela_usuarios(usuarios: Usuario[], table: HTMLTableElement, botao_callback: (id: string) => void) {
-
-  console.log(usuarios);
-
-  for (let i = 0; i < usuarios.length; i++) {
-
-    const linha = document.createElement('tr');
-    linha.className = "reports_table_row"
-
-    const nome = document.createElement('td');
-    nome.textContent = usuarios.at(i)!.nome;
-    nome.className = "reports_table_cell"
-
-    const cpf = document.createElement('td');
-    cpf.textContent = usuarios.at(i)!.cpf;
-    cpf.className = "reports_table_cell"
-
-    const botao_container = document.createElement('td');
-    botao_container.className = "reports_table_cell"
-
-    const botao_abrir_perfil_usuario = document.createElement("button");
-    botao_abrir_perfil_usuario.textContent = "Abrir"
-    botao_abrir_perfil_usuario.className = "base_table_button"
-
-    botao_abrir_perfil_usuario.addEventListener('click', () => {
-      botao_callback(usuarios.at(i)!.id)
-    })
-
-    table.appendChild(linha)
-
-    linha.appendChild(nome)
-    linha.appendChild(cpf)
-
-    botao_container.appendChild(botao_abrir_perfil_usuario)
-    linha.appendChild(botao_container)
-
-
-  }
-
-
-}
 
 function go_to_user_page(user_id: string) {
 
@@ -55,96 +14,7 @@ function go_to_user_page(user_id: string) {
 
 }
 
-export function sort_table_by_name(container: HTMLElement, table: HTMLTableElement, ascendente: boolean) {
 
-  const sort_by_user_name_button = container.querySelector<HTMLButtonElement>('#sort_by_user_name_button');
-
-  sort_by_user_name_button?.addEventListener('click', async () => {
-
-    const linhas = container.querySelectorAll('.reports_table_row')
-
-    linhas.forEach(linha => {
-      linha.remove();
-    })
-
-    const { data: usuarios, error: pegarUsuariosError } = await supabase
-      .rpc('obter_usuarios_ordenados', {
-        ascendente: ascendente
-      });
-
-
-
-    if (pegarUsuariosError) {
-      console.log("Erro usuarios em ordem de nome");
-      console.log(pegarUsuariosError)
-    }
-
-    if (usuarios) {
-      encher_tabela_usuarios(usuarios, table, go_to_user_page)
-    }
-
-    ascendente = !ascendente;
-  });
-}
-
-export interface Paciente {
-  paciente_id: string,
-  nome_paciente: string,
-  data_nascimento: string,
-  sexo: string,
-  paciente_cpf: string
-}
-
-export function encher_tabela_pacientes(paciente: Paciente[], table: HTMLTableElement, botao_callback: (id: string) => void) {
-
-  console.log(paciente)
-
-  for (let i = 0; i < paciente.length; i++) {
-
-    const linha = document.createElement('tr');
-    linha.className = "reports_table_row"
-
-    const nome_paciente = document.createElement('td');
-    nome_paciente.textContent = paciente.at(i)!.nome_paciente;
-    nome_paciente.className = "reports_table_cell"
-
-    const data_nascimento = document.createElement('td');
-    data_nascimento.textContent = new Date(paciente.at(i)!.data_nascimento).toLocaleString('pt-BR');
-    data_nascimento.className = "reports_table_cell"
-
-    const sexo = document.createElement('td');
-    sexo.textContent = paciente.at(i)!.sexo;
-    sexo.className = "reports_table_cell"
-
-    const cpf = document.createElement('td');
-    cpf.textContent = paciente.at(i)!.paciente_cpf;
-    cpf.className = "reports_table_cell"
-
-    const botao_container = document.createElement('td');
-    botao_container.className = "reports_table_cell"
-
-    const botao_criar_novo_relatorio = document.createElement("button");
-    botao_criar_novo_relatorio.textContent = "Abrir"
-    botao_criar_novo_relatorio.className = "base_table_button"
-
-    botao_criar_novo_relatorio.addEventListener('click', (_MouseEvent) => {
-      botao_callback(paciente.at(i)!.paciente_id)
-    })
-
-    table.appendChild(linha)
-
-    linha.appendChild(nome_paciente)
-    linha.appendChild(data_nascimento)
-    linha.appendChild(sexo)
-    linha.appendChild(cpf)
-
-    botao_container.appendChild(botao_criar_novo_relatorio)
-    linha.appendChild(botao_container)
-
-
-  }
-
-}
 
 export interface sort_table_options<T> {
   button: HTMLButtonElement | null;

@@ -125,8 +125,13 @@ export async function init_lista_pacientes_page() {
                 </div>
 
               </td>
+              
               <td class="reports_table_header_cell" colspan="2">
                 Abrir
+              </td>
+              
+              <td class="reports_table_header_cell" colspan="2">
+              Nova avaliação
               </td>
             </tr>
 
@@ -148,7 +153,7 @@ export async function init_lista_pacientes_page() {
 
   let pacientes = await get_pacientes('nome', true, user_id, 1);
   const pacientes_entradas = await get_entradas_pacientes(user_id);
-  setup_fill_table(pacientes ?? [], table, criar_novo_atendimento);
+  setup_fill_table(pacientes ?? [], table, ir_perfil_paciente);
 
 
   const sort_by_patient_name_button = container.querySelector<HTMLButtonElement>('#sort_by_patient_name_button');
@@ -158,19 +163,19 @@ export async function init_lista_pacientes_page() {
   setup_table_sorting(
     sort_by_patient_name_button,
     (ascendente) => get_pacientes('nome', ascendente, user_id, 1),
-    (dados) => setup_fill_table(dados, table, criar_novo_atendimento)
+    (dados) => setup_fill_table(dados, table, ir_perfil_paciente)
   )
 
   setup_table_sorting(
     sort_by_date_of_birth_button,
     (ascendente) => get_pacientes('data_nascimento', ascendente, user_id, 1),
-    (dados) => setup_fill_table(dados, table, criar_novo_atendimento)
+    (dados) => setup_fill_table(dados, table, ir_perfil_paciente)
   )
 
   setup_table_sorting(
     sort_by_sex_button,
     (ascendente) => get_pacientes('sex', ascendente, user_id, 1),
-    (dados) => setup_fill_table(dados, table, criar_novo_atendimento)
+    (dados) => setup_fill_table(dados, table, ir_perfil_paciente)
   )
 
   let page = 1;
@@ -180,7 +185,7 @@ export async function init_lista_pacientes_page() {
     page,
     get_max_pages(pacientes_entradas!, 24),
     (p) => get_pacientes('nome', true, user_id, p),
-    (dados) => setup_fill_table(dados ?? [], table, criar_novo_atendimento)
+    (dados) => setup_fill_table(dados ?? [], table, ir_perfil_paciente)
   );
 
 }
@@ -228,9 +233,9 @@ async function get_pacientes<T extends object>(ordenar_por: string, ascendente: 
 
 }
 
-function criar_novo_atendimento(paciente_id: string) {
+function ir_perfil_paciente(paciente_id: string) {
 
-  navigateTo("/nova_avaliacao")
-  window.history.pushState(null, '', "/nova_avaliacao/" + paciente_id);
+  navigateTo("/perfil_paciente")
+  window.history.pushState(null, '', "/perfil_paciente/" + paciente_id);
 
 }

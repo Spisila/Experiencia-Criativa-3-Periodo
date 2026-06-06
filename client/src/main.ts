@@ -20,6 +20,8 @@ import { init_relatorio_page } from './pages/relatorio/relatorio.ts';
 
 import { init_nova_avaliacao_page } from './pages/nova_avaliacao/nova_avaliacao.ts';
 
+import { init_perfil_paciente_page } from './pages/perfil_paciente/perfil_paciente.ts';
+
 // Libs
 import { carregar_pesos } from './lib/sintoma_pesos.ts';
 import { supabase } from './lib/supabase.ts';
@@ -58,7 +60,9 @@ const Paginas: Pagina[] = [
 
   { path: '/relatorio',          init: init_relatorio_page,          perfil_necessario: "autorizado",    titulo: "RELATORIO" },
 
-  { path: '/nova_avaliacao',     init: init_nova_avaliacao_page,     perfil_necessario: "medico",        titulo: "NOVA AVALIAÇÃO"}
+  { path: '/nova_avaliacao',     init: init_nova_avaliacao_page,     perfil_necessario: "medico",        titulo: "NOVA AVALIAÇÃO"},
+
+  { path: '/perfil_paciente',     init: init_perfil_paciente_page,     perfil_necessario: "medico",        titulo: "PERFIL PACIENTE"}
 ]
 
 let paths: string[] = Paginas.map(p => p.path);
