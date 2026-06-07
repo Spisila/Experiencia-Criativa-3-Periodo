@@ -5,6 +5,31 @@ import "../../components/input_boxes.css"
 import { supabase } from "../../lib/supabase"
 import { navigateTo } from '../../main';
 
+import { trigger_notification_popup } from '../../components/notification_popup';
+
+import { calcular_score_final, retornar_sintomas_selecionados } from '../../lib/sintoma_pesos';
+
+const tem_sintomas: Record<string, boolean> = {
+  'deficiencia_intelectual': false,
+  'face_orelhas_alongadas': false,
+  'macroorquidismo': false,
+  'hipermobilidade_articular': false,
+  'dificuldade_de_aprendizagem': false,
+  'deficit_de_atencao': false,
+  'movimentos_repetitivos': false,
+  'atraso_na_fala': false,
+  'hiperatividade': false,
+  'evita_contato_visual': false,
+  'evita_contato_fisico': false,
+  'agressividade': false
+};
+
+const tem_relatorio_extras: Record<string, boolean> = {
+  'tem_autismo': false,
+  'tem_irmaos': false,
+  'familiares_ataxia': false,
+  'familiares_sintomas_mentais': false,
+};
 
 export async function init_relatorio_page() {
 
@@ -65,16 +90,94 @@ export async function init_relatorio_page() {
 
               <div class="extra_report_info"> 
 
-                <p id="tem_irmaos_texto" >Paciente tem irmãos :</p>
-                <p id="tem_autismo_texto" >Paciente tem diagnostico de autismo :</p>
-                <p id="tem_familia_sintomas_mentais_texto" >Paciente tem familiares com sintomas mentais :</p>
-                <p id="tem_familia_ataxia_texto" >Familiares com ataxia :</p>
+                
+                <table class="basic_table"> 
 
+                  <tr class="basic_row"> 
+                  
+                    <td class="basic_cell"> 
+                      <p>Tem diagnostico de autismo:</p>
+                    </td>
+
+                    <td class="basic_cell"> 
+
+                      <div class="basic_cell_button_container"> 
+                        <p id="tem_autismo_texto" >Não</p>
+                        <button id="edit_tem_autismo_button" class="yes_no_small_toggle_button">
+                          Não
+                        </button>
+                      </div>
+
+          
+                    </td>
+
+                  </tr>
+
+                  <tr class="basic_row"> 
+                  
+                    <td class="basic_cell"> 
+                      <p>Tem irmãos</p>
+                    </td>
+
+                    <td class="basic_cell"> 
+                    
+                      <div class="basic_cell_button_container"> 
+                        <p id="tem_irmaos_texto" >Não</p>
+                        <button id="edit_tem_irmaos_button" class="yes_no_small_toggle_button">
+                          Não
+                        </button>
+                      </div>
+          
+                    </td>
+
+                  </tr>
+
+                  <tr class="basic_row"> 
+                  
+                    <td class="basic_cell"> 
+                      <p>Familiares com ataxia:</p>
+                    </td>
+
+                    <td class="basic_cell"> 
+                    
+                      <div class="basic_cell_button_container"> 
+                        <p id="tem_familia_ataxia_texto" >Não</p>
+                        <button id="edit_familia_ataxia_button" class="yes_no_small_toggle_button">
+                          Não
+                        </button>
+                      </div>
+          
+                    </td>
+
+                  </tr>
+
+                  <tr class="basic_row"> 
+                  
+                    <td class="basic_cell"> 
+                      <p>Familiares com sintomas mentais:</p>
+                    </td>
+
+                    <td class="basic_cell"> 
+                    
+                      <div class="basic_cell_button_container">
+                        <p id="tem_familia_sintomas_mentais_texto" >Não</p> 
+                        <button id="edit_familia_sintomas_mentais_button" class="yes_no_small_toggle_button">
+                          Não
+                        </button>
+                      </div>
+          
+                    </td>
+
+                  </tr>
+                
+                </table>
+                
               </div>
-
+                
               <div class="report_conclusion"">
                 
                 <p id="observacoes_texto" >Observações :</p>
+                <input type="text" class="base_small_input_text" placeholder="Observação" id="observation_edit_input"/>
 
               </div>
 
@@ -92,110 +195,146 @@ export async function init_relatorio_page() {
               </tr>
 
               <tr class="symptoms_table_row">
+                <td class="symptoms_table_cell">Deficiência intelectual</td>
                 <td class="symptoms_table_cell">
-                  Deficiência Intelectual
-                </td>
-                <td id="deficiencia_intelectual_texto" class="symptoms_table_cell">
-                  Nao
+                  <div class="basic_cell_button_container">
+                    <p id="deficiencia_intelectual_texto">Não</p>
+                    <button id="edit_deficiencia_intelectual_button" class="yes_no_small_toggle_button">
+                      Não
+                    </button>
+                  </div>
                 </td>
               </tr>
 
               <tr class="symptoms_table_row">
+                <td class="symptoms_table_cell">Face alongada/orelhas</td>
                 <td class="symptoms_table_cell">
-                  Face alongada/orelhas
-                </td>
-                <td id="face_alongada_orelhas_texto" class="symptoms_table_cell">
-                  Nao
+                  <div class="basic_cell_button_container">
+                    <p id="face_alongada_orelhas_texto">Não</p>
+                    <button id="edit_face_alongada_orelhas_button" class="yes_no_small_toggle_button">
+                      Não
+                    </button>
+                  </div>
                 </td>
               </tr>
 
               <tr class="symptoms_table_row">
+                <td class="symptoms_table_cell">Macroorquidismo</td>
                 <td class="symptoms_table_cell">
-                  Macroorquidismo
-                </td>
-                <td id="macroorquidismo_texto" class="symptoms_table_cell">
-                  Nao
+                  <div class="basic_cell_button_container">
+                    <p id="macroorquidismo_texto">Não</p>
+                    <button id="edit_macroorquidismo_button" class="yes_no_small_toggle_button">
+                      Não
+                    </button>
+                  </div>
                 </td>
               </tr>
 
               <tr class="symptoms_table_row">
+                <td class="symptoms_table_cell">Hipermobilidade articular</td>
                 <td class="symptoms_table_cell">
-                  Hipermobilidade articular
-                </td>
-                <td id="hipermobilidade_articular_texto" class="symptoms_table_cell">
-                  Nao
+                  <div class="basic_cell_button_container">
+                    <p id="hipermobilidade_articular_texto">Não</p>
+                    <button id="edit_hipermobilidade_articular_button" class="yes_no_small_toggle_button">
+                      Não
+                    </button>
+                  </div>
                 </td>
               </tr>
 
               <tr class="symptoms_table_row">
+                <td class="symptoms_table_cell">Dificuldades de aprendizagem</td>
                 <td class="symptoms_table_cell">
-                  Dificuldades de aprendizagem
-                </td> 
-                <td id="dificuldades_aprendizagem_texto" class="symptoms_table_cell">
-                  Nao
+                  <div class="basic_cell_button_container">
+                    <p id="dificuldades_aprendizagem_texto">Não</p>
+                    <button id="edit_dificuldades_aprendizagem_button" class="yes_no_small_toggle_button">
+                      Não
+                    </button>
+                  </div>
                 </td>
               </tr>
 
               <tr class="symptoms_table_row">
+                <td class="symptoms_table_cell">Déficit de atenção</td>
                 <td class="symptoms_table_cell">
-                  Déficit de atenção
-                </td>
-                <td id="deficit_atencao_texto" class="symptoms_table_cell">
-                  Nao
+                  <div class="basic_cell_button_container">
+                    <p id="deficit_atencao_texto">Não</p>
+                    <button id="edit_deficit_atencao_button" class="yes_no_small_toggle_button">
+                      Não
+                    </button>
+                  </div>
                 </td>
               </tr>
 
               <tr class="symptoms_table_row">
+                <td class="symptoms_table_cell">Movimentos repetitivos</td>
                 <td class="symptoms_table_cell">
-                  Movimentos repetitivos
-                </td>
-                <td id="movimentos_repetitivos_texto" class="symptoms_table_cell">
-                  Nao
+                  <div class="basic_cell_button_container">
+                    <p id="movimentos_repetitivos_texto">Não</p>
+                    <button id="edit_movimentos_repetitivos_button" class="yes_no_small_toggle_button">
+                      Não
+                    </button>
+                  </div>
                 </td>
               </tr>
 
               <tr class="symptoms_table_row">
+                <td class="symptoms_table_cell">Atraso na fala</td>
                 <td class="symptoms_table_cell">
-                  Atraso na fala
-                </td>
-                <td id="atraso_fala_texto" class="symptoms_table_cell">
-                  Nao
+                  <div class="basic_cell_button_container">
+                    <p id="atraso_fala_texto">Não</p>
+                    <button id="edit_atraso_fala_button" class="yes_no_small_toggle_button">
+                      Não
+                    </button>
+                  </div>
                 </td>
               </tr>
 
               <tr class="symptoms_table_row">
+                <td class="symptoms_table_cell">Hiperatividade</td>
                 <td class="symptoms_table_cell">
-                  Hiperatividade 
-                </td>
-                <td id="hiperatividade_texto" class="symptoms_table_cell">
-                  Nao
+                  <div class="basic_cell_button_container">
+                    <p id="hiperatividade_texto">Não</p>
+                    <button id="edit_hiperatividade_button" class="yes_no_small_toggle_button">
+                      Não
+                    </button>
+                  </div>
                 </td>
               </tr>
 
               <tr class="symptoms_table_row">
+                <td class="symptoms_table_cell">Evita contato visual</td>
                 <td class="symptoms_table_cell">
-                  Evita contato visual 
-                </td>
-                <td id="evita_contato_visual_texto" class="symptoms_table_cell">
-                  Nao
+                  <div class="basic_cell_button_container">
+                    <p id="evita_contato_visual_texto">Não</p>
+                    <button id="edit_evita_contato_visual_button" class="yes_no_small_toggle_button">
+                      Não
+                    </button>
+                  </div>
                 </td>
               </tr>
 
               <tr class="symptoms_table_row">
+                <td class="symptoms_table_cell">Evita contato físico</td>
                 <td class="symptoms_table_cell">
-                  Evita contato físico 
-                </td>
-                <td id="evita_contato_fisico_texto" class="symptoms_table_cell">
-                  Nao
+                  <div class="basic_cell_button_container">
+                    <p id="evita_contato_fisico_texto">Não</p>
+                    <button id="edit_evita_contato_fisico_button" class="yes_no_small_toggle_button">
+                      Não
+                    </button>
+                  </div>
                 </td>
               </tr>
 
               <tr class="symptoms_table_row">
+                <td class="symptoms_table_cell">Agressividade</td>
                 <td class="symptoms_table_cell">
-                  Agressividade 
-                </td>
-                <td id="agressividade_texto" class="symptoms_table_cell">
-                  Nao
+                  <div class="basic_cell_button_container">
+                    <p id="agressividade_texto">Não</p>
+                    <button id="edit_agressividade_button" class="yes_no_small_toggle_button">
+                      Não
+                    </button>
+                  </div>
                 </td>
               </tr>
 
@@ -228,120 +367,12 @@ export async function init_relatorio_page() {
   
   `
 
+  // Pega os dados do relatorio, paciente e usuario
   const relatorio_id = window.location.pathname.replace("/relatorio/", "")
 
-  const { data: relatorioDados, error: getRelatorioError } = await supabase.from("avaliacao").select("*").eq("id", relatorio_id);
-
-  if (getRelatorioError) {
-    console.log("Erro ao pegar relatorio");
-    console.log(relatorioDados);
-  }
-
-  if (!relatorioDados) {
-    console.log("Fala ao pegar dados do relatorio");
-  }
-
-  console.log(relatorioDados)
-
-  const medico_id = relatorioDados?.at(0).usuario_id;
-  const paciente_id = relatorioDados?.at(0).paciente_id;
-
-  const { data: medicoDados, error: getMedicoError } = await supabase.from("usuario").select("*").eq("id", medico_id);
-  const { data: pacienteDados, error: getPacienteError } = await supabase.from("paciente").select("*").eq("id", paciente_id);
-
-  if (getMedicoError || getPacienteError) {
-    console.log("Erro ao pegar medico ou paciente em relatorio");
-  }
-
-  const nome_paciente = pacienteDados?.at(0).nome;
-  const data_nascimento = pacienteDados?.at(0).data_nascimento;
-  const nascimento_formatada = new Date(data_nascimento).toLocaleDateString('pt-BR');
-  const sexo = pacienteDados?.at(0).sexo;
-  const nome_medico = medicoDados?.at(0).nome;
-  const data_avaliacao = relatorioDados?.at(0).data_realizada;
-  const data_avaliacao_formatada = new Date(data_avaliacao).toLocaleString('pt-BR');
-  const score_total = relatorioDados?.at(0).score_final;
-
-  let tem_irmaos = false;
-
-  if (relatorioDados?.at(0).tem_irmaos == true) {
-    tem_irmaos = true;
-  }
-
-  let tem_autismo = false;
-
-  if (relatorioDados?.at(0).tem_autismo == true) {
-    tem_autismo = true;
-  }
-
-  let familia_sintomas_mentais = false;
-
-  if (relatorioDados?.at(0).familia_sintomas_mentais == true) {
-    familia_sintomas_mentais = true;
-  }
-
-  let familia_ataxia = false;
-
-  if (relatorioDados?.at(0).familia_ataxia == true) {
-    familia_ataxia = true;
-  }
-
-  let indicacao = "Nenhuma"
-
-  if (sexo == "masculino" && score_total > 0.56) {
-    indicacao = "Fazer teste genetico";
-  }
-  else if (sexo == "feminino" && score_total > 0.55) {
-    indicacao = "Fazer teste genetico";
-  }
-  else {
-    indicacao = "Nenhuma";
-  }
-
-  const observacao = relatorioDados?.at(0).resultado_final;
-
-  const nome_paciente_container = container.querySelector<HTMLTextAreaElement>('#nome_paciente_texto')
-  const data_nascimento_container = container.querySelector<HTMLTextAreaElement>('#data_nascimento_texto')
-  const sexo_container = container.querySelector<HTMLTextAreaElement>('#sexo_texto')
-
-  const nome_medico_container = container.querySelector<HTMLTextAreaElement>('#nome_medico_texto')
-  const data_avaliacao_container = container.querySelector<HTMLTextAreaElement>('#data_avaliacao_texto')
-  const indicacao_container = container.querySelector<HTMLTextAreaElement>('#indicacao_texto')
-
-  const observacao_container = container.querySelector<HTMLTextAreaElement>('#observacoes_texto')
-
-  const tem_irmaos_container = container.querySelector<HTMLTextAreaElement>('#tem_irmaos_texto')
-  const tem_autismo_container = container.querySelector<HTMLTextAreaElement>('#tem_autismo_texto')
-  const tem_familia_sintomas_mentais_container = container.querySelector<HTMLTextAreaElement>('#tem_familia_sintomas_mentais_texto')
-  const tem_familia_ataxia_container = container.querySelector<HTMLTextAreaElement>('#tem_familia_ataxia_texto')
-
-  if (
-    !nome_paciente_container ||
-    !data_nascimento_container ||
-    !sexo_container ||
-    !nome_medico_container ||
-    !data_avaliacao_container ||
-    !indicacao_container ||
-    !observacao_container ||
-    !tem_irmaos_container ||
-    !tem_autismo_container ||
-    !tem_familia_sintomas_mentais_container ||
-    !tem_familia_ataxia_container) { return; }
-
-  nome_paciente_container.textContent = "Nome do paciente : " + nome_paciente;
-  data_nascimento_container.textContent = "Data nascimento : " + nascimento_formatada;
-  sexo_container.textContent = "Sexo : " + sexo;
-
-  nome_medico_container.textContent = "Nome Medico : " + nome_medico;
-  data_avaliacao_container.textContent = "Data avaliação : " + data_avaliacao_formatada;
-  indicacao_container.textContent = "Indicação : " + indicacao;
-
-  observacao_container.textContent = "Observação : " + observacao;
-
-  tem_irmaos_container.textContent = "Paciente tem irmãos : " + (tem_irmaos ? "Sim" : "Não");
-  tem_autismo_container.textContent = "Paciente tem diagnostico de autismo : " + (tem_autismo ? "Sim" : "Não");
-  tem_familia_sintomas_mentais_container.textContent = "Paciente tem familiares com sintomas mentais : " + (familia_sintomas_mentais ? "Sim" : "Não");
-  tem_familia_ataxia_container.textContent = "Familiares com ataxia : " + (familia_ataxia ? "Sim" : "Não");
+  const { data: relatorio_dados, error: funcerr } = await supabase.rpc("get_dados_relatorio_especifico", {
+    avaliacao_id: relatorio_id
+  })
 
   const { data: itemAvaliacaoDados, error: getItemAvaliacaoError } = await supabase.from("item_avaliacao").select("sintoma_id").eq("avaliacao_id", relatorio_id);
 
@@ -349,105 +380,132 @@ export async function init_relatorio_page() {
     console.log("Erro ao pegar item relatorios");
   }
 
-  if (!itemAvaliacaoDados) {
-    console.log("Fala ao pegar dados do relatorio");
-    return;
+  if (funcerr) {
+    console.log(funcerr)
   }
 
-  const deficiencia_intelectual_container = container.querySelector<HTMLTextAreaElement>('#deficiencia_intelectual_texto')
-  const face_alongada_orelhas_container = container.querySelector<HTMLTextAreaElement>('#face_alongada_orelhas_texto')
-  const macroorquidismo_container = container.querySelector<HTMLTextAreaElement>('#macroorquidismo_texto')
-  const hipermobilidade_articular_container = container.querySelector<HTMLTextAreaElement>('#hipermobilidade_articular_texto')
-  const dificuldades_aprendizagem_container = container.querySelector<HTMLTextAreaElement>('#dificuldades_aprendizagem_texto')
-  const deficit_atencao_container = container.querySelector<HTMLTextAreaElement>('#deficit_atencao_texto')
-  const movimentos_repetitivos_container = container.querySelector<HTMLTextAreaElement>('#movimentos_repetitivos_texto')
-  const atraso_fala_container = container.querySelector<HTMLTextAreaElement>('#atraso_fala_texto')
-  const hiperatividade_container = container.querySelector<HTMLTextAreaElement>('#hiperatividade_texto')
-  const evita_contato_visual_container = container.querySelector<HTMLTextAreaElement>('#evita_contato_visual_texto')
-  const evita_contato_fisico_container = container.querySelector<HTMLTextAreaElement>('#evita_contato_fisico_texto')
-  const agressividade_container = container.querySelector<HTMLTextAreaElement>('#agressividade_texto')
+  console.log(relatorio_dados)
 
-  if (
+  const usuario_id = relatorio_dados[0].usuario_id;
 
-    !deficiencia_intelectual_container ||
-    !face_alongada_orelhas_container ||
-    !macroorquidismo_container ||
-    !hipermobilidade_articular_container ||
-    !dificuldades_aprendizagem_container ||
-    !deficit_atencao_container ||
-    !movimentos_repetitivos_container ||
-    !atraso_fala_container ||
-    !hiperatividade_container ||
-    !evita_contato_visual_container ||
-    !evita_contato_fisico_container ||
-    !agressividade_container
-  ) {
-    return
-  }
+  // Cria variaveis para cada dado
+  const nome_paciente = relatorio_dados[0].paciente_nome;
+  const data_nascimento = relatorio_dados[0].paciente_data_nascimento;
+  const nascimento_formatada = new Date(data_nascimento).toLocaleDateString('pt-BR');
+  const sexo = relatorio_dados[0].paciente_sexo;
 
-  const containers = [
-    deficiencia_intelectual_container,
-    face_alongada_orelhas_container,
-    macroorquidismo_container,
-    hipermobilidade_articular_container,
-    dificuldades_aprendizagem_container,
-    deficit_atencao_container,
-    movimentos_repetitivos_container,
-    atraso_fala_container,
-    hiperatividade_container,
-    evita_contato_visual_container,
-    evita_contato_fisico_container,
-    agressividade_container
-  ]
+  const nome_medico = relatorio_dados[0].usuario_nome;
+  const data_avaliacao = relatorio_dados[0].data_avaliacao;
+  const data_avaliacao_formatada = new Date(data_avaliacao).toLocaleString('pt-BR');
+  const score_total = relatorio_dados[0].score_final;
 
-  for (let i = 0; i < itemAvaliacaoDados.length; i++) {
+  tem_relatorio_extras.tem_autismo = relatorio_dados[0].tem_autismo;
+  tem_relatorio_extras.tem_irmaos = relatorio_dados[0].tem_irmaos;
+  tem_relatorio_extras.familiares_ataxia = relatorio_dados[0].familia_ataxia;
+  tem_relatorio_extras.familiares_sintomas_mentais = relatorio_dados[0].familia_sintomas_mentais;
 
-    containers.at(itemAvaliacaoDados.at(i)?.sintoma_id)!.textContent = "Sim"
+  let indicacao = calcular_indicacao(sexo, score_total);
+
+  const observacao = relatorio_dados[0].resultado_final;
+
+  // Pega as partes do relatorio no HTML
+  const nome_paciente_container = container.querySelector<HTMLTextAreaElement>('#nome_paciente_texto')
+  const data_nascimento_container = container.querySelector<HTMLTextAreaElement>('#data_nascimento_texto')
+  const sexo_container = container.querySelector<HTMLTextAreaElement>('#sexo_texto')
+  const nome_medico_container = container.querySelector<HTMLTextAreaElement>('#nome_medico_texto')
+  const data_avaliacao_container = container.querySelector<HTMLTextAreaElement>('#data_avaliacao_texto')
+
+  const indicacao_container = container.querySelector<HTMLTextAreaElement>('#indicacao_texto')
+  const observacao_container = container.querySelector<HTMLTextAreaElement>('#observacoes_texto')
+
+  const tem_containers = get_tem_text(container);
+  const tem_edit_buttons = get_tem_edit_buttons(container);
+
+  const tem_extras_chave = Object.keys(tem_relatorio_extras);
+
+  for (let i = 0; i < tem_containers!.length; i++) {
+
+    if (tem_relatorio_extras[tem_extras_chave.at(i)!] == true) {
+      tem_containers.at(i)!.textContent = "Sim"
+    }
 
   }
 
-  const front_view_url = `${medico_id}/${relatorio_id}/front_view`;
-  const three_four_view_url = `${medico_id}/${relatorio_id}/three_four_view`;
-  const profile_view_url = `${medico_id}/${relatorio_id}/profile_view`;
-
-  const { data: front_photo } = supabase.storage
-    .from('fotos_pacientes')
-    .getPublicUrl(front_view_url);
-
-  const { data: three_four_photo } = supabase.storage
-    .from('fotos_pacientes')
-    .getPublicUrl(three_four_view_url);
-
-  const { data: profile_photo } = supabase.storage
-    .from('fotos_pacientes')
-    .getPublicUrl(profile_view_url);
-
-  const front_image = container.querySelector<HTMLImageElement>('#face_front_image');
-  const three_four_image = container.querySelector<HTMLImageElement>('#face_three_four_image');
-  const profile_image = container.querySelector<HTMLImageElement>('#face_profile_image');
-
-  if (front_image) {
-    front_image.src = front_photo.publicUrl;
+  for (let i = 0; i < tem_edit_buttons.length; i++) {
+    tem_edit_buttons.at(i)!.addEventListener('click', () => {
+      toggle_tem(tem_extras_chave.at(i)!, tem_relatorio_extras, tem_edit_buttons.at(i)!, tem_containers.at(i)!);
+    })
   }
 
-  if (three_four_image) {
-    three_four_image.src = three_four_photo.publicUrl;
+  for (let i = 0; i < tem_containers.length; i++) {
+
+    if (tem_containers.at(i)?.textContent === "Sim") {
+      table_to_button_set_active(tem_containers.at(i)!, tem_edit_buttons.at(i)!, true);
+    }
   }
 
-  if (profile_image) {
-    profile_image.src = profile_photo.publicUrl;
+  hide_all_show_others(tem_edit_buttons, tem_containers);
+
+  // Seta os dados no HTML
+  nome_paciente_container!.textContent = "Nome do paciente : " + nome_paciente;
+  data_nascimento_container!.textContent = "Data nascimento : " + nascimento_formatada;
+  sexo_container!.textContent = "Sexo : " + sexo;
+  nome_medico_container!.textContent = "Nome Medico : " + nome_medico;
+  data_avaliacao_container!.textContent = "Data avaliação : " + data_avaliacao_formatada;
+
+  indicacao_container!.textContent = "Indicação : " + indicacao;
+  observacao_container!.textContent = "Observação : " + observacao;
+
+  const sintomas_containers = get_sintomas_text(container);
+  const edit_sintomas_buttons = get_edit_sintomas_buttons(container);
+
+
+  for (let i = 0; i < itemAvaliacaoDados!.length; i++) {
+
+    sintomas_containers.at(itemAvaliacaoDados!.at(i)?.sintoma_id)!.textContent = "Sim"
+
   }
 
+  const chavesSintomas = Object.keys(tem_sintomas);
+
+  for (let i = 0; i < itemAvaliacaoDados!.length; i++) {
+    const sintomaId = itemAvaliacaoDados![i].sintoma_id;
+
+    tem_sintomas[chavesSintomas[sintomaId]] = true;
+  }
+
+  hide_all_show_others(edit_sintomas_buttons, sintomas_containers);
+
+  for (let i = 0; i < sintomas_containers.length; i++) {
+
+    if (sintomas_containers.at(i)?.textContent === "Sim") {
+      table_to_button_set_active(sintomas_containers.at(i)!, edit_sintomas_buttons.at(i)!, true);
+    }
+  }
+
+  const tem_sintomas_chaves = Object.keys(tem_sintomas)
+
+  for (let i = 0; i < edit_sintomas_buttons.length; i++) {
+    edit_sintomas_buttons.at(i)!.addEventListener('click', () => {
+      toggle_tem(tem_sintomas_chaves.at(i)!, tem_sintomas, edit_sintomas_buttons.at(i)!, sintomas_containers.at(i)!);
+    })
+  }
+
+
+  set_fotos_avaliacao(container, usuario_id, relatorio_id)
+
+
+  // Botoes
 
   const imprimir = container.querySelector<HTMLButtonElement>('#imprimir_button');
 
-  imprimir?.addEventListener('click', (MouseEvent) => {
+  imprimir?.addEventListener('click', (_event) => {
     window.print();
   })
 
-  const deletar = container.querySelector<HTMLButtonElement>('#deletar_button')
+  const delete_button = container.querySelector<HTMLButtonElement>('#deletar_button')
 
-  deletar?.addEventListener('click', async () => {
+  delete_button?.addEventListener('click', async () => {
 
     const confirmar = confirm(
       "Tem certeza que deseja deletar este relatório?"
@@ -473,4 +531,281 @@ export async function init_relatorio_page() {
     navigateTo("/relatorios_usuario");
   });
 
+  const edit_button = container.querySelector<HTMLButtonElement>('#editar_button');
+
+  let editando = false;
+
+  const observation_edit = container.querySelector<HTMLInputElement>('#observation_edit_input');
+
+  observation_edit!.value = observacao;
+
+  observation_edit!.style.display = "none";
+
+  function toggle_editar(ativo: boolean) {
+
+    if (ativo == true) {
+
+      hide_one_display_other(observacao_container!, observation_edit!)
+      hide_all_show_others(tem_containers, tem_edit_buttons);
+      hide_all_show_others(sintomas_containers, edit_sintomas_buttons);
+
+    }
+    else {
+
+      hide_one_display_other(observation_edit!, observacao_container!)
+      hide_all_show_others(edit_sintomas_buttons, sintomas_containers);
+      hide_all_show_others(tem_edit_buttons, tem_containers);
+    }
+
+  }
+
+  edit_button?.addEventListener('click', async (_event) => {
+
+    if (editando == false) {
+      toggle_editar(true);
+      editando = true;
+      edit_button.textContent = "Salvar";
+      delete_button!.style.display = "none";
+    }
+    else {
+      toggle_editar(false);
+      editando = false;
+      edit_button.textContent = "Editar";
+      delete_button!.style.display = "flex";
+
+      let is_male = false;
+
+      if (sexo === "masculino") {
+        is_male = true;
+      }
+      else {
+        is_male = false
+      }
+
+      observacao_container!.textContent = observation_edit!.value;
+
+      const { data, error: erro_update_relatorio } = await supabase.from("avaliacao").update({
+        diagnostico_autismo: tem_relatorio_extras.tem_autismo,
+        tem_irmaos: tem_relatorio_extras.tem_irmaos,
+        familia_sintomas_mentais: tem_relatorio_extras.familiares_sintomas_mentais,
+        familia_ataxia: tem_relatorio_extras.familiares_ataxia,
+
+        resultado_final: observation_edit?.value,
+
+        score_final: calcular_score_final(tem_sintomas, is_male)
+      }).eq('id', relatorio_id).single()
+
+      if (erro_update_relatorio) {
+        console.log("Erro update usuario = " + erro_update_relatorio);
+        trigger_notification_popup("Erro ao atualizar usuario");
+        return;
+      }
+
+      const { error: delete_sintomas_antigos_erro } = await supabase
+        .from('item_avaliacao')
+        .delete()
+        .eq('avaliacao_id', relatorio_id)
+
+      if (delete_sintomas_antigos_erro) {
+        console.error('Error limpando sintomas antigos:', delete_sintomas_antigos_erro)
+      }
+
+      const chaves = Object.keys(tem_sintomas);
+
+      for (let i = 0; i < chaves.length; i++) {
+
+        if (tem_sintomas[chaves.at(i)!] == true) {
+
+          const { error: erro_insert_item } = await supabase
+            .from("item_avaliacao")
+            .insert({
+              avaliacao_id: relatorio_id,
+              sintoma_id: i
+            })
+
+          if (erro_insert_item) {
+            console.log(erro_insert_item);
+          }
+
+        }
+
+      }
+
+
+      trigger_notification_popup("Relatorio editado com sucesso");
+    }
+
+  })
+
 }
+
+function toggle_tem(chave_tem: string, tem_record: Record<string, boolean>, botao: HTMLElement | null, text: HTMLTextAreaElement): void {
+  if (!botao) return;
+
+  const isSelected = botao.classList.toggle('is_active');
+
+  if (chave_tem in tem_record) {
+
+    if (isSelected == true) {
+      tem_record[chave_tem] = true;
+      botao.textContent = "Sim"
+      text.textContent = "Sim"
+    }
+    else {
+      tem_record[chave_tem] = false;
+      botao.textContent = "Não"
+      text.textContent = "Não"
+    }
+
+  }
+}
+
+function calcular_indicacao(sexo: string, score_total: number) {
+
+  if (sexo == "masculino" && score_total > 0.56) {
+    return "Fazer teste genetico";
+  }
+  else if (sexo == "feminino" && score_total > 0.55) {
+    return "Fazer teste genetico";
+  }
+  else {
+    return "Nenhuma";
+  }
+}
+
+function hide_one_display_other(one: HTMLElement, other: HTMLElement) {
+
+  one!.style.display = "none"
+  other!.style.display = "flex"
+
+}
+
+function hide_all_show_others<A extends HTMLElement, B extends HTMLElement>(all: (A | null)[], others: (B | null)[]) {
+
+  all.forEach(element => {
+    element?.style.setProperty("display", "none");
+  })
+
+  others.forEach(element => {
+    element?.style.setProperty("display", "flex");
+  })
+
+}
+
+function table_to_button_set_active(text: HTMLTextAreaElement, button: HTMLButtonElement, bool: boolean) {
+
+  if (bool == true) {
+    text.textContent = "Sim"
+    button?.classList.add("is_active")
+    button!.textContent = "Sim";
+    return true;
+  }
+  else {
+    text.textContent = "Não"
+    button?.classList.remove("is_active")
+    button!.textContent = "Não";
+    return false;
+  }
+}
+
+function set_all_display_none<T extends HTMLElement>(elements: (T | null)[]) {
+
+  elements.forEach(element => {
+    element?.style.setProperty("display", "none");
+  });
+}
+
+function set_fotos_avaliacao(container: HTMLDivElement, medico_id: string, relatorio_id: string) {
+
+
+  const front_view_url = `${medico_id}/${relatorio_id}/front_view`;
+  const three_four_view_url = `${medico_id}/${relatorio_id}/three_four_view`;
+  const profile_view_url = `${medico_id}/${relatorio_id}/profile_view`;
+
+  const { data: front_photo } = supabase.storage
+    .from('fotos_pacientes')
+    .getPublicUrl(front_view_url);
+
+  const { data: three_four_photo } = supabase.storage
+    .from('fotos_pacientes')
+    .getPublicUrl(three_four_view_url);
+
+  const { data: profile_photo } = supabase.storage
+    .from('fotos_pacientes')
+    .getPublicUrl(profile_view_url);
+
+  // Pega HTML das imagens das fotos
+
+  const front_image = container.querySelector<HTMLImageElement>('#face_front_image');
+  const three_four_image = container.querySelector<HTMLImageElement>('#face_three_four_image');
+  const profile_image = container.querySelector<HTMLImageElement>('#face_profile_image');
+
+  // Seta as fotos
+
+  if (front_image) {
+    front_image.src = front_photo.publicUrl;
+  }
+
+  if (three_four_image) {
+    three_four_image.src = three_four_photo.publicUrl;
+  }
+
+  if (profile_image) {
+    profile_image.src = profile_photo.publicUrl;
+  }
+
+}
+
+
+function get_tem_text(container: HTMLDivElement) {
+  return [
+    container.querySelector<HTMLTextAreaElement>('#tem_autismo_texto'),
+    container.querySelector<HTMLTextAreaElement>('#tem_irmaos_texto'),
+    container.querySelector<HTMLTextAreaElement>('#tem_familia_sintomas_mentais_texto'),
+    container.querySelector<HTMLTextAreaElement>('#tem_familia_ataxia_texto')
+  ];
+}
+
+function get_tem_edit_buttons(container: HTMLDivElement) {
+  return [
+    container.querySelector<HTMLButtonElement>('#edit_tem_autismo_button'),
+    container.querySelector<HTMLButtonElement>('#edit_tem_irmaos_button'),
+    container.querySelector<HTMLButtonElement>('#edit_familia_sintomas_mentais_button'),
+    container.querySelector<HTMLButtonElement>('#edit_familia_ataxia_button')
+  ];
+}
+
+function get_sintomas_text(container: HTMLDivElement) {
+  return [
+    container.querySelector<HTMLTextAreaElement>('#deficiencia_intelectual_texto'),
+    container.querySelector<HTMLTextAreaElement>('#face_alongada_orelhas_texto'),
+    container.querySelector<HTMLTextAreaElement>('#macroorquidismo_texto'),
+    container.querySelector<HTMLTextAreaElement>('#hipermobilidade_articular_texto'),
+    container.querySelector<HTMLTextAreaElement>('#dificuldades_aprendizagem_texto'),
+    container.querySelector<HTMLTextAreaElement>('#deficit_atencao_texto'),
+    container.querySelector<HTMLTextAreaElement>('#movimentos_repetitivos_texto'),
+    container.querySelector<HTMLTextAreaElement>('#atraso_fala_texto'),
+    container.querySelector<HTMLTextAreaElement>('#hiperatividade_texto'),
+    container.querySelector<HTMLTextAreaElement>('#evita_contato_visual_texto'),
+    container.querySelector<HTMLTextAreaElement>('#evita_contato_fisico_texto'),
+    container.querySelector<HTMLTextAreaElement>('#agressividade_texto')
+  ];
+}
+
+function get_edit_sintomas_buttons(container: HTMLDivElement) {
+  return [
+    container.querySelector<HTMLButtonElement>('#edit_deficiencia_intelectual_button'),
+    container.querySelector<HTMLButtonElement>('#edit_face_alongada_orelhas_button'),
+    container.querySelector<HTMLButtonElement>('#edit_macroorquidismo_button'),
+    container.querySelector<HTMLButtonElement>('#edit_hipermobilidade_articular_button'),
+    container.querySelector<HTMLButtonElement>('#edit_dificuldades_aprendizagem_button'),
+    container.querySelector<HTMLButtonElement>('#edit_deficit_atencao_button'),
+    container.querySelector<HTMLButtonElement>('#edit_movimentos_repetitivos_button'),
+    container.querySelector<HTMLButtonElement>('#edit_atraso_fala_button'),
+    container.querySelector<HTMLButtonElement>('#edit_hiperatividade_button'),
+    container.querySelector<HTMLButtonElement>('#edit_evita_contato_visual_button'),
+    container.querySelector<HTMLButtonElement>('#edit_evita_contato_fisico_button'),
+    container.querySelector<HTMLButtonElement>('#edit_agressividade_button')
+  ];
+}
+

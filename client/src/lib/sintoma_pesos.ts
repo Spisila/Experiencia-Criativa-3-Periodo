@@ -50,3 +50,67 @@ export async function carregar_pesos() {
   }
 
 }
+
+export function calcular_score_final(tem_sintomas: Record<string, boolean>, is_male: boolean) {
+
+  const sintomas_selecionados = Object.keys(tem_sintomas)
+
+  let score = 0;
+
+  for (let i = 0; i < sintomas_selecionados.length; i++) {
+
+    if (is_male == true) {
+
+      if (tem_sintomas[sintomas_selecionados[i]] == true) {
+
+        score += sintomas_atuais_masculinas[sintomas_selecionados[i]];
+
+      }
+
+    } else {
+
+      if (tem_sintomas[sintomas_selecionados[i]] == true) {
+
+        score += sintomas_atuais_feminino[sintomas_selecionados[i]];
+
+      }
+
+    }
+
+  }
+
+  return score;
+
+}
+
+export function retornar_sintomas_selecionados(tem_sintomas: Record<string, boolean>, is_male: boolean) {
+
+  const sintomas_selecionados = Object.keys(tem_sintomas)
+
+  let id_sintomas_selecionados = []
+
+  for (let i = 0; i < sintomas_selecionados.length; i++) {
+
+    if (is_male == true) {
+
+      if (tem_sintomas[sintomas_selecionados[i]] == true) {
+
+        id_sintomas_selecionados.push(i)
+
+      }
+
+    } else {
+
+      if (tem_sintomas[sintomas_selecionados[i]] == true) {
+
+        id_sintomas_selecionados.push(i)
+
+      }
+
+    }
+
+  }
+
+  return id_sintomas_selecionados;
+
+}
