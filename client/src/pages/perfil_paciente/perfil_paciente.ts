@@ -118,7 +118,7 @@ export async function init_perfil_paciente_page() {
 
   }
 
-  edit_button?.addEventListener('click', (_event) => {
+  edit_button?.addEventListener('click', async (_event) => {
 
     if (editando == false) {
       toggle_editar(false);
@@ -133,6 +133,29 @@ export async function init_perfil_paciente_page() {
       editando = false;
       nova_avaliacao_button!.style.display = "flex";
       delete_button!.style.display = "flex";
+
+      const { error: erro_update_paciente } = await supabase.from("paciente").update({
+        nome: name_input?.value,
+        data_nascimento: data_nascimento_input?.value,
+        sexo: sexo_input?.value,
+        cpf: cpf_input?.value,
+        nome_mae: nome_mae_input?.value,
+        nome_responsavel: nome_responsavel_input?.value,
+        cpf_responsavel: cpf_responsavel_input?.value,
+        pais: pais_input?.value,
+        estado: estado_input?.value,
+        cidade: cidade_input?.value,
+        telefone: telefone_input?.value,
+      }).eq('id', paciente_id)
+
+      if (erro_update_paciente) {
+        console.log("Erro update paciente = " + erro_update_paciente);
+        trigger_notification_popup("Erro ao atualizar paciente");
+        return;
+      }
+
+      trigger_notification_popup("Paciente editado com sucesso");
+
     }
 
   });
@@ -164,7 +187,7 @@ export async function init_perfil_paciente_page() {
     navigateTo("/nova_avaliacao")
     window.history.pushState(null, '', "/nova_avaliacao/" + paciente_id);
 
-  } 
+  }
 
   nova_avaliacao_button?.addEventListener('click', () => criar_novo_atendimento(paciente_id));
 

@@ -11,7 +11,7 @@ import { init_opcoes_usuario_page } from './pages/opcoes_usuario/opcoes_usuario.
 import { init_opcoes_admin_page } from './pages/opcoes_admin/opcoes_admin.ts';
 
 import { init_lista_pacientes_page } from './pages/lista_pacientes/lista_pacientes.ts';
-import { init_lista_usuarios_page } from './pages/lista_usuarios/lista_usuarios.ts' 
+import { init_lista_usuarios_page } from './pages/lista_usuarios/lista_usuarios.ts'
 
 import { init_relatorios_admin_page } from './pages/relatorios_admin/relatorios_admin.ts';
 import { init_relatorios_usuario_page } from './pages/relatorios_usuario/relatorios_usuario.ts';
@@ -21,6 +21,7 @@ import { init_relatorio_page } from './pages/relatorio/relatorio.ts';
 import { init_nova_avaliacao_page } from './pages/nova_avaliacao/nova_avaliacao.ts';
 
 import { init_perfil_paciente_page } from './pages/perfil_paciente/perfil_paciente.ts';
+import { init_perfil_usuario_page } from './pages/perfil_usuario/perfil_usuario.ts';
 
 // Libs
 import { carregar_pesos } from './lib/sintoma_pesos.ts';
@@ -42,27 +43,28 @@ interface Pagina {
 }
 
 const Paginas: Pagina[] = [
-  { path: '/login_total',        init: init_login_total_page,        perfil_necessario: null,            titulo: "LOGIN" },
+  { path: '/login_total', init: init_login_total_page, perfil_necessario: null, titulo: "LOGIN" },
 
-  { path: '/cadastro_paciente',  init: init_cadastro_paciente_page,  perfil_necessario: "medico",        titulo: "CADASTRO DE PACIENTE" },
+  { path: '/cadastro_paciente', init: init_cadastro_paciente_page, perfil_necessario: "medico", titulo: "CADASTRO DE PACIENTE" },
 
-  { path: '/cadastro_medico',    init: init_cadastro_medico_page,    perfil_necessario: "administrador", titulo: "CADASTRO DE USUARIO" },
-  { path: '/cadastro_admin',     init: init_cadastro_admin_page,     perfil_necessario: "administrador", titulo: "CADASTRO DE ADMIN" },
+  { path: '/cadastro_medico', init: init_cadastro_medico_page, perfil_necessario: "administrador", titulo: "CADASTRO DE USUARIO" },
+  { path: '/cadastro_admin', init: init_cadastro_admin_page, perfil_necessario: "administrador", titulo: "CADASTRO DE ADMIN" },
 
-  { path: '/opcoes_usuario',     init: init_opcoes_usuario_page,     perfil_necessario: "medico",        titulo: "OPÇÕES DO USUARIO" },
-  { path: '/opcoes_admin',       init: init_opcoes_admin_page,       perfil_necessario: "administrador", titulo: "OPÇÕES DO ADMINISTRADOR" },
+  { path: '/opcoes_usuario', init: init_opcoes_usuario_page, perfil_necessario: "medico", titulo: "OPÇÕES DO USUARIO" },
+  { path: '/opcoes_admin', init: init_opcoes_admin_page, perfil_necessario: "administrador", titulo: "OPÇÕES DO ADMINISTRADOR" },
 
-  { path: '/lista_pacientes',    init: init_lista_pacientes_page,    perfil_necessario: "medico",        titulo: "LISTA DE PACIENTES" },
-  { path: '/lista_usuarios',     init: init_lista_usuarios_page,    perfil_necessario: "administrador", titulo: "LISTA DE USUARIOS" },
+  { path: '/lista_pacientes', init: init_lista_pacientes_page, perfil_necessario: "medico", titulo: "LISTA DE PACIENTES" },
+  { path: '/lista_usuarios', init: init_lista_usuarios_page, perfil_necessario: "administrador", titulo: "LISTA DE USUARIOS" },
 
-  { path: '/relatorios_usuario', init: init_relatorios_usuario_page, perfil_necessario: "medico",        titulo: "RELATORIOS DO USUARIO" },
-  { path: '/relatorios_admin',   init: init_relatorios_admin_page,   perfil_necessario: "administrador", titulo: "RELATORIOS DO ADMINISTRADOR" },
+  { path: '/relatorios_usuario', init: init_relatorios_usuario_page, perfil_necessario: "medico", titulo: "RELATORIOS DO USUARIO" },
+  { path: '/relatorios_admin', init: init_relatorios_admin_page, perfil_necessario: "administrador", titulo: "RELATORIOS DO ADMINISTRADOR" },
 
-  { path: '/relatorio',          init: init_relatorio_page,          perfil_necessario: "autorizado",    titulo: "RELATORIO" },
+  { path: '/relatorio', init: init_relatorio_page, perfil_necessario: "autorizado", titulo: "RELATORIO" },
 
-  { path: '/nova_avaliacao',     init: init_nova_avaliacao_page,     perfil_necessario: "medico",        titulo: "NOVA AVALIAÇÃO"},
+  { path: '/nova_avaliacao', init: init_nova_avaliacao_page, perfil_necessario: "medico", titulo: "NOVA AVALIAÇÃO" },
 
-  { path: '/perfil_paciente',     init: init_perfil_paciente_page,     perfil_necessario: "medico",        titulo: "PERFIL PACIENTE"}
+  { path: '/perfil_paciente', init: init_perfil_paciente_page, perfil_necessario: "medico", titulo: "PERFIL PACIENTE" },
+  { path: '/perfil_usuario', init: init_perfil_usuario_page, perfil_necessario: "administrador", titulo: "PERFIL USUARIO" }
 ]
 
 let paths: string[] = Paginas.map(p => p.path);

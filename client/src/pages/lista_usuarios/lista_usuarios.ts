@@ -151,7 +151,8 @@ async function get_usuarios<T extends object>(ordenar_por: string, ascendente: b
 
 function go_to_user_page(user_id: string) {
 
-  navigateTo("/perfil_usuario/" + user_id)
+  navigateTo("/perfil_usuario")
+  window.history.pushState(null, '', "/perfil_usuario/" + user_id);
 
 }
 

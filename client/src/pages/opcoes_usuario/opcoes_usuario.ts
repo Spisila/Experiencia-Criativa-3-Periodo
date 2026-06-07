@@ -2,8 +2,9 @@ import './opcoes_usuario.css'
 import '../../components/base_button.css'
 
 import { navigateTo } from '../../main';
+import { get_auth_user } from '../../components/auth_functions';
 
-export function init_opcoes_usuario_page() {
+export async function init_opcoes_usuario_page() {
 
   const container = document.querySelector<HTMLDivElement>('#app');
 
@@ -29,6 +30,11 @@ export function init_opcoes_usuario_page() {
         Lista de pacientes
       </button>
 
+      <button class="big_ass_button" id="usuario_perfil_button">
+        <img class="icon_image" src="/node_modules/lucide-static/icons/heart-handshake.svg" alt="Paciente" style="height: 30%;" />
+        Seu perfil
+      </button>
+
     </div>
   `
 
@@ -37,6 +43,8 @@ export function init_opcoes_usuario_page() {
   const pacientes_usuario_button = container.querySelector<HTMLButtonElement>("#pacientes_usuario_button")
 
   const cadastrar_paciente_button = container.querySelector<HTMLButtonElement>("#cadastrar_paciente_button")
+
+  const usuario_perfil_button = container.querySelector<HTMLButtonElement>("#usuario_perfil_button");
 
   relatorios_button?.addEventListener('click', (_event) => {
     navigateTo('/relatorios_usuario')
@@ -50,6 +58,16 @@ export function init_opcoes_usuario_page() {
     navigateTo('/cadastro_paciente')
   })
 
+  const user_session = await get_auth_user();
+
+  const user_id = user_session?.session?.user.id;
+
+  usuario_perfil_button?.addEventListener('click', (_event) => {
+
+    navigateTo("/perfil_usuario")
+    window.history.pushState(null, '', "/perfil_usuario/" + user_id);
+
+  })
 
 
 }
