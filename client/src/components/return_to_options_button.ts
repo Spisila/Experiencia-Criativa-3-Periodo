@@ -10,7 +10,9 @@ const show_options_button_path = [
   '/relatorios_usuario',
   '/relatorios_admin',
   '/relatorio',
-  '/nova_avaliacao'
+  '/nova_avaliacao',
+  '/perfil_paciente',
+  '/perfil_usuario'
 ];
 
 export async function return_to_options() {
