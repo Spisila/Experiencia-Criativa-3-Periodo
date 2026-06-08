@@ -48,6 +48,16 @@ export async function init_relatorios_admin_page() {
         <div class="reports_list_container">
 
           <table class="reports_table" id="reports_table">
+            
+            <colgroup>
+              <col style="width: auto;"> <!-- Nome do paciente -->
+              <col style="width: auto;"> <!-- Nome do paciente -->
+              <col style="width: 150px;"> <!-- Data de nascimento -->
+              <col style="width: 100px;"> <!-- Sexo -->
+              <col style="width: 200px;"> <!-- Data avaliacao -->
+              <col style="width: 50px;"> <!-- Score -->
+              <col style="width: 50px;"> <!-- Botão -->
+            </colgroup>
 
             <tr class="reports_table_header">
               <td class="reports_table_header_cell" style="display: flex; justify-content: left; align-items: center; text-align:center">
@@ -161,7 +171,7 @@ export async function init_relatorios_admin_page() {
                 
                 </div>
               </td>
-              <td class="reports_table_header_cell" colspan="2">
+              <td class="reports_table_header_cell" colspan="1">
                 Abrir
               </td>
             </tr>
