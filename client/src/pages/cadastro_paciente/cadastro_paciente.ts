@@ -308,7 +308,6 @@ export async function init_cadastro_paciente_page() {
   });
 
 
-
   const symptomButtonMacroorquidismo = container.querySelector<HTMLButtonElement>('#symptom_button_macroorquidismo');
 
   const sintomas_botoes = get_sintomas_buttons(container)
@@ -356,36 +355,42 @@ export async function init_cadastro_paciente_page() {
 
     let score = 0;
 
-    // if (!nome ||
-    //   !cpf ||
-    //   !data_nascimento ||
-    //   !mother_name ||
-    //   !responsible_name ||
-    //   !cpf_responsible ||
-    //   !phone_number ||
-    //   !country ||
-    //   !state ||
-    //   !city) {
-    //   trigger_notification_popup("Preencha os campos obrigatórios");
-    //   return;
-    // }
+    if (!nome ||
+      !cpf ||
+      !data_nascimento ||
+      !mother_name ||
+      !responsible_name ||
+      !cpf_responsible ||
+      !phone_number ||
+      !country ||
+      !state ||
+      !city) {
+      trigger_notification_popup("Preencha os campos obrigatórios");
+      return;
+    }
 
-    // // TODO: validar cpf, telefone, data de nascimento e outros campos
-    // const dadosFormulario = {
-    //   nome: nome,
-    //   cpf: cpf,
-    //   data_nascimento: data_nascimento,
-    //   observacao: observacao
-    // }
+    const dadosFormulario = {
+      nome: nome,
+      cpf: cpf,
+      data_nascimento: data_nascimento,
+      mother_name: mother_name,
+      responsible_name: responsible_name,
+      cpf_responsible: cpf_responsible,
+      phone_number: phone_number,
+      country: country,
+      state: state,
+      city: city,
+      observacao: observacao,
+    };
 
-    // const resultado = cadastro_paciente_schema.safeParse(dadosFormulario);
+    const resultado = cadastro_paciente_schema.safeParse(dadosFormulario);
 
-    // if (!resultado.success) {
-    //   const messages = resultado.error.issues.map(issue => issue.message);
-    //   console.log(messages[0]);
-    //   trigger_notification_popup(messages[0]);
-    //   return;
-    // }
+    if (!resultado.success) {
+      const messages = resultado.error.issues.map(issue => issue.message);
+      console.log(messages[0]);
+      trigger_notification_popup(messages[0]);
+      return;
+    }
 
     const { data: cpf_exists } = await supabase.from('paciente').select('cpf').eq('cpf', cpf).single();
 
