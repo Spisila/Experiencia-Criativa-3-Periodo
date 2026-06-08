@@ -6,11 +6,8 @@ import { supabase } from "../../lib/supabase"
 import { navigateTo } from '../../main';
 
 import { setup_table_sorting, setup_fill_table } from '../../components/table_functions';
-import { update_page, type Usuario, type sort_table_options } from '../../components/table_functions';
 
 import { get_auth_user } from '../../components/auth_functions';
-import { search_users } from '../../components/search_bar';
-import { object } from 'zod';
 
 export async function init_lista_usuarios_page() {
 
@@ -106,11 +103,7 @@ export async function init_lista_usuarios_page() {
   
   `
 
-  const user_session = await get_auth_user();
-
   let nomes_ascendentes = true;
-
-  const user_id = user_session!.session?.user.id
 
   const table = container.querySelector<HTMLTableElement>('#reports_table')
 

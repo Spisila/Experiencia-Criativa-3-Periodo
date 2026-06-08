@@ -1,21 +1,3 @@
-import { supabase } from "../lib/supabase";
-import { navigateTo } from "../main";
-
-export interface Usuario {
-  id: string,
-  nome: string,
-  cpf: string
-}
-
-
-function go_to_user_page(user_id: string) {
-
-  navigateTo("/perfil_usuario/" + user_id)
-
-}
-
-
-
 export interface sort_table_options<T> {
   button: HTMLButtonElement | null;
   fetch_data: (ascendente: boolean) => Promise<T[] | null>;

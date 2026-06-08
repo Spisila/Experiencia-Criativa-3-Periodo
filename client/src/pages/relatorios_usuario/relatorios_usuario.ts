@@ -5,18 +5,10 @@ import "../../components/input_boxes.css"
 import { supabase } from "../../lib/supabase"
 import { navigateTo } from '../../main';
 
-import { get_max_pages, setup_fill_table, setup_table_sorting, update_page } from '../../components/table_functions';
+import { clear_table, get_max_pages, setup_fill_table, setup_table_sorting, update_page } from '../../components/table_functions';
 
 import { get_auth_user } from '../../components/auth_functions';
 
-interface Relatorio {
-  relatorio_id: string;
-  nome_paciente: string;
-  data_nascimento: string;
-  sexo: string;
-  data_realizada: string;
-  score_final: number;
-};
 
 export async function init_relatorios_usuario_page() {
 
@@ -214,70 +206,66 @@ export async function init_relatorios_usuario_page() {
 
   //#region SEARCH
 
-  // const search_input = container.querySelector<HTMLButtonElement>('#search_bar');
-  // const search_button = container.querySelector<HTMLButtonElement>('#search_button');
+  const search_input = container.querySelector<HTMLButtonElement>('#search_bar');
+  const search_button = container.querySelector<HTMLButtonElement>('#search_button');
 
-  // search_button?.addEventListener('click', async (_MouseEvent) => {
+  search_button?.addEventListener('click', async (_MouseEvent) => {
 
-  //   console.log(search_input?.value.length)
+    console.log(search_input?.value.length)
 
-  //   if (search_input?.value.length === 0) {
+    if (search_input?.value.length === 0) {
 
-  //     relatorios_por('nome', user_id!, table, realizadas_ascendentes, container);
-  //     return;
-  //   }
+      let relatorios = await get_relatorios(user_id, 'nome', true, 1)
 
-
-  //   if (search_input?.value) {
-
-
+      clear_table(container)
+      setup_fill_table(relatorios, table, ir_relatorio_especifico)
+      return;
+    }
 
 
-  //     const { data: pacienteBuscado, error: pegarPacienteBuscadoError } = await supabase
-  //       .from('paciente').select('id').or(`nome.ilike.${search_input.value}%, cpf.ilike.${search_input.value}%`);
+    if (search_input?.value) {
 
-  //     if (pegarPacienteBuscadoError) {
-  //       console.log("Erro ao pesquisar paciente")
-  //       console.log(pegarPacienteBuscadoError)
-  //       return;
-  //     }
+      const { data: pacienteBuscado, error: pegarPacienteBuscadoError } = await supabase
+        .from('paciente').select('id').or(`nome.ilike.${search_input.value}%, cpf.ilike.${search_input.value}%`);
 
-  //     if (!pacienteBuscado || pacienteBuscado.length === 0) {
-  //       console.log("Nenhum paciente encontrado com esse nome ou cpf")
-  //       return;
-  //     }
+      if (pegarPacienteBuscadoError) {
+        console.log("Erro ao pesquisar paciente")
+        console.log(pegarPacienteBuscadoError)
+        return;
+      }
 
-  //     const linhas = container.querySelectorAll('.reports_table_row')
+      if (!pacienteBuscado || pacienteBuscado.length === 0) {
+        console.log("Nenhum paciente encontrado com esse nome ou cpf")
+        return;
+      }
 
-  //     linhas.forEach(linha => {
-  //       linha.remove();
-  //     })
+      clear_table(container);
 
-  //     console.log(pacienteBuscado)
+      console.log(pacienteBuscado)
 
-  //     for (let i = 0; i < pacienteBuscado.length; i++) {
+      for (let i = 0; i < pacienteBuscado.length; i++) {
 
-  //       const { data: relatoriosBuscados, error: pegarRelatoriosError } = await supabase
-  //         .rpc('obter_relatorios_do_paciente', {
-  //           paciente_id_param: pacienteBuscado.at(i)!.id,
-  //           ascendente: true,
-  //           ordenar_por: 'nome'
-  //         });
+        const { data: relatoriosBuscados, error: pegarRelatoriosError } = await supabase
+          .rpc('obter_relatorios_do_paciente', {
+            paciente_id_param: pacienteBuscado.at(i)!.id,
+            ascendente: true,
+            ordenar_por: 'nome'
+          });
 
-  //       if (pegarRelatoriosError) {
-  //         console.log("Erro relatorios buscados por paciente");
-  //         console.log(pegarRelatoriosError)
-  //       }
+        if (pegarRelatoriosError) {
+          console.log("Erro relatorios buscados por paciente");
+          console.log(pegarRelatoriosError)
+        }
 
-  //       if (relatoriosBuscados) {
-  //         encher_relatorios(relatoriosBuscados, table)
-  //       }
-  //     }
+        if (relatoriosBuscados) {
+          setup_fill_table(relatoriosBuscados, table, ir_relatorio_especifico)
+        }
+      }
 
 
-  //   }
+    }
 
-  // })
+  })
 
   //#endregion
 

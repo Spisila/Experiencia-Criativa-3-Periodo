@@ -195,8 +195,7 @@ export async function init_nova_avaliacao_page() {
   
 
   `
-
-
+  
   const paciente_id = window.location.pathname.replace("/nova_avaliacao/", "")
 
   const { data: pacienteDados, error: getPacienteError } = await supabase.from("paciente").select("*").eq("id", paciente_id).single();
