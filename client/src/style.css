@@ -23,20 +23,6 @@
   --icon-theme: 100%;
 }
 
-/* Claro antes */
-/* [data-theme="light"] {
-  --bg: #ffffff;
-  --card-bg: #ffffff;
-  --card-border: #e2e8f0;
-  --text-primary: #0f172a;
-  --text-secondary: #64748b;
-  --input-bg: #ffffff;
-  --input-border: #cbd5e1;
-  --accent-blue: #00a8cc;
-  --header-bg: #ffffff;
-  --icon-theme: 0%;
-} */
-
 [data-theme="light"] {
   --bg: #99c2e7;
 

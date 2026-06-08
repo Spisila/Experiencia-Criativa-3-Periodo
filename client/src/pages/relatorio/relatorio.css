@@ -292,6 +292,10 @@
     margin: 4px 0;
   }
 
+  .notfication_popup {
+    display: none;
+  }
+
   .whole {
     background-color: white;
   }
@@ -355,31 +359,40 @@
 
   .patient_info {
 
-    width: 50%;
+    width: 100%;
     height: 100px;
 
     padding: 0px;
 
-    border-right: 1px solid black;
-
+    white-space: nowrap;   
+    overflow: hidden;       
+    text-overflow: clip;  
+      
     border: 0;
     background-color: white;
   }
-
+  
   .doctor_info {
-
-    width: 50%;
+    
+    width: 95%;
     height: 100px;
 
+    white-space: nowrap;   
+    overflow: hidden;       
+    text-overflow: clip;  
+    
     padding: 0px;
     padding-left: 5px;
+  
+    margin-right: 5px;
 
+    
     background-color: white;
   }
 
   .report_conclusion_container {
     width: 100%;
-    height: 300px;
+    height: 400px;
 
     border: 1px solid black;
 
@@ -387,17 +400,21 @@
   }
 
   .report_conclusion {
+    
+    text-overflow: clip;  
 
-    border-top: 1px solid black;
+    flex-direction: column;
 
-    height: 200px;
+    text-align: start;
+
+    height: 50%;
     background-color: white;
   }
 
 
   .report_symptoms_table {
 
-    height: 12cm;
+    height: 9cm;
 
     page-break-inside: avoid;
   }
@@ -410,6 +427,24 @@
 
   .symptoms_table_row {
     background-color: white;
+  }
+
+
+  .basic_table{
+    font-size: 1rem;
+    table-layout: fixed;
+  }
+
+  .basic_row{
+    max-height: 1rem;
+  }
+
+  .basic_cell {
+    max-height: 10px;
+  }
+
+  .report_buttons_container {
+    display: none;
   }
 
   .text_and_toggle_button {

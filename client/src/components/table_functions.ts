@@ -6,7 +6,7 @@ export interface sort_table_options<T> {
 
 
 export function setup_table_sorting<T extends object>(
-  button : HTMLButtonElement | null,
+  button: HTMLButtonElement | null,
   fetch_data: (ascendente: boolean) => Promise<T[] | null>,
   render_data: (data: T[]) => void,
 ) {
@@ -53,7 +53,15 @@ export function setup_fill_table<T extends object>(row: T[], table: HTMLTableEle
     for (let j = 0; j < column_count; j++) {
 
       const current_key = column[j];
-      const current_value = (current_item as Record<string, any>)[current_key];
+      let current_value = (current_item as Record<string, any>)[current_key];
+
+      if (current_key === 'data_nascimento') {
+        current_value = new Date(current_value).toLocaleDateString('pt-BR');
+      }
+
+      if (current_key === 'data_avaliacao') {
+        current_value = new Date(current_value).toLocaleString('pt-BR');
+      }
 
       if (j == column_count - 1) {
 

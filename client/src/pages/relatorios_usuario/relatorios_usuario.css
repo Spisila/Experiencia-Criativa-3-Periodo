@@ -61,6 +61,7 @@
   min-height: 3rem;
   max-height: 3rem;
 
+  table-layout: fixed;
 
   background-color: var(--card-border)
 }
@@ -86,6 +87,10 @@
 
   min-height: 2rem;
   width: auto;
+
+  white-space: nowrap;    /* Prevents the text from wrapping to a new line */
+  overflow: hidden;       /* Hides the text that goes past the width */
+  text-overflow: clip;
 
   padding-left: 5px;
 }
@@ -120,6 +125,10 @@
 
   min-height: 4rem;
   width: auto;
+
+  white-space: nowrap;    /* Prevents the text from wrapping to a new line */
+  overflow: hidden;       /* Hides the text that goes past the width */
+  text-overflow: clip;
 
   padding-left: 5px;
 }
