@@ -31,7 +31,7 @@ import { supabase } from './lib/supabase.ts';
 import { return_to_options, should_hide_return_button } from './components/return_to_options_button.ts';
 import { should_hide_logout_button, log_out } from './components/logout_button.ts';
 import { initTheme, toggleTheme } from './components/tema_claro_escuro.ts';
-
+import { trigger_notification_popup, showNotification, hideNotification } from './components/notification_popup.ts';
 
 type FuncaoInit = (container: HTMLElement) => void;
 
@@ -78,8 +78,9 @@ async function init() {
 
   initTheme();
 
+  showNotification("Carregando pagina...")
   await carregar_pesos();
-
+  hideNotification()
   const { data: user_session } = await supabase.auth.getSession();
 
   if (!user_session) {
@@ -104,7 +105,8 @@ async function handleRouting() {
   const path = window.location.pathname;
 
   if (paths.includes(path) == false && path.startsWith("/relatorio/") == false) {
-    window.alert("Pagina não existe")
+    // window.alert("Pagina não existe")
+    trigger_notification_popup("Pagina não existe")
     navigateTo("/login_total")
     return;
   }
@@ -146,10 +148,11 @@ async function handleRouting() {
       }
 
       if (user_perfil != pagina_i.perfil_necessario) {
-        window.alert("ACESSO NEGADO");
+        // window.alert("ACESSO NEGADO");
+        trigger_notification_popup("ACESSO NEGADO")
         navigateTo("/login_total");
         log_out();
-        return;;
+        return;
       }
 
       atualizar_titulo_da_pagina(Paginas.at(i)?.titulo!)

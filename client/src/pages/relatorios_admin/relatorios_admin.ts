@@ -249,71 +249,69 @@ export async function init_relatorios_admin_page() {
   )
 
 
-  //#region SEARCH
 
-  // const search_input = container.querySelector<HTMLButtonElement>('#search_bar');
-  // const search_button = container.querySelector<HTMLButtonElement>('#search_button');
+  const search_input = container.querySelector<HTMLButtonElement>('#search_bar');
+  const search_button = container.querySelector<HTMLButtonElement>('#search_button');
 
-  // search_button?.addEventListener('click', async (_MouseEvent) => {
 
-  //   console.log(search_input?.value.length)
+  search_button?.addEventListener('click', async (_MouseEvent) => {
 
-  //   if (search_input?.value.length === 0) {
+    console.log(search_input?.value.length)
 
-  //     console.log("Campo de pesquisa vazio, mostrando todos os relatorios")
-  //     relatorios_por('nome', table, realizadas_ascendentes, container);
-  //     return;
+    if (search_input?.value.length === 0) {
 
-  //   }
+      relatorios = await get_todos_relatorios('nome', true, 1);
+      setup_fill_table(relatorios, table, ir_relatorio_especifico)
+      return;
 
-  //   if (search_input?.value) {
+    }
 
-  //     console.log("Pesquisando por: " + search_input.value)
+    if (search_input?.value) {
 
-  //     const { data: pacienteBuscado, error: pegarPacienteBuscadoError } = await supabase
-  //       .from('paciente').select('id').or(`nome.ilike.${search_input.value}%, cpf.ilike.${search_input.value}%`);
+      console.log("Pesquisando por: " + search_input.value)
 
-  //     if (pegarPacienteBuscadoError) {
-  //       console.log("Erro ao pesquisar paciente")
-  //       console.log(pegarPacienteBuscadoError)
-  //       return;
-  //     }
+      const { data: pacienteBuscado, error: pegarPacienteBuscadoError } = await supabase
+        .from('paciente').select('id').or(`nome.ilike.${search_input.value}%, cpf.ilike.${search_input.value}%`);
 
-  //     if (!pacienteBuscado || pacienteBuscado.length === 0) {
-  //       console.log("Nenhum paciente encontrado com esse nome ou cpf")
-  //       return;
-  //     }
+      if (pegarPacienteBuscadoError) {
+        console.log("Erro ao pesquisar paciente")
+        console.log(pegarPacienteBuscadoError)
+        return;
+      }
 
-  //     const linhas = container.querySelectorAll('.reports_table_row')
+      if (!pacienteBuscado || pacienteBuscado.length === 0) {
+        console.log("Nenhum paciente encontrado com esse nome ou cpf")
+        return;
+      }
 
-  //     linhas.forEach(linha => {
-  //       linha.remove();
-  //     })
+      const linhas = container.querySelectorAll('.reports_table_row')
 
-  //     console.log(pacienteBuscado)
+      linhas.forEach(linha => {
+        linha.remove();
+      })
 
-  //     for (let i = 0; i < pacienteBuscado.length; i++) {
+      console.log(pacienteBuscado)
 
-  //       const { data: relatoriosBuscados, error: pegarRelatoriosError } = await supabase
-  //         .rpc('obter_relatorios_do_paciente', {
-  //           paciente_id_param: pacienteBuscado.at(i)!.id,
-  //           ascendente: true,
-  //           ordenar_por: 'nome'
-  //         });
+      for (let i = 0; i < pacienteBuscado.length; i++) {
 
-  //       if (pegarRelatoriosError) {
-  //         console.log("Erro relatorios buscados por paciente");
-  //         console.log(pegarRelatoriosError)
-  //       }
+        const { data: relatoriosBuscados, error: pegarRelatoriosError } = await supabase
+          .rpc('obter_relatorios_do_paciente_administrador', {
+            paciente_id: pacienteBuscado.at(i)!.id,
+            ascendente: true,
+            ordenar_por: 'nome'
+          });
 
-  //       if (relatoriosBuscados) {
-  //         encher_relatorios(relatoriosBuscados, table)
-  //       }
-  //     }
-  //   }
-  // });
+        if (pegarRelatoriosError) {
+          console.log("Erro relatorios buscados por paciente");
+          console.log(pegarRelatoriosError)
+        }
 
-  //#endregion
+        if (relatoriosBuscados) {
+          setup_fill_table(relatoriosBuscados, table, ir_relatorio_especifico)
+        }
+      }
+    }
+  });
 
   update_page(
     container,

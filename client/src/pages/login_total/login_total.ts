@@ -7,7 +7,7 @@ import { supabase } from "../../lib/supabase"
 import { navigateTo } from '../../main'
 import { atualizar_botao_log_out } from '../../components/logout_button'
 
-import { trigger_notification_popup } from '../../components/notification_popup'
+import { trigger_notification_popup, showNotification, hideNotification } from '../../components/notification_popup'
 
 import { login_schema } from '../../schemas/login_schema';
 
@@ -71,6 +71,8 @@ export function init_login_total_page() {
 
     }
 
+    showNotification("Fazendo login...")
+
     const { data, error } = await supabase.auth.signInWithPassword({ email: email, password: password });
 
     if (error) {
@@ -99,6 +101,8 @@ export function init_login_total_page() {
       atualizar_botao_log_out("visivel");
 
     }
+
+    hideNotification()
 
   }
 }

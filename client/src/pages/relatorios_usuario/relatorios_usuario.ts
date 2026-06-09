@@ -8,6 +8,7 @@ import { navigateTo } from '../../main';
 import { clear_table, get_max_pages, setup_fill_table, setup_table_sorting, update_page } from '../../components/table_functions';
 
 import { get_auth_user } from '../../components/auth_functions';
+import { hideNotification, showNotification, trigger_notification_popup } from '../../components/notification_popup';
 
 
 export async function init_relatorios_usuario_page() {
@@ -55,10 +56,10 @@ export async function init_relatorios_usuario_page() {
 
               <colgroup>
                 <col style="width: auto;"> <!-- Nome do paciente -->
-                <col style="width: 150px;"> <!-- Data de nascimento -->
+                <col style="width: 250px;"> <!-- Data de nascimento -->
                 <col style="width: 100px;"> <!-- Sexo -->
                 <col style="width: 200px;"> <!-- Data avaliacao -->
-                <col style="width: 50px;"> <!-- Score -->
+                <col style="width: 200px;"> <!-- Score -->
                 <col style="width: 50px;"> <!-- Botão -->
               </colgroup>
 
@@ -165,15 +166,29 @@ export async function init_relatorios_usuario_page() {
   
   `
 
-  const user_session = await get_auth_user();
+  const user_session = await supabase.auth.getSession();
 
-  const user_id = String(user_session?.session?.user.id)
+  const user_id = String(user_session.data.session?.user.id)
+
+  console.log(user_id)
 
   const table = container.querySelector<HTMLTableElement>('#reports_table')
 
   if (!table) { return; }
 
+  showNotification("Buscando relatórios...")
+  
   const relatorios = await get_relatorios(String(user_id), 'nome', true, 1)
+
+  if (relatorios.length == 0) {
+    hideNotification();
+    trigger_notification_popup("Nenhum relatorio encontrado");
+  }
+  else {
+
+    hideNotification();
+  }
+
 
   setup_fill_table(relatorios, table, ir_relatorio_especifico);
 
@@ -220,8 +235,6 @@ export async function init_relatorios_usuario_page() {
 
   search_button?.addEventListener('click', async (_MouseEvent) => {
 
-    console.log(search_input?.value.length)
-
     if (search_input?.value.length === 0) {
 
       let relatorios = await get_relatorios(user_id, 'nome', true, 1)
@@ -244,13 +257,11 @@ export async function init_relatorios_usuario_page() {
       }
 
       if (!pacienteBuscado || pacienteBuscado.length === 0) {
-        console.log("Nenhum paciente encontrado com esse nome ou cpf")
+        trigger_notification_popup("Nenhum paciente encontrado com esse nome ou CPF")
         return;
       }
 
       clear_table(container);
-
-      console.log(pacienteBuscado)
 
       for (let i = 0; i < pacienteBuscado.length; i++) {
 
@@ -295,6 +306,8 @@ async function get_relatorios(usuario_id: string, ordenar_por: string, ascendent
   const from = (page - 1) * 24
   const to = (page * 24) - 1
 
+  console.log(usuario_id)
+
   const { data: relatorios, error: pegarRelatoriosError } = await supabase
     .rpc('pegar_dados_relatorios', {
       usuario_id: usuario_id,
@@ -307,6 +320,8 @@ async function get_relatorios(usuario_id: string, ordenar_por: string, ascendent
     console.log(pegarRelatoriosError)
     return;
   }
+
+  console.log(relatorios)
 
   return relatorios
 

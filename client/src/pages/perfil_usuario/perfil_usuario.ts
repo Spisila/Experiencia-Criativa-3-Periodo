@@ -7,6 +7,7 @@ import { trigger_notification_popup } from '../../components/notification_popup'
 
 import { cadastro_usuario_schema } from '../../schemas/cadastro_usuario_schema';
 import { navigateTo } from '../../main';
+import { get_auth_user } from '../../components/auth_functions';
 
 export async function init_perfil_usuario_page() {
 
@@ -41,6 +42,18 @@ export async function init_perfil_usuario_page() {
 
   `
 
+  const user_session = await get_auth_user()
+
+  const permissao = user_session?.session?.user.user_metadata.perfil
+
+  const edit_button = container.querySelector<HTMLButtonElement>('#edit_button');
+  const delete_button = container.querySelector<HTMLButtonElement>('#delete_button');
+
+  if (permissao == 'medico') {
+    delete_button!.style.display == 'none'
+    delete_button?.remove()
+  }
+
   const usuario_id = window.location.pathname.replace("/perfil_usuario/", "")
 
   const { data: dadosUsuario, error: errorUsuario } = await supabase.from('usuario').select('*').eq('id', usuario_id).single();
@@ -60,14 +73,6 @@ export async function init_perfil_usuario_page() {
   name_input!.value = dadosUsuario.nome;
   cpf_input!.value = dadosUsuario.cpf;
 
-  const edit_button = container.querySelector<HTMLButtonElement>('#edit_button');
-  const delete_button = container.querySelector<HTMLButtonElement>('#delete_button');
-
-  console.log(dadosUsuario)
-
-  if (dadosUsuario.permissao == 'medico') {
-    delete_button!.style.display = "none";
-  }
 
   let editando = false;
 
@@ -121,12 +126,12 @@ export async function init_perfil_usuario_page() {
       .eq("id", usuario_id);
 
     if (error) {
-      alert("Erro ao deletar usuario");
+      trigger_notification_popup("Erro ao deletar usuario");
       console.error(error);
       return;
     }
 
-    alert("usuario deletado com sucesso");
+    trigger_notification_popup("Usuario deletado com sucesso");
 
     navigateTo("/lista_usuarios");
   });

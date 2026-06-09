@@ -8,6 +8,7 @@ import { navigateTo } from '../../main';
 import { setup_table_sorting, setup_fill_table } from '../../components/table_functions';
 
 import { get_auth_user } from '../../components/auth_functions';
+import { showNotification, hideNotification, trigger_notification_popup } from '../../components/notification_popup';
 
 export async function init_lista_usuarios_page() {
 
@@ -123,7 +124,18 @@ export async function init_lista_usuarios_page() {
     (usuarios) => setup_fill_table(usuarios, table, go_to_user_page)
   );
 
+  showNotification("Carregando usuarios...")
+
   const usuarios = await get_usuarios('nome', nomes_ascendentes);
+
+  if (usuarios.length == 0) {
+    hideNotification();
+    trigger_notification_popup("Nenhum relatorio encontrado");
+  }
+  else {
+
+    hideNotification();
+  }
 
   setup_fill_table(usuarios, table, go_to_user_page)
 

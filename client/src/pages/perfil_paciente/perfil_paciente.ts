@@ -172,12 +172,11 @@ export async function init_perfil_paciente_page() {
       .eq("id", paciente_id);
 
     if (error) {
-      alert("Erro ao deletar paciente");
+      trigger_notification_popup("Erro ao deletar paciente");
       console.error(error);
       return;
     }
-
-    alert("Paciente deletado com sucesso");
+    trigger_notification_popup("Paciente deletado com sucesso");
 
     navigateTo("/lista_pacientes");
   });

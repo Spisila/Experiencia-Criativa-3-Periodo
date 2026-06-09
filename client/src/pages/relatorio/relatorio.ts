@@ -519,14 +519,14 @@ export async function init_relatorio_page() {
       .eq("id", relatorio_id);
 
     if (error) {
-      alert("Erro ao deletar relatório");
+      trigger_notification_popup("Erro ao deletar relatório");
       console.error(error);
       return;
     }
 
     console.log(relatorio_id)
 
-    alert("Relatório deletado com sucesso");
+    trigger_notification_popup("Relatório deletado com sucesso");
 
     navigateTo("/relatorios_usuario");
   });
@@ -630,7 +630,6 @@ export async function init_relatorio_page() {
         }
 
       }
-
 
       trigger_notification_popup("Relatorio editado com sucesso");
     }

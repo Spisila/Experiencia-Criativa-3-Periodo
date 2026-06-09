@@ -9,6 +9,8 @@ import { get_auth_user } from '../../components/auth_functions';
 
 import { setup_table_sorting, setup_fill_table, clear_table, update_page, get_max_pages } from '../../components/table_functions';
 
+import { trigger_notification_popup, showNotification, hideNotification } from '../../components/notification_popup';
+
 export async function init_lista_pacientes_page() {
 
   const container = document.querySelector<HTMLDivElement>('#app');
@@ -53,7 +55,7 @@ export async function init_lista_pacientes_page() {
 
             <colgroup>
               <col style="width: auto;"> <!-- Nome do paciente -->
-              <col style="width: 100px;"> <!-- Data de nascimento -->
+              <col style="width: 250px;"> <!-- Data de nascimento -->
               <col style="width: 100px;"> <!-- Sexo -->
               <col style="width: 200px;"> <!-- CPF -->
               <col style="width: 50px;"> <!-- Botão -->
@@ -148,15 +150,29 @@ export async function init_lista_pacientes_page() {
   
   `
 
+  
   const user_session = await get_auth_user();
-
+  
+  
   const user_id = String(user_session!.session?.user.id)
-
+  
   const table = container.querySelector<HTMLTableElement>('#reports_table')
-
+  
   if (!table) { return; }
-
+  
+  showNotification("Carregando pacientes...")
+  
   let pacientes = await get_pacientes('nome', true, user_id, 1);
+  
+  if (pacientes!.length == 0) {
+    hideNotification();
+    trigger_notification_popup("Nenhum paciente encontrado");
+  }
+  else {
+
+    hideNotification();
+  }
+  
   const pacientes_entradas = await get_entradas_pacientes(user_id);
   setup_fill_table(pacientes ?? [], table, ir_perfil_paciente);
 

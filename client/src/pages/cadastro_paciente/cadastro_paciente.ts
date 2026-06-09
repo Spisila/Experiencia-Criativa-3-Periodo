@@ -502,9 +502,7 @@ export async function init_cadastro_paciente_page() {
 
       if (error) {
         throw error;
-      } else {
-        console.log('Paciente, avaliação e itens cadastrados com sucesso!');
-      }
+      } 
 
     } catch (error) {
       console.error('Erro no cadastro:', error instanceof Error ? error.message : error);
