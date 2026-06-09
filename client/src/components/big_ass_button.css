@@ -11,8 +11,11 @@
   border: 0;
   border-radius: 15px;
 
-  width: 350px;
-  height: 250px;
+  width: 40%;
+  height: 35%;
+
+  max-width: 350px;
+  max-height: 250px;
 
   padding: 25px;
 

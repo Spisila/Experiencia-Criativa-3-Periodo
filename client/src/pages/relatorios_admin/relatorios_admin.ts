@@ -55,7 +55,7 @@ export async function init_relatorios_admin_page() {
               <col style="width: 150px;"> <!-- Data de nascimento -->
               <col style="width: 100px;"> <!-- Sexo -->
               <col style="width: 200px;"> <!-- Data avaliacao -->
-              <col style="width: 50px;"> <!-- Score -->
+              <col style="width: 150px;"> <!-- Score -->
               <col style="width: 50px;"> <!-- Botão -->
             </colgroup>
 

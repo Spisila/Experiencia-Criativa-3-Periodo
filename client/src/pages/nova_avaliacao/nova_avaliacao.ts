@@ -7,7 +7,7 @@ import { sintomas_atuais_masculinas, sintomas_atuais_feminino } from '../../lib/
 
 import { switch_pair_button } from '../../components/switch_pair_button'
 
-import { trigger_notification_popup } from '../../components/notification_popup'
+import { hideNotification, showNotification, trigger_notification_popup } from '../../components/notification_popup'
 
 import { v4 as uuidv4 } from 'uuid';
 
@@ -195,7 +195,7 @@ export async function init_nova_avaliacao_page() {
   
 
   `
-  
+
   const paciente_id = window.location.pathname.replace("/nova_avaliacao/", "")
 
   const { data: pacienteDados, error: getPacienteError } = await supabase.from("paciente").select("*").eq("id", paciente_id).single();
@@ -497,6 +497,7 @@ export async function init_nova_avaliacao_page() {
 
   async function nova_avaliacao_press() {
 
+    showNotification("Criando Avaliação...")
 
     const { data: pacienteDados, error: getPacienteError } = await supabase.from("paciente").select("*").eq("id", paciente_id).single();
 
@@ -623,7 +624,8 @@ export async function init_nova_avaliacao_page() {
       if (error) {
         throw error;
       } else {
-        console.log('Avaliação criada');
+        hideNotification()
+        trigger_notification_popup("Avaliação Criada")
       }
 
     } catch (error) {
@@ -631,6 +633,7 @@ export async function init_nova_avaliacao_page() {
       trigger_notification_popup("Erro ao criar nova avaliação");
       return;
     }
+
 
 
   }

@@ -13,6 +13,8 @@
 
   gap: 25px;
 
+  border-radius: 25px;
+
   background-color: var(--secondary-card-bg);
 
 }
@@ -29,6 +31,8 @@
   width: 95%;
   height: 10%;
 
+  border-radius: 25px;
+
   background-color: var(--tertiary-card-bg);
 
 }
@@ -44,7 +48,6 @@
   width: 20%;
   height: 95%;
 
-  background-color: var(--tertiary-card-bg);
 
 }
 
@@ -52,6 +55,8 @@
 
   width: 95%;
   height: 85%;
+
+  border-radius: 25px;
 
   background-color: var(--tertiary-card-bg);
 }
@@ -63,6 +68,7 @@
 
   table-layout: fixed;
 
+  
   background-color: var(--card-border)
 }
 
@@ -71,6 +77,8 @@
   
   max-height: 2rem;
   width: 100%;
+
+    border-radius: 25px;
 
   background-color: var(--bg);
 }

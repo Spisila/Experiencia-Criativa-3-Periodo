@@ -31,7 +31,7 @@ export async function init_opcoes_usuario_page() {
       </button>
 
       <button class="big_ass_button" id="usuario_perfil_button">
-        <img class="icon_image" src="/node_modules/lucide-static/icons/heart-handshake.svg" alt="Paciente" style="height: 30%;" />
+        <img class="icon_image" src="/node_modules/lucide-static/icons/user-pen.svg" alt="Paciente" style="height: 30%;" />
         Seu perfil
       </button>
 
