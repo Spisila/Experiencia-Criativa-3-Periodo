@@ -7,6 +7,7 @@ import { trigger_notification_popup } from '../../components/notification_popup'
 
 import { cadastro_usuario_schema } from '../../schemas/cadastro_usuario_schema';
 import { navigateTo } from '../../main';
+import { deletar_fotos_avaliacao } from '../../components/bucket_functions';
 
 export async function init_perfil_paciente_page() {
 
@@ -180,18 +181,35 @@ export async function init_perfil_paciente_page() {
 
     if (!confirmar) return;
 
-    const { error } = await supabase
+    const { data: usuario_paciente } = await supabase
+      .from("paciente")
+      .select("usuario_id")
+      .eq("id", paciente_id)
+      .single();
+
+    const { data: paciente_avaliacoes } = await supabase
+      .from("avaliacao")
+      .select("id")
+      .eq("paciente_id", paciente_id);
+
+    for (let i = 0; i < paciente_avaliacoes!.length; i++) {
+      await deletar_fotos_avaliacao(usuario_paciente?.usuario_id, paciente_avaliacoes?.at(i)?.id)
+    }
+
+    const { error: delete_paciente_error } = await supabase
       .from("paciente")
       .delete()
       .eq("id", paciente_id);
 
-    if (error) {
+    if (delete_paciente_error) {
       trigger_notification_popup("Erro ao deletar paciente");
-      console.error(error);
+      console.error(delete_paciente_error);
       return;
     }
+
     trigger_notification_popup("Paciente deletado com sucesso");
 
+    await new Promise((resolve) => setTimeout(resolve, 2000));
     navigateTo("/lista_pacientes");
   });
 

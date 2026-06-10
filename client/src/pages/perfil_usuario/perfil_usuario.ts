@@ -8,6 +8,7 @@ import { trigger_notification_popup } from '../../components/notification_popup'
 import { cadastro_usuario_schema } from '../../schemas/cadastro_usuario_schema';
 import { navigateTo } from '../../main';
 import { get_auth_user } from '../../components/auth_functions';
+import { deletar_fotos_avaliacao } from '../../components/bucket_functions';
 
 export async function init_perfil_usuario_page() {
 
@@ -123,6 +124,25 @@ export async function init_perfil_usuario_page() {
     const confirmar = confirm("Tem certeza que deseja deletar este usuario?");
 
     if (!confirmar) return;
+
+    const { data: avaliacoes_usuario, error: pegar_avaliacoes_usuario_erro } = await supabase
+      .from("avaliacao")
+      .select("id")
+      .eq("usuario_id", usuario_id);
+
+    if (pegar_avaliacoes_usuario_erro) {
+      trigger_notification_popup("Erro ao deletar usuario")
+      console.log(pegar_avaliacoes_usuario_erro)
+      return;
+    }
+
+    console.log(avaliacoes_usuario)
+    console.log(usuario_id)
+
+    for (let i = 0; i < avaliacoes_usuario!.length; i++) {
+      await deletar_fotos_avaliacao(usuario_id, avaliacoes_usuario.at(i)?.id);
+    }
+
 
     const { error } = await supabase
       .from("usuario")

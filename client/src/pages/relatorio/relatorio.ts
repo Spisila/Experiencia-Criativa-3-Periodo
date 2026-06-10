@@ -8,6 +8,7 @@ import { navigateTo } from '../../main';
 import { trigger_notification_popup } from '../../components/notification_popup';
 
 import { calcular_score_final, retornar_sintomas_selecionados } from '../../lib/sintoma_pesos';
+import { deletar_fotos_avaliacao } from '../../components/bucket_functions';
 
 const tem_sintomas: Record<string, boolean> = {
   'deficiencia_intelectual': false,
@@ -512,6 +513,8 @@ export async function init_relatorio_page() {
     );
 
     if (!confirmar) return;
+
+    deletar_fotos_avaliacao(usuario_id, relatorio_id)
 
     const { error } = await supabase
       .from("avaliacao")

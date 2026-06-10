@@ -3,7 +3,7 @@ import "../../components/base_button.css"
 import "../../components/input_boxes.css"
 
 import { supabase } from "../../lib/supabase"
-import { trigger_notification_popup } from '../../components/notification_popup';
+import { hideNotification, showNotification, trigger_notification_popup } from '../../components/notification_popup';
 
 import { cadastro_usuario_schema } from '../../schemas/cadastro_usuario_schema';
 
@@ -57,29 +57,31 @@ export async function init_cadastro_medico_page() {
       trigger_notification_popup("Preencha todos os campos");
       return;
     }
-
+    
     const dadosFormulario = {
       nome: name,
       cpf: cpf,
       email: email,
       senha: password
     }
-
+    
     const resultado_validacao = cadastro_usuario_schema.safeParse(dadosFormulario);
-
+    
     if (!resultado_validacao.success) {
       const messages = resultado_validacao.error.issues.map(issue => issue.message);
       console.log(messages[0]);
       trigger_notification_popup(messages[0]);
       return;
     }
-
+    
     const { data: cpf_exists } = await supabase.from('usuario').select('cpf').eq('cpf', cpf).single();
-
+    
     if (cpf_exists) {
       trigger_notification_popup("CPF já cadastrado");
       return;
     }
+    
+    showNotification("Cadastrando usuario...");
 
     try {
 
@@ -90,6 +92,7 @@ export async function init_cadastro_medico_page() {
         trigger_notification_popup("Usuário não autenticado");
         return;
       }
+
 
       const response = await fetch('http://localhost:3000/api/usuarios', {
         method: 'POST',
@@ -102,7 +105,7 @@ export async function init_cadastro_medico_page() {
           password: password,
           nome: name,
           cpf: cpf,
-          perfil: 'medico' 
+          perfil: 'medico'
         })
       });
 
@@ -112,6 +115,8 @@ export async function init_cadastro_medico_page() {
         trigger_notification_popup('Erro ao cadastrar');
         throw new Error(resultado.error || 'Erro ao cadastrar');
       }
+
+      hideNotification()
 
       trigger_notification_popup("Usuário cadastrado com sucesso");
 

@@ -4,7 +4,7 @@ import "../../components/input_boxes.css"
 
 import { supabase } from "../../lib/supabase"
 import { sintomas_atuais_masculinas, sintomas_atuais_feminino } from '../../lib/sintoma_pesos'
-import { trigger_notification_popup } from '../../components/notification_popup'
+import { hideNotification, showNotification, trigger_notification_popup } from '../../components/notification_popup'
 
 import { get_auth_user } from '../../components/auth_functions';
 
@@ -437,6 +437,8 @@ export async function init_cadastro_paciente_page() {
     }
 
 
+    showNotification("Cadastrando paciente...")
+
     const user = await get_auth_user();
 
     const id_medico = user!.session!.user.id;
@@ -502,13 +504,15 @@ export async function init_cadastro_paciente_page() {
 
       if (error) {
         throw error;
-      } 
+      }
 
     } catch (error) {
       console.error('Erro no cadastro:', error instanceof Error ? error.message : error);
       trigger_notification_popup("Erro ao cadastrar paciente");
       return;
     }
+
+    hideNotification()
 
     trigger_notification_popup("Paciente cadastrado com sucesso");
 
