@@ -198,31 +198,31 @@ export async function init_relatorios_usuario_page() {
   const sort_by_avaliacao_date_button = container.querySelector<HTMLButtonElement>('#sort_by_avaliacao_date_button');
   const sort_by_total_score_button = container.querySelector<HTMLButtonElement>('#sort_by_total_score_button');
 
-  setup_table_sorting(
+  setup_table_sorting(container,
     sort_by_patient_name_button,
-    (ascendente) => get_relatorios(user_id, 'nome', ascendente, 1),
+    (ascendente) => get_relatorios(user_id, 'nome', !ascendente, 1),
     (dados) => setup_fill_table(dados, table, ir_relatorio_especifico)
   )
 
-  setup_table_sorting(
+  setup_table_sorting(container,
     sort_by_date_of_birth_button,
     (ascendente) => get_relatorios(user_id, 'data_nascimento', ascendente, 1),
     (dados) => setup_fill_table(dados, table, ir_relatorio_especifico)
   )
 
-  setup_table_sorting(
+  setup_table_sorting(container,
     sort_by_sex_button,
     (ascendente) => get_relatorios(user_id, 'sexo', ascendente, 1),
     (dados) => setup_fill_table(dados, table, ir_relatorio_especifico)
   )
 
-  setup_table_sorting(
+  setup_table_sorting(container,
     sort_by_avaliacao_date_button,
     (ascendente) => get_relatorios(user_id, 'data_avaliacao', ascendente, 1),
     (dados) => setup_fill_table(dados, table, ir_relatorio_especifico)
   )
 
-  setup_table_sorting(
+  setup_table_sorting(container,
     sort_by_total_score_button,
     (ascendente) => get_relatorios(user_id, 'score', ascendente, 1),
     (dados) => setup_fill_table(dados, table, ir_relatorio_especifico)

@@ -124,13 +124,6 @@ export async function init_lista_pacientes_page() {
                   <div class="header_cell_title">
                     CPF
                   </div>
-  
-                  <div class="header_cell_button">
-                    <button id="sort_by_avaliacao_date_button" class="base_table_button" style="max-width: 30px; min-width: 30px; margin-right: 5px;">
-                      <img class="icon_image" src="/node_modules/lucide-static/icons/arrow-up-down.svg" alt="Ordenar"
-                        style="height: 100%;  " />
-                    </button>
-                  </div>
                 
                 </div>
 
@@ -181,21 +174,21 @@ export async function init_lista_pacientes_page() {
   const sort_by_date_of_birth_button = container.querySelector<HTMLButtonElement>('#sort_by_date_of_birth_button');
   const sort_by_sex_button = container.querySelector<HTMLButtonElement>('#sort_by_sex_button');
 
-  setup_table_sorting(
+  setup_table_sorting(container,
     sort_by_patient_name_button,
-    (ascendente) => get_pacientes('nome', ascendente, user_id, 1),
+    (ascendente) => get_pacientes('nome', !ascendente, user_id, 1),
     (dados) => setup_fill_table(dados, table, ir_perfil_paciente)
   )
 
-  setup_table_sorting(
+  setup_table_sorting(container,
     sort_by_date_of_birth_button,
     (ascendente) => get_pacientes('data_nascimento', ascendente, user_id, 1),
     (dados) => setup_fill_table(dados, table, ir_perfil_paciente)
   )
 
-  setup_table_sorting(
+  setup_table_sorting(container,
     sort_by_sex_button,
-    (ascendente) => get_pacientes('sex', ascendente, user_id, 1),
+    (ascendente) => get_pacientes('sexo', ascendente, user_id, 1),
     (dados) => setup_fill_table(dados, table, ir_perfil_paciente)
   )
 
@@ -204,7 +197,7 @@ export async function init_lista_pacientes_page() {
   update_page(
     container,
     page,
-    get_max_pages(pacientes_entradas!, 24),
+    get_max_pages(pacientes_entradas!, 25),
     (p) => get_pacientes('nome', true, user_id, p),
     (dados) => setup_fill_table(dados ?? [], table, ir_perfil_paciente)
   );

@@ -212,37 +212,37 @@ export async function init_relatorios_admin_page() {
   const sort_by_total_score_button = container.querySelector<HTMLButtonElement>('#sort_by_total_score_button');
 
 
-  setup_table_sorting(
+  setup_table_sorting(container,
     sort_by_patient_name_button,
-    (ascendente) => get_todos_relatorios('nome', ascendente, 1),
+    (ascendente) => get_todos_relatorios('nome', !ascendente, 1),
     (dados) => setup_fill_table(dados, table, ir_relatorio_especifico)
   )
 
-  setup_table_sorting(
+  setup_table_sorting(container,
     sort_by_doctor_name_button,
     (ascendente) => get_todos_relatorios('usuario', ascendente, 1),
     (dados) => setup_fill_table(dados, table, ir_relatorio_especifico)
   )
 
-  setup_table_sorting(
+  setup_table_sorting(container,
     sort_by_date_of_birth_button,
     (ascendente) => get_todos_relatorios('data_nascimento', ascendente, 1),
     (dados) => setup_fill_table(dados, table, ir_relatorio_especifico)
   )
 
-  setup_table_sorting(
+  setup_table_sorting(container,
     sort_by_sex_button,
     (ascendente) => get_todos_relatorios('sexo', ascendente, 1),
     (dados) => setup_fill_table(dados, table, ir_relatorio_especifico)
   )
 
-  setup_table_sorting(
+  setup_table_sorting(container,
     sort_by_avaliacao_date_button,
     (ascendente) => get_todos_relatorios('data_avaliacao', ascendente, 1),
     (dados) => setup_fill_table(dados, table, ir_relatorio_especifico)
   )
 
-  setup_table_sorting(
+  setup_table_sorting(container,
     sort_by_total_score_button,
     (ascendente) => get_todos_relatorios('score', ascendente, 1),
     (dados) => setup_fill_table(dados, table, ir_relatorio_especifico)

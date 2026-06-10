@@ -85,13 +85,6 @@ export async function init_lista_usuarios_page() {
                   <div class="header_cell_title">
                     CPF
                   </div>
-  
-                  <div class="header_cell_button">
-                    <button id="sort_by_date_of_birth_button" class="base_table_button" style="max-width: 30px; min-width: 30px; margin-right: 5px;">
-                      <img class="icon_image" src="/node_modules/lucide-static/icons/arrow-up-down.svg" alt="Ordenar"
-                        style="height: 100%;  " />
-                    </button>
-                  </div>
                 
                 </div>
 
@@ -117,16 +110,17 @@ export async function init_lista_usuarios_page() {
   if (!table) { return; }
 
   const sort_name_button = container.querySelector<HTMLButtonElement>('#sort_by_user_name_button');
+  
+  const usuarios = await get_usuarios('nome', nomes_ascendentes);
 
-  setup_table_sorting(
+  setup_table_sorting(container,
     sort_name_button,
-    (ascendente) => get_usuarios('nome', ascendente),
+    (ascendente) => get_usuarios('nome', !ascendente),
     (usuarios) => setup_fill_table(usuarios, table, go_to_user_page)
   );
 
   showNotification("Carregando usuarios...")
 
-  const usuarios = await get_usuarios('nome', nomes_ascendentes);
 
   if (usuarios.length == 0) {
     hideNotification();
