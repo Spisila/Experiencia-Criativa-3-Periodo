@@ -132,12 +132,8 @@ export async function init_perfil_usuario_page() {
 
     if (pegar_avaliacoes_usuario_erro) {
       trigger_notification_popup("Erro ao deletar usuario")
-      console.log(pegar_avaliacoes_usuario_erro)
       return;
     }
-
-    console.log(avaliacoes_usuario)
-    console.log(usuario_id)
 
     for (let i = 0; i < avaliacoes_usuario!.length; i++) {
       await deletar_fotos_avaliacao(usuario_id, avaliacoes_usuario.at(i)?.id);
