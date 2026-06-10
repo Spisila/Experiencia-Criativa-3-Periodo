@@ -263,7 +263,7 @@ export async function init_cadastro_paciente_page() {
   let family_with_ataxia = switch_pair_button(familyWithAtaxiaNoButton!, familyWithAtaxiaYesButton!, false);
 
   autismDiagnosisYesButton?.addEventListener('click', (_event) => {
-    has_autism_diagnosis = switch_pair_button(autismDiagnosisYesButton!, autismDiagnosisNoButton!, has_autism_diagnosis);
+    has_autism_diagnosis = switch_pair_button(autismDiagnosisNoButton!, autismDiagnosisYesButton!, has_autism_diagnosis);
   });
 
   autismDiagnosisNoButton?.addEventListener('click', (_event) => {
@@ -271,7 +271,7 @@ export async function init_cadastro_paciente_page() {
   });
 
   hasSiblingsYesButton?.addEventListener('click', (_event) => {
-    has_siblings = switch_pair_button(hasSiblingsYesButton!, hasSiblingsNoButton!, has_siblings);
+    has_siblings = switch_pair_button(hasSiblingsNoButton!, hasSiblingsYesButton!, has_siblings);
   });
 
   hasSiblingsNoButton?.addEventListener('click', (_event) => {
@@ -279,7 +279,7 @@ export async function init_cadastro_paciente_page() {
   });
 
   familyWithMentalSymptomsYesButton?.addEventListener('click', (_event) => {
-    family_with_mental_symptoms = switch_pair_button(familyWithMentalSymptomsYesButton!, familyWithMentalSymptomsNoButton!, family_with_mental_symptoms);
+    family_with_mental_symptoms = switch_pair_button(familyWithMentalSymptomsNoButton!, familyWithMentalSymptomsYesButton!, family_with_mental_symptoms);
   });
 
   familyWithMentalSymptomsNoButton?.addEventListener('click', (_event) => {
@@ -287,7 +287,7 @@ export async function init_cadastro_paciente_page() {
   });
 
   familyWithAtaxiaYesButton?.addEventListener('click', (_event) => {
-    family_with_ataxia = switch_pair_button(familyWithAtaxiaYesButton!, familyWithAtaxiaNoButton!, family_with_ataxia);
+    family_with_ataxia = switch_pair_button(familyWithAtaxiaNoButton!, familyWithAtaxiaYesButton!, family_with_ataxia);
   });
 
   familyWithAtaxiaNoButton?.addEventListener('click', (_event) => {

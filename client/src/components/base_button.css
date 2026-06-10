@@ -20,6 +20,8 @@
   text-shadow: 0px 1px 1px var(--text-secondary);
   text-align: center;
 
+  border: 1px solid var(--button-border);
+
   color: var(--text-primary);
   background-color: var(--button_color);
 
@@ -31,11 +33,16 @@
 
 .base_button:hover {
 
+  border: 1px solid var(--button-border-hover);
+
   transform: translateY(-5px);
   box-shadow: 0px 14px var(--button_shadow);
 }
 
 .base_button:active {
+
+  border: 1px solid var(--button-border-active);
+
   transform: translateY(9px);
   box-shadow: 0px 0px var(--button_shadow);
 }
@@ -59,6 +66,8 @@
   text-shadow: 0px 1px 1px var(--text-secondary);
   text-align: center;
 
+  border: 1px solid var(--button-border);
+
   color: var(--text-primary);
   background-color: var(--button_color);
 
@@ -70,11 +79,16 @@
 
 .base_small_button:hover {
 
+  border: 1px solid var(--button-border-hover);
+
   transform: translateY(-5px);
   box-shadow: 0px 14px var(--button_shadow);
 }
 
 .base_small_button:active {
+
+  border: 1px solid var(--button-border-active);
+
   transform: translateY(9px);
   box-shadow: 0px 0px var(--button_shadow);
 }
@@ -89,11 +103,13 @@
 
   box-shadow: 0px 3px var(--button_shadow);
 
-  text-shadow: 0px 1px 1px var(--text-secondary);
+  text-shadow: var(--text-shadow-sm);
   text-align: center;
 
   color: var(--text-primary);
   background-color: var(--button_color);
+
+  border: 1px solid var(--button-border);
 
   transition:
     transform 0.1s ease-in-out,
@@ -103,11 +119,16 @@
 
 .base_table_button:hover {
 
+  border: 1px solid var(--button-border-hover);
+
   transform: translateY(-2px);
   box-shadow: 0px 5px var(--button_shadow);
 }
 
 .base_table_button:active {
+
+  border: 1px solid var(--button-border-active);
+
   transform: translateY(3px);
   box-shadow: 0px 0px var(--button_shadow);
 }
@@ -132,6 +153,8 @@
   text-shadow: 0px 1px 1px var(--text-secondary);
   text-align: center;
 
+  border: 1px solid var(--button-border);
+
   color: var(--text-primary);
   background-color: var(--button_color);
 
@@ -145,12 +168,28 @@
 
 .toggle_base_button:hover {
 
+  border: 1px solid var(--button-border-hover);
+
   transform: translateY(-5px);
   box-shadow: 0px 15px var(--button_shadow);
 
 }
 
+.toggle_base_button:disabled {
+
+  color: var(--button-disabled-text);
+  background-color: var(--button-disabled-bg);
+
+  border: 1px solid var(--button-disabled-border);
+
+  
+
+}
+
 .toggle_base_button.is_active {
+
+  border: 1px solid var(--button-border-active);
+
   color: var(--toggled_text_color);
   background-color: var(--toggled_button_color);
   transform: translateY(9px);
@@ -176,6 +215,8 @@
   text-shadow: 0px 1px 1px var(--text-secondary);
   text-align: center;
 
+  border: 1px solid var(--button-border);
+
   color: var(--text-primary);
   background-color: var(--button_color);
 
@@ -189,12 +230,17 @@
 
 .toggle_small_base_button:hover {
 
+  border: 1px solid var(--button-border-hover);
+
   transform: translateY(-5px);
   box-shadow: 0px 15px var(--button_shadow);
 
 }
 
 .toggle_small_base_button.is_active {
+
+  border: 1px solid var(--button-border-active);
+
   color: var(--toggled_text_color);
   background-color: var(--toggled_button_color);
   transform: translateY(9px);
@@ -221,6 +267,8 @@
   text-shadow: 0px 1px 1px var(--text-secondary);
   text-align: center;
 
+  border: 1px solid var(--button-border);
+
   color: var(--text-primary);
   background-color: var(--button_color);
 
@@ -234,12 +282,17 @@
 
 .yes_no_small_toggle_button:hover {
 
+  border: 1px solid var(--button-border-hover);
+
   transform: translateY(-5px);
   box-shadow: 0px 9px var(--button_shadow);
 
 }
 
 .yes_no_small_toggle_button.is_active {
+
+  border: 1px solid var(--button-border-active);
+
   color: var(--toggled_text_color);
   background-color: var(--toggled_button_color);
   transform: translateY(3px);

@@ -46,7 +46,14 @@ export function setup_fill_table<T extends object>(row: T[], table: HTMLTableEle
     const column_count = column.length;
 
     const linha = document.createElement('tr');
-    linha.className = "reports_table_row"
+
+    if (i % 2 == 0) {
+      linha.className = "reports_table_row"
+    }
+    else {
+      linha.className = "reports_table_row_darker"
+    }
+
 
     table.appendChild(linha)
 

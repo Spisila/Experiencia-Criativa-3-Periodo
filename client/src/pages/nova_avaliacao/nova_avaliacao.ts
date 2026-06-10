@@ -288,10 +288,11 @@ export async function init_nova_avaliacao_page() {
   const familyWithAtaxiaYesButton = container.querySelector<HTMLButtonElement>('#family_with_ataxia_yes');
   const familyWithAtaxiaNoButton = container.querySelector<HTMLButtonElement>('#family_with_ataxia_no');
 
-  let has_autism_diagnosis = false;
-  let has_siblings = false;
-  let family_with_mental_symptoms = false;
-  let family_with_ataxia = false;
+  let has_autism_diagnosis = switch_pair_button(autismDiagnosisNoButton!, autismDiagnosisYesButton!, false);
+  let has_siblings = switch_pair_button(hasSiblingsNoButton!, hasSiblingsYesButton!, false);
+  let family_with_mental_symptoms = switch_pair_button(familyWithMentalSymptomsNoButton!, familyWithMentalSymptomsYesButton!, false);
+  let family_with_ataxia = switch_pair_button(familyWithAtaxiaNoButton!, familyWithAtaxiaYesButton!, false);
+
 
   autismDiagnosisYesButton?.addEventListener('click', (_event) => {
     has_autism_diagnosis = switch_pair_button(autismDiagnosisNoButton!, autismDiagnosisYesButton!, has_autism_diagnosis);

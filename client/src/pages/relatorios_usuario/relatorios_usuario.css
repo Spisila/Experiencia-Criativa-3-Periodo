@@ -68,8 +68,31 @@
 
   table-layout: fixed;
 
-  
-  background-color: var(--card-border)
+
+  background-color: var(--table-bg)
+
+}
+
+.reports_table_row {
+
+  min-height: 2rem;
+  width: auto;
+
+  background-color: var(--table-row-bg);
+}
+
+.reports_table_row:hover,
+.reports_table_row_darker:hover{
+
+  background: var(--table-hover-bg);
+
+}
+
+.reports_table_row_darker{
+  min-height: 2rem;
+  width: auto;
+
+  background-color: var(--table-row-alt-bg);
 }
 
 .reports_table_header {
@@ -78,9 +101,9 @@
   max-height: 2rem;
   width: 100%;
 
-    border-radius: 25px;
+  border-radius: 25px;
 
-  background-color: var(--bg);
+  background-color: var(--table-header-bg);
 }
 
 .header_cell_title_button_container {
@@ -96,11 +119,13 @@
   min-height: 2rem;
   width: auto;
 
-  white-space: nowrap;    /* Prevents the text from wrapping to a new line */
-  overflow: hidden;       /* Hides the text that goes past the width */
+  white-space: nowrap;  
+  overflow: hidden;       
   text-overflow: clip;
 
   padding-left: 5px;
+
+  border: 1px solid var(--table-border);
 }
 
 .header_cell_title {
@@ -121,22 +146,15 @@
   
 }
 
-.reports_table_row {
-
-  min-height: 2rem;
-  width: auto;
-
-  background-color: var(--tertiary-card-bg);
-}
-
 .reports_table_cell {
 
   min-height: 4rem;
   width: auto;
 
-  white-space: nowrap;    /* Prevents the text from wrapping to a new line */
-  overflow: hidden;       /* Hides the text that goes past the width */
+  white-space: nowrap;    
+  overflow: hidden;       
   text-overflow: clip;
+
 
   padding-left: 5px;
 }

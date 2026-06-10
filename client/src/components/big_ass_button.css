@@ -22,7 +22,7 @@
   box-shadow: 0px 15px var(--button_shadow);
 
   font-size: 2.5rem;
-  text-shadow: 0px 2px 1px var(--button_shadow);
+  text-shadow:var(--text-shadow-lg);
   text-align: center;
 
 
