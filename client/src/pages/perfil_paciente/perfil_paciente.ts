@@ -22,28 +22,42 @@ export async function init_perfil_paciente_page() {
 
       <div class="paciente_perfil_inputs">
 
-        <p> Nome do paciente: </p>
-        <input type="text" class="base_small_input_text" placeholder="Nome" id="name"/>
-        <p> Data de Nascimento: </p>
-        <input type="date" class="base_small_input_text" placeholder="Data de Nascimento" id="data_nascimento"/>
-        <p> Sexo: </p>
-        <input type="text" class="base_small_input_text" placeholder="Sexo" id="sexo"/>
-        <p> CPF: </p>
-        <input type="text" class="base_small_input_text" placeholder="CPF" id="cpf"/>
-        <p> Nome da mãe: </p>
-        <input type="text" class="base_small_input_text" placeholder="Nome da mãe" id="nome_mae"/>
-        <p> Nome do responsável: </p>
-        <input type="text" class="base_small_input_text" placeholder="Nome do responsável" id="nome_responsavel"/>
-        <p> CPF do responsável: </p>
-        <input type="text" class="base_small_input_text" placeholder="CPF do responsável" id="cpf_responsavel"/>
-        <p> País: </p>
-        <input type="text" class="base_small_input_text" placeholder="País" id="pais"/>
-        <p> Estado: </p>
-        <input type="text" class="base_small_input_text" placeholder="Estado" id="estado"/>
-        <p> Cidade: </p>
-        <input type="text" class="base_small_input_text" placeholder="Cidade" id="cidade"/>
-        <p> Telefone: </p>
-        <input type="text" class="base_small_input_text" placeholder="Telefone" id="telefone"/>
+        <div class="paciente_inputs"> 
+        
+          <p> Nome do paciente: </p>
+          <input type="text" class="base_small_input_text" placeholder="Nome" id="name"/>
+          <p> Data de Nascimento: </p>
+          <input type="date" class="base_small_input_text" placeholder="Data de Nascimento" id="data_nascimento"/>
+          <p> Sexo: </p>
+          <input type="text" class="base_small_input_text" placeholder="Sexo" id="sexo"/>
+          <p> CPF: </p>
+          <input type="text" class="base_small_input_text" placeholder="CPF" id="cpf"/>
+        
+        </div>
+
+        <div class="responsavel_inputs"> 
+        
+          <p> Nome da mãe: </p>
+          <input type="text" class="base_small_input_text" placeholder="Nome da mãe" id="nome_mae"/>
+          <p> Nome do responsável: </p>
+          <input type="text" class="base_small_input_text" placeholder="Nome do responsável" id="nome_responsavel"/>
+          <p> CPF do responsável: </p>
+          <input type="text" class="base_small_input_text" placeholder="CPF do responsável" id="cpf_responsavel"/>
+        
+        </div>
+
+        <div class="cidade_inputs"> 
+        
+          <p> País: </p>
+          <input type="text" class="base_small_input_text" placeholder="País" id="pais"/>
+          <p> Estado: </p>
+          <input type="text" class="base_small_input_text" placeholder="Estado" id="estado"/>
+          <p> Cidade: </p>
+          <input type="text" class="base_small_input_text" placeholder="Cidade" id="cidade"/>
+          <p> Telefone: </p>
+          <input type="text" class="base_small_input_text" placeholder="Telefone" id="telefone"/>
+        
+        </div>
         
       </div>
         

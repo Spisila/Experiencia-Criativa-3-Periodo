@@ -85,7 +85,7 @@ export async function init_cadastro_paciente_page() {
           
             <div class="yes_no_container"> 
             
-              <p>Possui diagnostico de autismo?</p>
+              <p class="yes_no_text">Possui diagnostico de autismo?</p>
 
               <div class="yes_no_button_container">
             
@@ -104,7 +104,7 @@ export async function init_cadastro_paciente_page() {
 
             <div class="yes_no_container"> 
             
-              <p>Tem irmãos?</p>
+              <p class="yes_no_container">Tem irmãos?</p>
 
               <div class="yes_no_button_container">
             
@@ -122,7 +122,7 @@ export async function init_cadastro_paciente_page() {
 
             <div class="yes_no_container"> 
             
-              <p>Familiares com sintomas mentais?</p>
+              <p class="yes_no_container">Familiares com sintomas mentais?</p>
 
               <div class="yes_no_button_container">
             
@@ -140,7 +140,7 @@ export async function init_cadastro_paciente_page() {
 
             <div class="yes_no_container"> 
             
-              <p>Familiares com ataxia?</p>
+              <p class="yes_no_container">Familiares com ataxia?</p>
 
               <div class="yes_no_button_container">
             

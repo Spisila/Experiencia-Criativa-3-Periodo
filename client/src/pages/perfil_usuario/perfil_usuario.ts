@@ -23,10 +23,14 @@ export async function init_perfil_usuario_page() {
 
       <div class="paciente_perfil_inputs">
 
-        <p> Nome: </p>
-        <input type="text" class="base_small_input_text" placeholder="Nome" id="name"/>
-        <p> CPF: </p>
-        <input type="text" class="base_small_input_text" placeholder="CPF" id="cpf"/>
+        <div> 
+        
+          <p> Nome: </p>
+          <input type="text" class="base_small_input_text" placeholder="Nome" id="name"/>
+          <p> CPF: </p>
+          <input type="text" class="base_small_input_text" placeholder="CPF" id="cpf"/>
+        
+        </div>
         
       </div>
         

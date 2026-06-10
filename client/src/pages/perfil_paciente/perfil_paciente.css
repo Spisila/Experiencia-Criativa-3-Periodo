@@ -1,4 +1,4 @@
-.paciente_perfil_container{
+.paciente_perfil_container {
 
   display: flex;
   justify-content: center;
@@ -8,8 +8,11 @@
 
   gap: 15px;
 
-  width: 40%;
-  height: 100%;
+  width: 60%;
+  height: 80%;
+
+  min-width: 500px;
+  min-height: 300px;
 
   z-index: 5;
 
@@ -24,15 +27,15 @@
 
 }
 
-.paciente_perfil_inputs{
+.paciente_perfil_inputs {
 
   display: flex;
-  justify-content: start;
-  align-items: left;
+  justify-content: center;
+  align-items: center;
 
-  flex-direction: column;
+  flex-direction: row;
 
-  gap: 3px;
+  gap: 10%;
 
   text-align: left;
 
@@ -44,6 +47,41 @@
   box-sizing: border-box;
 
 
+}
+
+.paciente_inputs {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  flex-direction: column;
+
+  width: 33%;
+  height: 100%;
+}
+
+.responsavel_inputs {
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  flex-direction: column;
+
+  width: 33%;
+  height: 100%;
+}
+
+.cidade_inputs {
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  flex-direction: column;
+
+  width: 33%;
+  height: 100%;
 }
 
 .paciente_perfil_buttons {
