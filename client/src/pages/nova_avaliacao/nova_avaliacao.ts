@@ -610,10 +610,10 @@ export async function init_nova_avaliacao_page() {
 
       const { error } = await supabase.rpc('nova_avaliacao_transacao', {
         p_observacao_avaliacao: observacao,
-        p_diagnostico_autismo_avaliacao: has_autism_diagnosis,
-        p_tem_irmaos_avaliacao: has_siblings,
-        p_familia_sintomas_mentais_avaliacao: family_with_mental_symptoms,
-        p_familiares_ataxia_avaliacao: family_with_ataxia,
+        p_diagnostico_autismo_avaliacao: !has_autism_diagnosis,
+        p_tem_irmaos_avaliacao: !has_siblings,
+        p_familia_sintomas_mentais_avaliacao: !family_with_mental_symptoms,
+        p_familiares_ataxia_avaliacao: !family_with_ataxia,
         p_avaliacao_sintomas: id_sintomas_selecionados,
         p_score_final_avaliacao: score,
 

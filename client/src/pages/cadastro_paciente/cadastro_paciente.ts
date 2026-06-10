@@ -487,10 +487,10 @@ export async function init_cadastro_paciente_page() {
         p_telefone_paciente: phone_number,
 
         p_observacao_avaliacao: observacao,
-        p_diagnostico_autismo_avaliacao: has_autism_diagnosis,
-        p_tem_irmaos_avaliacao: has_siblings,
-        p_familia_sintomas_mentais_avaliacao: family_with_mental_symptoms,
-        p_familiares_ataxia_avaliacao: family_with_ataxia,
+        p_diagnostico_autismo_avaliacao: !has_autism_diagnosis,
+        p_tem_irmaos_avaliacao: !has_siblings,
+        p_familia_sintomas_mentais_avaliacao: !family_with_mental_symptoms,
+        p_familiares_ataxia_avaliacao: !family_with_ataxia,
         p_avaliacao_sintomas: id_sintomas_selecionados,
         p_score_final_avaliacao: score,
 
