@@ -115,6 +115,7 @@ export function update_page<T extends object>(
   const current_page = container.querySelector<HTMLParagraphElement>('#current_page');
 
   pagina_anterior_button!.style.display = "none";
+  pagina_proxima_button!.style.display = "none";
 
   pagina_anterior_button?.addEventListener('click', async () => {
 
