@@ -587,6 +587,8 @@ export async function init_relatorio_page() {
 
       observacao_container!.textContent = observation_edit!.value;
 
+      let novo_score = calcular_score_final(tem_sintomas, is_male);
+
       const { data, error: erro_update_relatorio } = await supabase.from("avaliacao").update({
         diagnostico_autismo: tem_relatorio_extras.tem_autismo,
         tem_irmaos: tem_relatorio_extras.tem_irmaos,
@@ -595,7 +597,7 @@ export async function init_relatorio_page() {
 
         resultado_final: observation_edit?.value,
 
-        score_final: calcular_score_final(tem_sintomas, is_male)
+        score_final: novo_score
       }).eq('id', relatorio_id).single()
 
       if (erro_update_relatorio) {
@@ -633,6 +635,9 @@ export async function init_relatorio_page() {
         }
 
       }
+
+      indicacao = calcular_indicacao(sexo, novo_score);
+      indicacao_container!.textContent = "Indicação : " + indicacao;
 
       trigger_notification_popup("Relatorio editado com sucesso");
     }
