@@ -55,12 +55,14 @@ export function init_login_total_page() {
       return;
     }
 
-    const dadosFormulario = {
+    // TODO: Isolar isso em uma função? Passar formulario e schema como parametros?
+    // Validação do Zod
+    const dados_formulario = {
       email: email,
       senha: password
     }
 
-    const resultado = login_schema.safeParse(dadosFormulario);
+    const resultado = login_schema.safeParse(dados_formulario);
 
     if (!resultado.success) {
 
@@ -86,8 +88,10 @@ export function init_login_total_page() {
       return;
     }
 
+    // TODO: função exportada de pegar a role
+    // Checa o perfil do usuario e vai para a pagina de opções correspondente
     if (data) {
-      console.log(data);
+
       if (data.user.user_metadata.perfil == "administrador") {
         navigateTo("/opcoes_admin");
       }

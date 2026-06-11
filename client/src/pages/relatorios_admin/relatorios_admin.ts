@@ -253,7 +253,7 @@ export async function init_relatorios_admin_page() {
   const search_input = container.querySelector<HTMLButtonElement>('#search_bar');
   const search_button = container.querySelector<HTMLButtonElement>('#search_button');
 
-
+  // TODO: Deixar pesquisa em uma função exportada em table_functions 
   search_button?.addEventListener('click', async (_MouseEvent) => {
 
     console.log(search_input?.value.length)
@@ -322,6 +322,7 @@ export async function init_relatorios_admin_page() {
 
 }
 
+// TODO: Numero de itens por pagina dinamico
 async function get_todos_relatorios(ordenar_por: string, ascendente: boolean, page: number) {
 
   const from = (page - 1) * 24

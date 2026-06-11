@@ -103,15 +103,13 @@ export async function init_lista_usuarios_page() {
   
   `
 
-  let nomes_ascendentes = true;
 
   const table = container.querySelector<HTMLTableElement>('#reports_table')
-
   if (!table) { return; }
 
   const sort_name_button = container.querySelector<HTMLButtonElement>('#sort_by_user_name_button');
   
-  const usuarios = await get_usuarios('nome', nomes_ascendentes);
+  const usuarios = await get_usuarios('nome', true);
 
   setup_table_sorting(container,
     sort_name_button,
@@ -136,6 +134,7 @@ export async function init_lista_usuarios_page() {
 
 }
 
+// Função que pega usuario, somenete usuarios com o perfil de medico
 async function get_usuarios<T extends object>(ordenar_por: string, ascendente: boolean): Promise<T[]> {
 
   const { data: usuarios, error: pegarUsuariosError } = await supabase.
@@ -154,6 +153,7 @@ async function get_usuarios<T extends object>(ordenar_por: string, ascendente: b
 
 }
 
+// Vai pra pagina de perfil de usuario com id dele na url
 function go_to_user_page(user_id: string) {
 
   navigateTo("/perfil_usuario")

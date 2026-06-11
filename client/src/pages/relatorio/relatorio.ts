@@ -10,6 +10,7 @@ import { trigger_notification_popup } from '../../components/notification_popup'
 import { calcular_score_final, retornar_sintomas_selecionados } from '../../lib/sintoma_pesos';
 import { deletar_fotos_avaliacao } from '../../components/bucket_functions';
 
+// Record se tem sintomas
 const tem_sintomas: Record<string, boolean> = {
   'deficiencia_intelectual': false,
   'face_orelhas_alongadas': false,
@@ -25,6 +26,8 @@ const tem_sintomas: Record<string, boolean> = {
   'agressividade': false
 };
 
+
+// Record se tem os extras
 const tem_relatorio_extras: Record<string, boolean> = {
   'tem_autismo': false,
   'tem_irmaos': false,
@@ -367,15 +370,19 @@ export async function init_relatorio_page() {
 
   
   `
-
-  // Pega os dados do relatorio, paciente e usuario
+  // Pega id do relatorio da url
   const relatorio_id = window.location.pathname.replace("/relatorio/", "")
-
+  
+  // Função do banco que pega todos os dados que precisam ser pegos para o relatorio
   const { data: relatorio_dados, error: funcerr } = await supabase.rpc("get_dados_relatorio_especifico", {
     avaliacao_id: relatorio_id
   })
 
-  const { data: itemAvaliacaoDados, error: getItemAvaliacaoError } = await supabase.from("item_avaliacao").select("sintoma_id").eq("avaliacao_id", relatorio_id);
+  // Pega os item de avaliação para marcar os sintomas que o foram marcados no relatorio
+  const { data: itemAvaliacaoDados, error: getItemAvaliacaoError } = await supabase
+  .from("item_avaliacao")
+  .select("sintoma_id")
+  .eq("avaliacao_id", relatorio_id);
 
   if (getItemAvaliacaoError) {
     console.log("Erro ao pegar item relatorios");
@@ -384,8 +391,6 @@ export async function init_relatorio_page() {
   if (funcerr) {
     console.log(funcerr)
   }
-
-  console.log(relatorio_dados)
 
   const usuario_id = relatorio_dados[0].usuario_id;
 
@@ -424,6 +429,7 @@ export async function init_relatorio_page() {
 
   const tem_extras_chave = Object.keys(tem_relatorio_extras);
 
+  // Seta texto dos extras como sim ou nao
   for (let i = 0; i < tem_containers!.length; i++) {
 
     if (tem_relatorio_extras[tem_extras_chave.at(i)!] == true) {
@@ -432,12 +438,14 @@ export async function init_relatorio_page() {
 
   }
 
+  // Seta botoes dos extras como sim ou nao 
   for (let i = 0; i < tem_edit_buttons.length; i++) {
     tem_edit_buttons.at(i)!.addEventListener('click', () => {
       toggle_tem(tem_extras_chave.at(i)!, tem_relatorio_extras, tem_edit_buttons.at(i)!, tem_containers.at(i)!);
     })
   }
-
+  
+  // Seta botoes de sintomas como sim ou nao
   for (let i = 0; i < tem_containers.length; i++) {
 
     if (tem_containers.at(i)?.textContent === "Sim") {
@@ -445,6 +453,7 @@ export async function init_relatorio_page() {
     }
   }
 
+  // Esconde todos os botoes de edit e mostra todos os textos
   hide_all_show_others(tem_edit_buttons, tem_containers);
 
   // Seta os dados no HTML
@@ -544,6 +553,7 @@ export async function init_relatorio_page() {
 
   observation_edit!.style.display = "none";
 
+  // Esconde os textos e mostra os inputs e vice e versa
   function toggle_editar(ativo: boolean) {
 
     if (ativo == true) {
@@ -588,6 +598,8 @@ export async function init_relatorio_page() {
       observacao_container!.textContent = observation_edit!.value;
 
       let novo_score = calcular_score_final(tem_sintomas, is_male);
+
+      // TODO: Colocar essa porra toda em uma transação
 
       const { data, error: erro_update_relatorio } = await supabase.from("avaliacao").update({
         diagnostico_autismo: tem_relatorio_extras.tem_autismo,
@@ -646,6 +658,7 @@ export async function init_relatorio_page() {
 
 }
 
+// Muda os botoes de sim e nao
 function toggle_tem(chave_tem: string, tem_record: Record<string, boolean>, botao: HTMLElement | null, text: HTMLTextAreaElement): void {
   if (!botao) return;
 
@@ -699,6 +712,7 @@ function hide_all_show_others<A extends HTMLElement, B extends HTMLElement>(all:
 
 }
 
+// TODO: Faz praticamente a mesma coisa que a outra função la em cima
 function table_to_button_set_active(text: HTMLTextAreaElement, button: HTMLButtonElement, bool: boolean) {
 
   if (bool == true) {
@@ -715,13 +729,7 @@ function table_to_button_set_active(text: HTMLTextAreaElement, button: HTMLButto
   }
 }
 
-function set_all_display_none<T extends HTMLElement>(elements: (T | null)[]) {
-
-  elements.forEach(element => {
-    element?.style.setProperty("display", "none");
-  });
-}
-
+// TODO: Refatorar também
 function set_fotos_avaliacao(container: HTMLDivElement, medico_id: string, relatorio_id: string) {
 
 

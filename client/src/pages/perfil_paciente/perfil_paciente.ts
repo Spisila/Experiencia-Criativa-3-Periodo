@@ -75,9 +75,15 @@ export async function init_perfil_paciente_page() {
 
   `
 
+  // Pega id do paciente da url
   const paciente_id = window.location.pathname.replace("/perfil_paciente/", "")
 
-  const { data: dadosPaciente, error: errorPaciente } = await supabase.from('paciente').select('*').eq('id', paciente_id).single();
+  //Pega dados do paciente atraves da url
+  const { data: dadosPaciente, error: errorPaciente } = await supabase.
+  from('paciente')
+  .select('*')
+  .eq('id', paciente_id)
+  .single();
 
   if (errorPaciente) {
     console.log(errorPaciente);
@@ -85,6 +91,7 @@ export async function init_perfil_paciente_page() {
     return;
   }
 
+  // Pega inputs e seta os dados deles
   const name_input = container.querySelector<HTMLInputElement>('#name');
   const data_nascimento_input = container.querySelector<HTMLInputElement>('#data_nascimento');
   const sexo_input = container.querySelector<HTMLInputElement>('#sexo');
@@ -97,7 +104,7 @@ export async function init_perfil_paciente_page() {
   const cidade_input = container.querySelector<HTMLInputElement>('#cidade');
   const telefone_input = container.querySelector<HTMLInputElement>('#telefone');
 
-  toggle_editar(true);
+  desabilita_editar(true);
 
   name_input!.value = dadosPaciente.nome;
   data_nascimento_input!.value = dadosPaciente.data_nascimento;
@@ -117,33 +124,35 @@ export async function init_perfil_paciente_page() {
 
   let editando = false;
 
-  function toggle_editar(ativo: boolean) {
+  function desabilita_editar(desabilitado: boolean) {
 
-    name_input!.disabled = ativo;
-    data_nascimento_input!.disabled = ativo;
-    sexo_input!.disabled = ativo;
-    cpf_input!.disabled = ativo;
-    nome_mae_input!.disabled = ativo;
-    nome_responsavel_input!.disabled = ativo;
-    cpf_responsavel_input!.disabled = ativo;
-    pais_input!.disabled = ativo;
-    estado_input!.disabled = ativo;
-    cidade_input!.disabled = ativo;
-    telefone_input!.disabled = ativo;
+    name_input!.disabled = desabilitado;
+    data_nascimento_input!.disabled = desabilitado;
+    sexo_input!.disabled = desabilitado;
+    cpf_input!.disabled = desabilitado;
+    nome_mae_input!.disabled = desabilitado;
+    nome_responsavel_input!.disabled = desabilitado;
+    cpf_responsavel_input!.disabled = desabilitado;
+    pais_input!.disabled = desabilitado;
+    estado_input!.disabled = desabilitado;
+    cidade_input!.disabled = desabilitado;
+    telefone_input!.disabled = desabilitado;
 
   }
 
+  // Setup dos botoes
+  // Se editando troca o botao de editar para o botao de salvar e esconde outros botoes
   edit_button?.addEventListener('click', async (_event) => {
 
     if (editando == false) {
-      toggle_editar(false);
+      desabilita_editar(false);
       edit_button.textContent = "Salvar";
       editando = true;
       nova_avaliacao_button!.style.display = "none";
       delete_button!.style.display = "none";
     }
     else {
-      toggle_editar(true);
+      desabilita_editar(true);
       edit_button.textContent = "Editar";
       editando = false;
       nova_avaliacao_button!.style.display = "flex";
@@ -181,6 +190,7 @@ export async function init_perfil_paciente_page() {
 
     if (!confirmar) return;
 
+    // TODO: Refatorar esse lixo
     const { data: usuario_paciente } = await supabase
       .from("paciente")
       .select("usuario_id")

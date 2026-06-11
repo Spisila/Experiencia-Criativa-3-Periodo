@@ -59,14 +59,14 @@ export async function init_cadastro_admin_page() {
       return;
     }
 
-    const dadosFormulario = {
+    const dados_formulario = {
       nome: name,
       cpf: cpf,
       email: email,
       senha: password
     }
 
-    const resultado_validacao = cadastro_usuario_schema.safeParse(dadosFormulario);
+    const resultado_validacao = cadastro_usuario_schema.safeParse(dados_formulario);
 
     if (!resultado_validacao.success) {
       const messages = resultado_validacao.error.issues.map(issue => issue.message);
@@ -75,6 +75,7 @@ export async function init_cadastro_admin_page() {
       return;
     }
 
+    // Checagem se o cpf ja existe no sistema
     const { data: cpf_exists } = await supabase.from('usuario').select('cpf').eq('cpf', cpf).single();
 
     if (cpf_exists) {
@@ -92,6 +93,7 @@ export async function init_cadastro_admin_page() {
         return;
       }
 
+      // Requisição para criar usuario no backend
       const response = await fetch('http://localhost:3000/api/usuarios', {
         method: 'POST',
         headers: {

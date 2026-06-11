@@ -16,7 +16,7 @@ import { switch_pair_button } from '../../components/switch_pair_button';
 import { v4 as uuidv4 } from 'uuid';
 import { navigateTo } from '../../main'
 
-
+// Associação entre o sintoma e se ele esta presente
 const temSintomas: Record<string, boolean> = {
   'deficiencia_intelectual': false,
   'face_orelhas_alongadas': false,
@@ -226,6 +226,8 @@ export async function init_cadastro_paciente_page() {
 
   `
 
+  // Pegando inputs de escrever
+
   const name_input = container.querySelector<HTMLInputElement>('#name');
   const cpf_input = container.querySelector<HTMLInputElement>('#cpf');
   const birth_day_input = container.querySelector<HTMLInputElement>('#birth_date');
@@ -241,7 +243,8 @@ export async function init_cadastro_paciente_page() {
 
   const observation_input = container.querySelector<HTMLInputElement>('#observation');
 
-  //#region Yes no buttons
+  // TODO: Função que pega esses botoes
+  // Pegando inputs de botão sim ou nao
 
   const toggleMaleButton = container.querySelector<HTMLButtonElement>('#toggle_male');
   const toggleFemaleButton = container.querySelector<HTMLButtonElement>('#toggle_female');
@@ -258,10 +261,16 @@ export async function init_cadastro_paciente_page() {
   const familyWithAtaxiaYesButton = container.querySelector<HTMLButtonElement>('#family_with_ataxia_yes');
   const familyWithAtaxiaNoButton = container.querySelector<HTMLButtonElement>('#family_with_ataxia_no');
 
+  // TODO: função que inicia as variaveis
+  // Setando variaveis de sim e não e setando todos os botoes como não
+
   let has_autism_diagnosis = switch_pair_button(autismDiagnosisNoButton!, autismDiagnosisYesButton!, false);
   let has_siblings = switch_pair_button(hasSiblingsNoButton!, hasSiblingsYesButton!, false);
   let family_with_mental_symptoms = switch_pair_button(familyWithMentalSymptomsNoButton!, familyWithMentalSymptomsYesButton!, false);
   let family_with_ataxia = switch_pair_button(familyWithAtaxiaNoButton!, familyWithAtaxiaYesButton!, false);
+
+  // TODO: Função que adiciona os eventos para todas as variaveis
+  // Linkando o evento de click dos botoes de sim e nao com a função que faz eles trocarem e atualiza a variavel
 
   autismDiagnosisYesButton?.addEventListener('click', (_event) => {
     has_autism_diagnosis = switch_pair_button(autismDiagnosisNoButton!, autismDiagnosisYesButton!, has_autism_diagnosis);
@@ -296,6 +305,8 @@ export async function init_cadastro_paciente_page() {
   });
 
 
+  // Linkando botoes de mudar de sexo
+
   toggleMaleButton?.addEventListener('click', (_event) => {
     toggle_sex();
   });
@@ -303,25 +314,32 @@ export async function init_cadastro_paciente_page() {
     toggle_sex();
   });
 
+
+  // Botao de cadastro
+
   const cadastrarButton = container.querySelector<HTMLButtonElement>('#cadastrar');
+
   cadastrarButton?.addEventListener('click', (_event) => {
     cadastrarButtonPress();
   });
 
 
+  // Botao de checar sintoma de macroorquidismo separado para desativar ele caso sexo = feminino
   const symptomButtonMacroorquidismo = container.querySelector<HTMLButtonElement>('#symptom_button_macroorquidismo');
 
+  // Pega e seta os botoes de sintomas
   const sintomas_botoes = get_sintomas_buttons(container)
-
   setup_sintomas_buttons(sintomas_botoes, Object.keys(temSintomas));
 
+  // Seta inputs de fotos
   const photo_inputs = get_photo_inputs(container);
-
   photo_upload(container, photo_inputs)
 
+  // Seta variavel de sexo como masculino 
   let is_male_ = switch_pair_button(toggleMaleButton!, toggleFemaleButton!, false);
   symptomButtonMacroorquidismo!.disabled = false;
 
+  // Função que troca o sexo do paciente e habilita/desabilita macrooquidismo
   function toggle_sex() {
 
     if (toggleMaleButton && toggleFemaleButton && symptomButtonMacroorquidismo) {
@@ -338,10 +356,12 @@ export async function init_cadastro_paciente_page() {
     clear_symptoms(sintomas_botoes);
   }
 
+  // Inicializa array dos ids dos sintomas selecionados
   const id_sintomas_selecionados: number[] = [];
 
   async function cadastrarButtonPress() {
 
+    // Pega valor de todos os inputs de escrita
     const nome = name_input?.value;
     const cpf = cpf_input?.value;
     const data_nascimento = birth_day_input?.valueAsDate;
@@ -356,6 +376,7 @@ export async function init_cadastro_paciente_page() {
 
     let score = 0;
 
+    // Checa se algum campo obrigatorio esta vazio e mostra uma notificação se sim
     if (!nome ||
       !cpf ||
       !data_nascimento ||
@@ -370,7 +391,8 @@ export async function init_cadastro_paciente_page() {
       return;
     }
 
-    const dadosFormulario = {
+    // Formulario do ZOD
+    const dados_formulario = {
       nome: nome,
       cpf: cpf,
       data_nascimento: data_nascimento,
@@ -384,7 +406,8 @@ export async function init_cadastro_paciente_page() {
       observacao: observacao,
     };
 
-    const resultado = cadastro_paciente_schema.safeParse(dadosFormulario);
+    // Validação do Zod
+    const resultado = cadastro_paciente_schema.safeParse(dados_formulario);
 
     if (!resultado.success) {
       const messages = resultado.error.issues.map(issue => issue.message);
@@ -393,6 +416,7 @@ export async function init_cadastro_paciente_page() {
       return;
     }
 
+    // Checagem se o CPF ja existe no sistema
     const { data: cpf_exists } = await supabase.from('paciente').select('cpf').eq('cpf', cpf).single();
 
     if (cpf_exists) {
@@ -400,6 +424,7 @@ export async function init_cadastro_paciente_page() {
       return;
     }
 
+    // Calculo do score e adiciona os ids dos sintomas ao array de ids de sintomas
     const sintomas_selecionados = Object.keys(temSintomas)
 
     for (let i = 0; i < sintomas_selecionados.length; i++) {
@@ -444,14 +469,19 @@ export async function init_cadastro_paciente_page() {
 
     const id_medico = user!.session!.user.id;
 
+    // Cria id da avaliacao para criar a pasta do bucket com fotos
     const avaliacao_id = uuidv4();
 
+    // Caminhos das fotos no bucket
     const front_path = `${id_medico}/${avaliacao_id}/front_view`;
     const three_four_path = `${id_medico}/${avaliacao_id}/three_four_view`;
     const profile_path = `${id_medico}/${avaliacao_id}/profile_view`;
 
 
     try {
+
+      // Upload de fotos
+
       const { error: uploadFrontError } = await supabase.storage
         .from('fotos_pacientes')
         .upload(front_path, photo_inputs.at(0)?.files![0]);
@@ -476,6 +506,7 @@ export async function init_cadastro_paciente_page() {
         throw uploadProfileError;
       }
 
+      // Dados para transação de criação de usuario
       const { data, error } = await supabase.rpc('cadastrar_paciente_transacao', {
         p_nome_paciente: nome,
         p_data_nascimento_paciente: data_nascimento,
@@ -517,6 +548,7 @@ export async function init_cadastro_paciente_page() {
 
     trigger_notification_popup("Paciente cadastrado com sucesso");
 
+    // Quando usuario criado navega para pagina de relatorio que foi criado junto com ele
     navigateTo("/relatorio")
     window.history.pushState(null, '', "/relatorio/" + avaliacao_id);
 
@@ -526,6 +558,8 @@ export async function init_cadastro_paciente_page() {
 
 }
 
+// TODO: Refatorar
+// Função que seta o input das fotos, adiciona e adiciona o preview delas
 function photo_upload(container: HTMLDivElement, photo_inputs: HTMLInputElement[]) {
 
   let uploadFaceFrontContainer = container.querySelector<HTMLDivElement>('#face_front_container');
@@ -591,6 +625,8 @@ function photo_upload(container: HTMLDivElement, photo_inputs: HTMLInputElement[
   });
 }
 
+// TODO: deixar generica para todos os botoes de toggle
+// Função que faz toggle no botao de sintomas 
 function toggle_symptom(chaveSintoma: string, botao: HTMLElement | null): void {
   if (!botao) return;
 
@@ -601,10 +637,8 @@ function toggle_symptom(chaveSintoma: string, botao: HTMLElement | null): void {
   }
 }
 
+// Função que seta o evento de click do botão para a função de toggle dele
 function setup_sintomas_buttons(buttons: HTMLButtonElement[], tem_sintomas: string[]) {
-
-
-  console.log(tem_sintomas)
 
   for (let i = 0; i < tem_sintomas.length; i++) {
     let chave = tem_sintomas.at(i) as string
@@ -615,6 +649,7 @@ function setup_sintomas_buttons(buttons: HTMLButtonElement[], tem_sintomas: stri
 
 }
 
+// Limpa sintomas selecionados
 function clear_symptoms(buttons: HTMLButtonElement[]) {
 
   const chaves = Object.keys(temSintomas);
@@ -629,6 +664,7 @@ function clear_symptoms(buttons: HTMLButtonElement[]) {
 
 }
 
+// Pega inputs de fotos 
 function get_photo_inputs(container: HTMLDivElement) {
   return [
     container.querySelector<HTMLInputElement>('#face_front_input'),
@@ -637,6 +673,7 @@ function get_photo_inputs(container: HTMLDivElement) {
   ].filter((input): input is HTMLInputElement => input !== null);
 }
 
+// Pega botoes de sintomas
 function get_sintomas_buttons(container: HTMLDivElement): HTMLButtonElement[] {
   return [
     container.querySelector<HTMLButtonElement>('#symptom_button_deficiência_intelectual'),

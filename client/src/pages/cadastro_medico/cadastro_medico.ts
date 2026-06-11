@@ -58,14 +58,16 @@ export async function init_cadastro_medico_page() {
       return;
     }
     
-    const dadosFormulario = {
+    // Formulario do Zod
+    const dados_formulario = {
       nome: name,
       cpf: cpf,
       email: email,
       senha: password
     }
     
-    const resultado_validacao = cadastro_usuario_schema.safeParse(dadosFormulario);
+    // Validação do Zod
+    const resultado_validacao = cadastro_usuario_schema.safeParse(dados_formulario);
     
     if (!resultado_validacao.success) {
       const messages = resultado_validacao.error.issues.map(issue => issue.message);
@@ -74,6 +76,7 @@ export async function init_cadastro_medico_page() {
       return;
     }
     
+    // Checagem se o cpf ja esta no sistema
     const { data: cpf_exists } = await supabase.from('usuario').select('cpf').eq('cpf', cpf).single();
     
     if (cpf_exists) {
@@ -94,6 +97,7 @@ export async function init_cadastro_medico_page() {
       }
 
 
+      // Requisição pro backend
       const response = await fetch('http://localhost:3000/api/usuarios', {
         method: 'POST',
         headers: {

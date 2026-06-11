@@ -228,8 +228,8 @@ export async function init_relatorios_usuario_page() {
     (dados) => setup_fill_table(dados, table, ir_relatorio_especifico)
   )
 
-  //#region SEARCH
 
+  // TODO: search como função 
   const search_input = container.querySelector<HTMLButtonElement>('#search_bar');
   const search_button = container.querySelector<HTMLButtonElement>('#search_button');
 
@@ -287,8 +287,6 @@ export async function init_relatorios_usuario_page() {
 
   })
 
-  //#endregion
-
   let realatorio_entadas = await get_entradas_relatorios(String(user_id))
 
   update_page(
@@ -301,6 +299,7 @@ export async function init_relatorios_usuario_page() {
 
 }
 
+// TODO: items por pagina dinamico
 async function get_relatorios(usuario_id: string, ordenar_por: string, ascendente: boolean, page: number) {
 
   const from = (page - 1) * 24

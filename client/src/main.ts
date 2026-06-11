@@ -33,8 +33,10 @@ import { should_hide_logout_button, log_out } from './components/logout_button.t
 import { initTheme, toggleTheme } from './components/tema_claro_escuro.ts';
 import { trigger_notification_popup, showNotification, hideNotification } from './components/notification_popup.ts';
 
+// TODO: Tirar esse type e colocar direto a arrow funcion
 type FuncaoInit = (container: HTMLElement) => void;
 
+// Interface que determina os parametros de uma pagina
 interface Pagina {
   path: string,
   init: FuncaoInit,
@@ -42,6 +44,8 @@ interface Pagina {
   titulo: string
 }
 
+
+// Paginas
 const Paginas: Pagina[] = [
   { path: '/login_total', init: init_login_total_page, perfil_necessario: null, titulo: "LOGIN" },
 
@@ -67,22 +71,26 @@ const Paginas: Pagina[] = [
   { path: '/perfil_usuario', init: init_perfil_usuario_page, perfil_necessario: "administrador", titulo: "PERFIL USUARIO" }
 ]
 
+// TODO: converter para for loop
 let paths: string[] = Paginas.map(p => p.path);
 
+// TODO: converter para snake_case
 export function navigateTo(url: string) {
   window.history.pushState(null, '', url);
   handleRouting();
 }
 
+// Função de inicialização de tudo
 async function init() {
 
-  initTheme();
-
   showNotification("Carregando pagina...")
+  
+  initTheme();
   await carregar_pesos();
   hideNotification()
+  
+  // Se usuario nao tem sessão volta para a pagina de login
   const { data: user_session } = await supabase.auth.getSession();
-
   if (!user_session) {
     navigateTo("/login_total")
   }
@@ -100,12 +108,13 @@ async function init() {
   log_out_button?.addEventListener('click', log_out)
 }
 
+// Função que faz todo o roteamento
 async function handleRouting() {
 
   const path = window.location.pathname;
 
+  // TODO: tirar esse ""path.startsWith("/relatorio/") == false"
   if (paths.includes(path) == false && path.startsWith("/relatorio/") == false) {
-    // window.alert("Pagina não existe")
     trigger_notification_popup("Pagina não existe")
     navigateTo("/login_total")
     return;
@@ -122,31 +131,37 @@ async function handleRouting() {
     }
   }
 
+  // Pega perfil do usuario
   const user_perfil = user_session.session?.user.user_metadata.perfil;
 
   should_hide_return_button(path);
   should_hide_logout_button(path);
 
+  // Limpa o HTML do container
   app.innerHTML = '';
 
+  // Checa que pagina o path da url é e age de acordo
   for (let i = 0; i < Paginas.length; i++) {
 
     let pagina_i = Paginas.at(i)
 
     if (pagina_i?.path == path) {
 
+      // Se a pagina não tem perfil necessario
       if (pagina_i.perfil_necessario == null) {
         atualizar_titulo_da_pagina(Paginas.at(i)?.titulo!)
         Paginas.at(i)?.init(app)
         return;
       }
 
+      // Se a pagina tem perfil de medico ou administrador
       if (user_perfil == "medico" || user_perfil == "administrador") {
         atualizar_titulo_da_pagina(Paginas.at(i)?.titulo!)
         Paginas.at(i)?.init(app)
         return;
       }
 
+      // Se o usuario nao tem permissoes para ir para a pagina
       if (user_perfil != pagina_i.perfil_necessario) {
         // window.alert("ACESSO NEGADO");
         trigger_notification_popup("ACESSO NEGADO")

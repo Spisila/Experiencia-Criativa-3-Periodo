@@ -196,11 +196,15 @@ export async function init_nova_avaliacao_page() {
 
   `
 
+  // Pega paciente_id da url
   const paciente_id = window.location.pathname.replace("/nova_avaliacao/", "")
 
-  const { data: pacienteDados, error: getPacienteError } = await supabase.from("paciente").select("*").eq("id", paciente_id).single();
-
-  console.log(pacienteDados)
+  // Pega dados do paciente apartir do id da url
+  const { data: pacienteDados, error: getPacienteError } = await supabase
+  .from("paciente")
+  .select("*")
+  .eq("id", paciente_id)
+  .single();
 
   if (getPacienteError) {
     console.log("Erro ao buscar dados do paciente");
@@ -208,6 +212,7 @@ export async function init_nova_avaliacao_page() {
     return;
   }
 
+  // Pega o texto que vai ser setado com as variaveis buscadas
   const patientName = container.querySelector<HTMLHeadingElement>('#patient_name');
   const patientCpf = container.querySelector<HTMLHeadingElement>('#patient_cpf');
   const patientBirthdate = container.querySelector<HTMLHeadingElement>('#patient_birthdate');
@@ -220,6 +225,8 @@ export async function init_nova_avaliacao_page() {
   const patientState = container.querySelector<HTMLHeadingElement>('#patient_state');
   const patientCity = container.querySelector<HTMLHeadingElement>('#patient_city');
 
+  // TODO: botar isso em um loop
+  // Seta as variaveis
   if (patientName) {
     patientName.textContent = `Nome: ${pacienteDados.nome}`;
   }
@@ -276,6 +283,8 @@ export async function init_nova_avaliacao_page() {
   const nova_avaliacao_button = container.querySelector<HTMLButtonElement>('#nova_avaliacao');
 
 
+  // TODO: refatorar tambem
+  // Botoes de sim ou não
   const autismDiagnosisYesButton = container.querySelector<HTMLButtonElement>('#autism_diagnosis_yes');
   const autismDiagnosisNoButton = container.querySelector<HTMLButtonElement>('#autism_diagnosis_no');
 
@@ -326,6 +335,9 @@ export async function init_nova_avaliacao_page() {
     family_with_ataxia = switch_pair_button(familyWithAtaxiaNoButton!, familyWithAtaxiaYesButton!, family_with_ataxia);
   });
 
+
+  // Refatorar também
+  // Fotos
   const uploadFaceFrontInput = container.querySelector<HTMLInputElement>('#face_front_input');
   const uploadFaceThreeFourInput = container.querySelector<HTMLInputElement>('#face_three_four_input');
   const uploadFaceProfileInput = container.querySelector<HTMLInputElement>('#face_profile_input');
@@ -392,6 +404,8 @@ export async function init_nova_avaliacao_page() {
     uploadFaceProfileContainer!.appendChild(photo_face_profile_preview);
   });
 
+  // TODO: refatorar também
+  // Botoes de sintomas
   const symptomButtonDeficienciaIntelectual = container.querySelector<HTMLButtonElement>('#symptom_button_deficiência_intelectual');
   const symptomButtonFaceOrelhasAlongadas = container.querySelector<HTMLButtonElement>('#symptom_button_face_orelhas_alongadas');
   const symptomButtonMacroorquidismo = container.querySelector<HTMLButtonElement>('#symptom_button_macroorquidismo');

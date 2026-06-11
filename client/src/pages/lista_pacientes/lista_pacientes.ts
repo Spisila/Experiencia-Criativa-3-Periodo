@@ -143,10 +143,8 @@ export async function init_lista_pacientes_page() {
   
   `
 
-  
+  // TODO: função em auth_functions que pega o id do usuario
   const user_session = await get_auth_user();
-  
-  
   const user_id = String(user_session!.session?.user.id)
   
   const table = container.querySelector<HTMLTableElement>('#reports_table')
@@ -169,11 +167,12 @@ export async function init_lista_pacientes_page() {
   const pacientes_entradas = await get_entradas_pacientes(user_id);
   setup_fill_table(pacientes ?? [], table, ir_perfil_paciente);
 
-
+  // Botoes de ordenação
   const sort_by_patient_name_button = container.querySelector<HTMLButtonElement>('#sort_by_patient_name_button');
   const sort_by_date_of_birth_button = container.querySelector<HTMLButtonElement>('#sort_by_date_of_birth_button');
   const sort_by_sex_button = container.querySelector<HTMLButtonElement>('#sort_by_sex_button');
 
+  // Setup de botoes de ordenação
   setup_table_sorting(container,
     sort_by_patient_name_button,
     (ascendente) => get_pacientes('nome', !ascendente, user_id, 1),
@@ -204,6 +203,7 @@ export async function init_lista_pacientes_page() {
 
 }
 
+// Pega quantidade total de pacientes no banco
 async function get_entradas_pacientes(usuario_id: string) {
 
   const { count, error: pegarRelatoriosError } = await supabase
@@ -221,6 +221,8 @@ async function get_entradas_pacientes(usuario_id: string) {
 
 }
 
+// TODO: Tamanho de pagina dinamico com tamanho da tela
+// Pega pacientes do banco
 async function get_pacientes<T extends object>(ordenar_por: string, ascendente: boolean, usuario_id: string, page: number): Promise<T[] | null> {
 
   const from = (page - 1) * 24
@@ -247,6 +249,7 @@ async function get_pacientes<T extends object>(ordenar_por: string, ascendente: 
 
 }
 
+// Ir para pagina do perfil do paciente e colocar id do paciente na url para carregar as infos dele la
 function ir_perfil_paciente(paciente_id: string) {
 
   navigateTo("/perfil_paciente")

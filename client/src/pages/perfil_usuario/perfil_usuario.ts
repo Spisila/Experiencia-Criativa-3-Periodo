@@ -54,14 +54,22 @@ export async function init_perfil_usuario_page() {
   const edit_button = container.querySelector<HTMLButtonElement>('#edit_button');
   const delete_button = container.querySelector<HTMLButtonElement>('#delete_button');
 
+  // Mesma pagina de perfil de usuario é usada para medico e administrado
+  // Logo ele checa a permisão do usuario quando a pagina é inicializada e ser for medico ele esconde o botão de deletar. Apenas o admin pode deletar o usuario
   if (permissao == 'medico') {
     delete_button!.style.display == 'none'
     delete_button?.remove()
   }
 
+  // Pega id do usuario na url
   const usuario_id = window.location.pathname.replace("/perfil_usuario/", "")
 
-  const { data: dadosUsuario, error: errorUsuario } = await supabase.from('usuario').select('*').eq('id', usuario_id).single();
+  // Pega dados do usuario pelo id recebido
+  const { data: dadosUsuario, error: errorUsuario } = await supabase
+  .from('usuario')
+  .select('*')
+  .eq('id', usuario_id)
+  .single();
 
   if (errorUsuario) {
     console.log(errorUsuario);
@@ -72,32 +80,31 @@ export async function init_perfil_usuario_page() {
   const name_input = container.querySelector<HTMLInputElement>('#name');
   const cpf_input = container.querySelector<HTMLInputElement>('#cpf');
 
-
-  toggle_editar(true);
+  desabilitar_editar(true);
 
   name_input!.value = dadosUsuario.nome;
   cpf_input!.value = dadosUsuario.cpf;
 
-
   let editando = false;
 
-  function toggle_editar(ativo: boolean) {
+  // TODO: Extrair isso em uma função exportada?
+  function desabilitar_editar(desabilitado: boolean) {
 
-    name_input!.disabled = ativo;
-    cpf_input!.disabled = ativo;
+    name_input!.disabled = desabilitado;
+    cpf_input!.disabled = desabilitado;
 
   }
 
   edit_button?.addEventListener('click', async (_event) => {
 
     if (editando == false) {
-      toggle_editar(false);
+      desabilitar_editar(false);
       edit_button.textContent = "Salvar";
       editando = true;
       delete_button!.style.display = "none";
     }
     else {
-      toggle_editar(true);
+      desabilitar_editar(true);
       edit_button.textContent = "Editar";
       editando = false;
       delete_button!.style.display = "flex";
