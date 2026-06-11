@@ -14,6 +14,7 @@ import { switch_pair_button } from '../../components/switch_pair_button';
 
 
 import { v4 as uuidv4 } from 'uuid';
+import { navigateTo } from '../../main'
 
 
 const temSintomas: Record<string, boolean> = {
@@ -48,12 +49,12 @@ export async function init_cadastro_paciente_page() {
           <div class="patient_input_container">
         
             <input class="base_small_input_text" placeholder="Nome do Paciente" id="name">
-            <input class="base_small_input_text" placeholder="CPF do paciente" id="cpf">
+            <input class="base_small_input_text" placeholder="CPF do paciente" id="cpf" maxlength="11">
             <input class="base_small_input_text" placeholder="Data nascimento do paciente" type="date" id="birth_date">
             <input class="base_small_input_text" placeholder="Nome da mãe" id="mother_name">
             <input class="base_small_input_text" placeholder="Responsavel pelo paciente" id="responsible_name">
-            <input class="base_small_input_text" placeholder="CPF do responsavel" id="cpf_responsible">
-            <input class="base_small_input_text" placeholder="Telefone" id="phone_number">
+            <input class="base_small_input_text" placeholder="CPF do responsavel" id="cpf_responsible" maxlength="11">
+            <input class="base_small_input_text" placeholder="Telefone" id="phone_number" maxlength="10">
             <input class="base_small_input_text" placeholder="Pais" id="country">
             <input class="base_small_input_text" placeholder="Estado" id="state">
             <input class="base_small_input_text" placeholder="Cidade" id="city">
@@ -515,6 +516,9 @@ export async function init_cadastro_paciente_page() {
     hideNotification()
 
     trigger_notification_popup("Paciente cadastrado com sucesso");
+
+    navigateTo("/relatorio")
+    window.history.pushState(null, '', "/relatorio/" + avaliacao_id);
 
     clear_symptoms(sintomas_botoes);
 

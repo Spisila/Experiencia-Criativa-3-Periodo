@@ -32,7 +32,7 @@ export async function init_perfil_paciente_page() {
           <p> Sexo: </p>
           <input type="text" class="base_small_input_text" placeholder="Sexo" id="sexo"/>
           <p> CPF: </p>
-          <input type="text" class="base_small_input_text" placeholder="CPF" id="cpf"/>
+          <input type="text" class="base_small_input_text" placeholder="CPF" id="cpf" maxlength="11"/>
         
         </div>
 
@@ -43,7 +43,7 @@ export async function init_perfil_paciente_page() {
           <p> Nome do responsável: </p>
           <input type="text" class="base_small_input_text" placeholder="Nome do responsável" id="nome_responsavel"/>
           <p> CPF do responsável: </p>
-          <input type="text" class="base_small_input_text" placeholder="CPF do responsável" id="cpf_responsavel"/>
+          <input type="text" class="base_small_input_text" placeholder="CPF do responsável" id="cpf_responsavel" maxlength="11"/>
         
         </div>
 
@@ -56,7 +56,7 @@ export async function init_perfil_paciente_page() {
           <p> Cidade: </p>
           <input type="text" class="base_small_input_text" placeholder="Cidade" id="cidade"/>
           <p> Telefone: </p>
-          <input type="text" class="base_small_input_text" placeholder="Telefone" id="telefone"/>
+          <input type="text" class="base_small_input_text" placeholder="Telefone" id="telefone" maxlength="10"/>
         
         </div>
         

@@ -29,7 +29,7 @@ export async function init_perfil_usuario_page() {
           <p> Nome: </p>
           <input type="text" class="base_small_input_text" placeholder="Nome" id="name"/>
           <p> CPF: </p>
-          <input type="text" class="base_small_input_text" placeholder="CPF" id="cpf"/>
+          <input type="text" class="base_small_input_text" placeholder="CPF" id="cpf" maxlength="11"/>
         
         </div>
         

@@ -24,7 +24,7 @@ export async function init_cadastro_admin_page() {
         <h2>Cadastro de Administrador</h2>
 
         <input type="text" class="base_input_text" placeholder="Nome" id="name" />
-        <input type="text" class="base_input_text" placeholder="CPF" id="cpf" maxLength=11 />
+        <input type="text" class="base_input_text" placeholder="CPF" id="cpf" maxlength="11" />
         <input type="email" class="base_input_text" placeholder="Email" id="email" />
         <input type="password" class="base_input_text" placeholder="Senha" id="password" />
         <button id="register" class="base_button">Registrar</button>

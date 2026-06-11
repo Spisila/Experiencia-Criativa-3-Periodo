@@ -42,15 +42,24 @@ app.post('/api/usuarios', async (req, res) => {
     }
 
     return res.status(201).json({
-      message: 'Usuário criado com sucesso!',
+      message: 'Usuário criado com sucesso',
       user: data.user
     });
 
   } catch (err) {
     return res.status(500).json({ error: 'Erro interno do servidor.' });
   }
+
 });
 
 app.listen(port, () => {
   console.log(`Servidor rodando em http://localhost:${port}`);
 });
+
+export async function deleteUser(userId: string) {
+  const { data, error } = await supabaseAdmin.auth.admin.deleteUser(userId);
+
+  if (error) throw error;
+
+  return data;
+}
