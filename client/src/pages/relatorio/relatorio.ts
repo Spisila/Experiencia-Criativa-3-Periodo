@@ -540,7 +540,7 @@ export async function init_relatorio_page() {
 
     trigger_notification_popup("Relatório deletado com sucesso");
 
-    navigate_to("/relatorios_usuario");
+    navigate_to("/relatorios_admin");
   });
 
   const edit_button = container.querySelector<HTMLButtonElement>('#editar_button');

@@ -24,7 +24,7 @@ export async function init_relatorios_admin_page() {
 
         <div class="search_and_pages_container">
 
-          <input id="search_bar" class="base_input_text" type="text" placeholder="Pesquisar Nome ou CPF" style="margin-left: 10px;">
+          <input id="search_bar" class="base_input_text" type="text" placeholder="Pesquisar Nome do paciente ou nome do medico" style="margin-left: 10px;">
           <button class="base_table_button" id="search_button" title="Pesquisar" style="height: 50px; width: 75px; margin-left: 10px">
             <img class="icon_image" src="/node_modules/lucide-static/icons/file-search-corner.svg"
               style="height: 80%; width: auto;" alt="">
