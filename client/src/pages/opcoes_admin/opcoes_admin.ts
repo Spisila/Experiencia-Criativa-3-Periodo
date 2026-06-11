@@ -1,7 +1,7 @@
 import './opcoes_admin.css'
 import '../../components/base_button.css'
 
-import { navigateTo } from '../../main';
+import { navigate_to } from '../../main';
 
 
 export function init_opcoes_admin_page() {
@@ -45,20 +45,20 @@ export function init_opcoes_admin_page() {
 
 
   relatorios_button?.addEventListener('click', (_event) => {
-    navigateTo("/relatorios_admin");
+    navigate_to("/relatorios_admin");
   })
 
   usuarios_button?.addEventListener('click', (_event) => {
-    navigateTo("/cadastro_medico");
+    navigate_to("/cadastro_medico");
   })
 
   cadastrar_admin_button?.addEventListener('click', (_event) => {
-    navigateTo("/cadastro_admin");
+    navigate_to("/cadastro_admin");
   })
 
 
   lista_usuarios_button?.addEventListener('click', (_event) => {
-    navigateTo("/lista_usuarios");
+    navigate_to("/lista_usuarios");
   })
 
 }

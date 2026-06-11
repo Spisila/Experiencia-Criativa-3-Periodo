@@ -4,9 +4,9 @@ import "../../components/input_boxes.css"
 
 import { supabase } from "../../lib/supabase"
 import { sintomas_atuais_masculinas, sintomas_atuais_feminino } from '../../lib/sintoma_pesos'
-import { hideNotification, showNotification, trigger_notification_popup } from '../../components/notification_popup'
+import { hide_notification, show_notification, trigger_notification_popup } from '../../components/notification_popup'
 
-import { get_auth_user } from '../../components/auth_functions';
+import { get_user_id, get_user_session } from '../../components/auth_functions';
 
 import { cadastro_paciente_schema } from '../../schemas/cadastro_pacientes_schema';
 
@@ -14,7 +14,7 @@ import { switch_pair_button } from '../../components/switch_pair_button';
 
 
 import { v4 as uuidv4 } from 'uuid';
-import { navigateTo } from '../../main'
+import { navigate_to } from '../../main'
 
 // Associação entre o sintoma e se ele esta presente
 const temSintomas: Record<string, boolean> = {
@@ -416,8 +416,13 @@ export async function init_cadastro_paciente_page() {
       return;
     }
 
+    // TODO: Função disso
     // Checagem se o CPF ja existe no sistema
-    const { data: cpf_exists } = await supabase.from('paciente').select('cpf').eq('cpf', cpf).single();
+    const { data: cpf_exists } = await supabase
+      .from('paciente')
+      .select('cpf')
+      .eq('cpf', cpf)
+      .single();
 
     if (cpf_exists) {
       trigger_notification_popup("CPF já cadastrado");
@@ -463,11 +468,9 @@ export async function init_cadastro_paciente_page() {
     }
 
 
-    showNotification("Cadastrando paciente...")
+    show_notification("Cadastrando paciente...")
 
-    const user = await get_auth_user();
-
-    const id_medico = user!.session!.user.id;
+    const id_medico = await get_user_id();
 
     // Cria id da avaliacao para criar a pasta do bucket com fotos
     const avaliacao_id = uuidv4();
@@ -544,12 +547,12 @@ export async function init_cadastro_paciente_page() {
       return;
     }
 
-    hideNotification()
+    hide_notification()
 
     trigger_notification_popup("Paciente cadastrado com sucesso");
 
     // Quando usuario criado navega para pagina de relatorio que foi criado junto com ele
-    navigateTo("/relatorio")
+    navigate_to("/relatorio")
     window.history.pushState(null, '', "/relatorio/" + avaliacao_id);
 
     clear_symptoms(sintomas_botoes);

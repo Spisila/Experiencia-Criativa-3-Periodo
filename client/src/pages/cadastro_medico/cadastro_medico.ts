@@ -3,7 +3,7 @@ import "../../components/base_button.css"
 import "../../components/input_boxes.css"
 
 import { supabase } from "../../lib/supabase"
-import { hideNotification, showNotification, trigger_notification_popup } from '../../components/notification_popup';
+import { hide_notification, show_notification, trigger_notification_popup } from '../../components/notification_popup';
 
 import { cadastro_usuario_schema } from '../../schemas/cadastro_usuario_schema';
 
@@ -57,7 +57,7 @@ export async function init_cadastro_medico_page() {
       trigger_notification_popup("Preencha todos os campos");
       return;
     }
-    
+
     // Formulario do Zod
     const dados_formulario = {
       nome: name,
@@ -65,26 +65,26 @@ export async function init_cadastro_medico_page() {
       email: email,
       senha: password
     }
-    
+
     // Validação do Zod
     const resultado_validacao = cadastro_usuario_schema.safeParse(dados_formulario);
-    
+
     if (!resultado_validacao.success) {
       const messages = resultado_validacao.error.issues.map(issue => issue.message);
       console.log(messages[0]);
       trigger_notification_popup(messages[0]);
       return;
     }
-    
+
     // Checagem se o cpf ja esta no sistema
     const { data: cpf_exists } = await supabase.from('usuario').select('cpf').eq('cpf', cpf).single();
-    
+
     if (cpf_exists) {
       trigger_notification_popup("CPF já cadastrado");
       return;
     }
-    
-    showNotification("Cadastrando usuario...");
+
+    show_notification("Cadastrando usuario...");
 
     try {
 
@@ -120,7 +120,7 @@ export async function init_cadastro_medico_page() {
         throw new Error(resultado.error || 'Erro ao cadastrar');
       }
 
-      hideNotification()
+      hide_notification()
 
       trigger_notification_popup("Usuário cadastrado com sucesso");
 

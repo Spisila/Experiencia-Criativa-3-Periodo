@@ -30,16 +30,14 @@ import { supabase } from './lib/supabase.ts';
 // Componentes
 import { return_to_options, should_hide_return_button } from './components/return_to_options_button.ts';
 import { should_hide_logout_button, log_out } from './components/logout_button.ts';
-import { initTheme, toggleTheme } from './components/tema_claro_escuro.ts';
-import { trigger_notification_popup, showNotification, hideNotification } from './components/notification_popup.ts';
+import { init_theme, toggleTheme } from './components/tema_claro_escuro.ts';
+import { trigger_notification_popup, show_notification, hide_notification } from './components/notification_popup.ts';
 
-// TODO: Tirar esse type e colocar direto a arrow funcion
-type FuncaoInit = (container: HTMLElement) => void;
 
 // Interface que determina os parametros de uma pagina
 interface Pagina {
   path: string,
-  init: FuncaoInit,
+  init: (container: HTMLElement) => void,
   perfil_necessario: string | null,
   titulo: string
 }
@@ -71,31 +69,33 @@ const Paginas: Pagina[] = [
   { path: '/perfil_usuario', init: init_perfil_usuario_page, perfil_necessario: "administrador", titulo: "PERFIL USUARIO" }
 ]
 
-// TODO: converter para for loop
-let paths: string[] = Paginas.map(p => p.path);
+let paths: string[] = [];
 
-// TODO: converter para snake_case
-export function navigateTo(url: string) {
+for (let i = 0; i < Paginas.length; i++) {
+  paths.push(Paginas[i].path);
+}
+
+export function navigate_to(url: string) {
   window.history.pushState(null, '', url);
-  handleRouting();
+  handle_routing();
 }
 
 // Função de inicialização de tudo
 async function init() {
 
-  showNotification("Carregando pagina...")
-  
-  initTheme();
+  show_notification("Carregando pagina...")
+
+  init_theme();
   await carregar_pesos();
-  hideNotification()
-  
+  hide_notification()
+
   // Se usuario nao tem sessão volta para a pagina de login
   const { data: user_session } = await supabase.auth.getSession();
   if (!user_session) {
-    navigateTo("/login_total")
+    navigate_to("/login_total")
   }
 
-  handleRouting();
+  handle_routing();
 
 
   const return_button = document.querySelector<HTMLButtonElement>('#btn-back');
@@ -109,14 +109,13 @@ async function init() {
 }
 
 // Função que faz todo o roteamento
-async function handleRouting() {
+async function handle_routing() {
 
   const path = window.location.pathname;
 
-  // TODO: tirar esse ""path.startsWith("/relatorio/") == false"
-  if (paths.includes(path) == false && path.startsWith("/relatorio/") == false) {
+  if (paths.includes(path) == false) {
     trigger_notification_popup("Pagina não existe")
-    navigateTo("/login_total")
+    navigate_to("/login_total")
     return;
   }
 
@@ -126,11 +125,12 @@ async function handleRouting() {
 
   if (path != "/login_total") {
     if (!user_session.session) {
-      navigateTo("/login_total")
+      navigate_to("/login_total")
       return;
     }
   }
 
+  // TODO: Trocar pela função de pega perfil
   // Pega perfil do usuario
   const user_perfil = user_session.session?.user.user_metadata.perfil;
 
@@ -165,7 +165,7 @@ async function handleRouting() {
       if (user_perfil != pagina_i.perfil_necessario) {
         // window.alert("ACESSO NEGADO");
         trigger_notification_popup("ACESSO NEGADO")
-        navigateTo("/login_total");
+        navigate_to("/login_total");
         log_out();
         return;
       }
@@ -189,5 +189,5 @@ function atualizar_titulo_da_pagina(titulo: string) {
 
 }
 
-window.addEventListener('popstate', handleRouting);
+window.addEventListener('popstate', handle_routing);
 window.addEventListener('DOMContentLoaded', init);

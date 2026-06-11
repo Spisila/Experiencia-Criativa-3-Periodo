@@ -16,7 +16,7 @@ export function trigger_notification_popup(notification_message: string) {
 
 }
 
-export function showNotification(message: string) {
+export function show_notification(message: string) {
   const popup = document.querySelector<HTMLDivElement>("#notfication_popup");
 
   if (!popup) return;
@@ -26,7 +26,7 @@ export function showNotification(message: string) {
   popup.classList.add("notfication_slide_in");
 }
 
-export function hideNotification() {
+export function hide_notification() {
   const popup = document.querySelector<HTMLDivElement>("#notfication_popup");
 
   if (!popup) return;
@@ -39,9 +39,9 @@ export function showTemporaryNotification(
   message: string,
   duration = 2000
 ) {
-  showNotification(message);
+  show_notification(message);
 
   setTimeout(() => {
-    hideNotification();
+    hide_notification();
   }, duration);
 }

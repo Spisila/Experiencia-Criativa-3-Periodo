@@ -23,7 +23,7 @@ export function toggleTheme() {
   atualizarIconeTema(newTheme);
 }
 
-export function initTheme() {
+export function init_theme() {
   const savedTheme = localStorage.getItem('theme');
   const systemTheme = savedTheme || 'dark';
 

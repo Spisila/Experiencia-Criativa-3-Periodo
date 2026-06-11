@@ -1,4 +1,4 @@
-import { navigateTo } from "../main";
+import { navigate_to } from "../main";
 import { supabase } from "../lib/supabase";
 
 const hide_logout_button_path = [
@@ -61,7 +61,7 @@ export async function log_out() {
 
   atualizar_botao_log_out("escondido")
 
-  navigateTo('/login_total')
+  navigate_to('/login_total')
 
   const { data: userDepois } = await supabase.auth.getUser();
 

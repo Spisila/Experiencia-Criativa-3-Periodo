@@ -3,12 +3,12 @@ import "../../components/base_button.css"
 import "../../components/input_boxes.css"
 
 import { supabase } from "../../lib/supabase"
-import { navigateTo } from '../../main';
+import { navigate_to } from '../../main';
 
 import { setup_table_sorting, setup_fill_table } from '../../components/table_functions';
 
-import { get_auth_user } from '../../components/auth_functions';
-import { showNotification, hideNotification, trigger_notification_popup } from '../../components/notification_popup';
+import { get_user_session } from '../../components/auth_functions';
+import { show_notification, hide_notification, trigger_notification_popup } from '../../components/notification_popup';
 
 export async function init_lista_usuarios_page() {
 
@@ -108,7 +108,7 @@ export async function init_lista_usuarios_page() {
   if (!table) { return; }
 
   const sort_name_button = container.querySelector<HTMLButtonElement>('#sort_by_user_name_button');
-  
+
   const usuarios = await get_usuarios('nome', true);
 
   setup_table_sorting(container,
@@ -117,16 +117,16 @@ export async function init_lista_usuarios_page() {
     (usuarios) => setup_fill_table(usuarios, table, go_to_user_page)
   );
 
-  showNotification("Carregando usuarios...")
+  show_notification("Carregando usuarios...")
 
 
   if (usuarios.length == 0) {
-    hideNotification();
+    hide_notification();
     trigger_notification_popup("Nenhum relatorio encontrado");
   }
   else {
 
-    hideNotification();
+    hide_notification();
   }
 
   setup_fill_table(usuarios, table, go_to_user_page)
@@ -156,7 +156,7 @@ async function get_usuarios<T extends object>(ordenar_por: string, ascendente: b
 // Vai pra pagina de perfil de usuario com id dele na url
 function go_to_user_page(user_id: string) {
 
-  navigateTo("/perfil_usuario")
+  navigate_to("/perfil_usuario")
   window.history.pushState(null, '', "/perfil_usuario/" + user_id);
 
 }

@@ -7,7 +7,7 @@ import { sintomas_atuais_masculinas, sintomas_atuais_feminino } from '../../lib/
 
 import { switch_pair_button } from '../../components/switch_pair_button'
 
-import { hideNotification, showNotification, trigger_notification_popup } from '../../components/notification_popup'
+import { hide_notification, show_notification, trigger_notification_popup } from '../../components/notification_popup'
 
 import { v4 as uuidv4 } from 'uuid';
 
@@ -201,10 +201,10 @@ export async function init_nova_avaliacao_page() {
 
   // Pega dados do paciente apartir do id da url
   const { data: pacienteDados, error: getPacienteError } = await supabase
-  .from("paciente")
-  .select("*")
-  .eq("id", paciente_id)
-  .single();
+    .from("paciente")
+    .select("*")
+    .eq("id", paciente_id)
+    .single();
 
   if (getPacienteError) {
     console.log("Erro ao buscar dados do paciente");
@@ -512,7 +512,7 @@ export async function init_nova_avaliacao_page() {
 
   async function nova_avaliacao_press() {
 
-    showNotification("Criando Avaliação...")
+    show_notification("Criando Avaliação...")
 
     const { data: pacienteDados, error: getPacienteError } = await supabase.from("paciente").select("*").eq("id", paciente_id).single();
 
@@ -639,7 +639,7 @@ export async function init_nova_avaliacao_page() {
       if (error) {
         throw error;
       } else {
-        hideNotification()
+        hide_notification()
         trigger_notification_popup("Avaliação Criada")
       }
 

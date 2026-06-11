@@ -3,7 +3,7 @@ import "../../components/base_button.css"
 import "../../components/input_boxes.css"
 
 import { supabase } from "../../lib/supabase"
-import { navigateTo } from '../../main';
+import { navigate_to } from '../../main';
 
 import { trigger_notification_popup } from '../../components/notification_popup';
 
@@ -372,7 +372,7 @@ export async function init_relatorio_page() {
   `
   // Pega id do relatorio da url
   const relatorio_id = window.location.pathname.replace("/relatorio/", "")
-  
+
   // Função do banco que pega todos os dados que precisam ser pegos para o relatorio
   const { data: relatorio_dados, error: funcerr } = await supabase.rpc("get_dados_relatorio_especifico", {
     avaliacao_id: relatorio_id
@@ -380,9 +380,9 @@ export async function init_relatorio_page() {
 
   // Pega os item de avaliação para marcar os sintomas que o foram marcados no relatorio
   const { data: itemAvaliacaoDados, error: getItemAvaliacaoError } = await supabase
-  .from("item_avaliacao")
-  .select("sintoma_id")
-  .eq("avaliacao_id", relatorio_id);
+    .from("item_avaliacao")
+    .select("sintoma_id")
+    .eq("avaliacao_id", relatorio_id);
 
   if (getItemAvaliacaoError) {
     console.log("Erro ao pegar item relatorios");
@@ -444,7 +444,7 @@ export async function init_relatorio_page() {
       toggle_tem(tem_extras_chave.at(i)!, tem_relatorio_extras, tem_edit_buttons.at(i)!, tem_containers.at(i)!);
     })
   }
-  
+
   // Seta botoes de sintomas como sim ou nao
   for (let i = 0; i < tem_containers.length; i++) {
 
@@ -540,7 +540,7 @@ export async function init_relatorio_page() {
 
     trigger_notification_popup("Relatório deletado com sucesso");
 
-    navigateTo("/relatorios_usuario");
+    navigate_to("/relatorios_usuario");
   });
 
   const edit_button = container.querySelector<HTMLButtonElement>('#editar_button');

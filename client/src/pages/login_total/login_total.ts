@@ -4,10 +4,10 @@ import "../../components/input_boxes.css"
 
 import { supabase } from "../../lib/supabase"
 
-import { navigateTo } from '../../main'
+import { navigate_to } from '../../main'
 import { atualizar_botao_log_out } from '../../components/logout_button'
 
-import { trigger_notification_popup, showNotification, hideNotification } from '../../components/notification_popup'
+import { trigger_notification_popup, show_notification, hide_notification } from '../../components/notification_popup'
 
 import { login_schema } from '../../schemas/login_schema';
 
@@ -73,7 +73,7 @@ export function init_login_total_page() {
 
     }
 
-    showNotification("Fazendo login...")
+    show_notification("Fazendo login...")
 
     const { data, error } = await supabase.auth.signInWithPassword({ email: email, password: password });
 
@@ -93,10 +93,10 @@ export function init_login_total_page() {
     if (data) {
 
       if (data.user.user_metadata.perfil == "administrador") {
-        navigateTo("/opcoes_admin");
+        navigate_to("/opcoes_admin");
       }
       else if (data.user.user_metadata.perfil == "medico") {
-        navigateTo("/opcoes_usuario");
+        navigate_to("/opcoes_usuario");
       }
       else {
         console.log("Erro: role desconhecida");
@@ -106,7 +106,7 @@ export function init_login_total_page() {
 
     }
 
-    hideNotification()
+    hide_notification()
 
   }
 }

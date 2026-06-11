@@ -1,6 +1,6 @@
 
 import { supabase } from "../lib/supabase";
-import { navigateTo } from "../main";
+import { navigate_to } from "../main";
 import type { Usuario } from "./table_functions";
 
 export function search_users(container: HTMLElement, table: HTMLTableElement) {
@@ -65,6 +65,6 @@ export function search_users(container: HTMLElement, table: HTMLTableElement) {
 
 function go_to_user_page(user_id: string) {
 
-  navigateTo("/perfil_usuario/" + user_id)
+  navigate_to("/perfil_usuario/" + user_id)
 
 }

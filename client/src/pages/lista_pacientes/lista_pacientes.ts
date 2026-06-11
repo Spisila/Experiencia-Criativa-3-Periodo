@@ -3,13 +3,13 @@ import "../../components/base_button.css"
 import "../../components/input_boxes.css"
 
 import { supabase } from "../../lib/supabase"
-import { navigateTo } from '../../main';
+import { navigate_to } from '../../main';
 
-import { get_auth_user } from '../../components/auth_functions';
+import { get_user_id } from '../../components/auth_functions';
 
 import { setup_table_sorting, setup_fill_table, clear_table, update_page, get_max_pages } from '../../components/table_functions';
 
-import { trigger_notification_popup, showNotification, hideNotification } from '../../components/notification_popup';
+import { trigger_notification_popup, show_notification, hide_notification } from '../../components/notification_popup';
 
 export async function init_lista_pacientes_page() {
 
@@ -143,27 +143,25 @@ export async function init_lista_pacientes_page() {
   
   `
 
-  // TODO: função em auth_functions que pega o id do usuario
-  const user_session = await get_auth_user();
-  const user_id = String(user_session!.session?.user.id)
-  
+  const user_id = await get_user_id()
+
   const table = container.querySelector<HTMLTableElement>('#reports_table')
-  
+
   if (!table) { return; }
-  
-  showNotification("Carregando pacientes...")
-  
+
+  show_notification("Carregando pacientes...")
+
   let pacientes = await get_pacientes('nome', true, user_id, 1);
-  
+
   if (pacientes!.length == 0) {
-    hideNotification();
+    hide_notification();
     trigger_notification_popup("Nenhum paciente encontrado");
   }
   else {
 
-    hideNotification();
+    hide_notification();
   }
-  
+
   const pacientes_entradas = await get_entradas_pacientes(user_id);
   setup_fill_table(pacientes ?? [], table, ir_perfil_paciente);
 
@@ -252,7 +250,7 @@ async function get_pacientes<T extends object>(ordenar_por: string, ascendente: 
 // Ir para pagina do perfil do paciente e colocar id do paciente na url para carregar as infos dele la
 function ir_perfil_paciente(paciente_id: string) {
 
-  navigateTo("/perfil_paciente")
+  navigate_to("/perfil_paciente")
   window.history.pushState(null, '', "/perfil_paciente/" + paciente_id);
 
 }

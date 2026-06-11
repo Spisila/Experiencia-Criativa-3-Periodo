@@ -6,7 +6,7 @@ import { supabase } from "../../lib/supabase"
 import { trigger_notification_popup } from '../../components/notification_popup';
 
 import { cadastro_usuario_schema } from '../../schemas/cadastro_usuario_schema';
-import { navigateTo } from '../../main';
+import { navigate_to } from '../../main';
 import { deletar_fotos_avaliacao } from '../../components/bucket_functions';
 
 export async function init_perfil_paciente_page() {
@@ -80,10 +80,10 @@ export async function init_perfil_paciente_page() {
 
   //Pega dados do paciente atraves da url
   const { data: dadosPaciente, error: errorPaciente } = await supabase.
-  from('paciente')
-  .select('*')
-  .eq('id', paciente_id)
-  .single();
+    from('paciente')
+    .select('*')
+    .eq('id', paciente_id)
+    .single();
 
   if (errorPaciente) {
     console.log(errorPaciente);
@@ -220,12 +220,12 @@ export async function init_perfil_paciente_page() {
     trigger_notification_popup("Paciente deletado com sucesso");
 
     await new Promise((resolve) => setTimeout(resolve, 2000));
-    navigateTo("/lista_pacientes");
+    navigate_to("/lista_pacientes");
   });
 
   function criar_novo_atendimento(paciente_id: string) {
 
-    navigateTo("/nova_avaliacao")
+    navigate_to("/nova_avaliacao")
     window.history.pushState(null, '', "/nova_avaliacao/" + paciente_id);
 
   }

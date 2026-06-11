@@ -6,8 +6,8 @@ import { supabase } from "../../lib/supabase"
 import { trigger_notification_popup } from '../../components/notification_popup';
 
 import { cadastro_usuario_schema } from '../../schemas/cadastro_usuario_schema';
-import { navigateTo } from '../../main';
-import { get_auth_user } from '../../components/auth_functions';
+import { navigate_to } from '../../main';
+import { get_user_session } from '../../components/auth_functions';
 import { deletar_fotos_avaliacao } from '../../components/bucket_functions';
 
 export async function init_perfil_usuario_page() {
@@ -47,7 +47,8 @@ export async function init_perfil_usuario_page() {
 
   `
 
-  const user_session = await get_auth_user()
+  // TODO: Trocar pela função de get_permissao
+  const user_session = await get_user_session()
 
   const permissao = user_session?.session?.user.user_metadata.perfil
 
@@ -66,10 +67,10 @@ export async function init_perfil_usuario_page() {
 
   // Pega dados do usuario pelo id recebido
   const { data: dadosUsuario, error: errorUsuario } = await supabase
-  .from('usuario')
-  .select('*')
-  .eq('id', usuario_id)
-  .single();
+    .from('usuario')
+    .select('*')
+    .eq('id', usuario_id)
+    .single();
 
   if (errorUsuario) {
     console.log(errorUsuario);
@@ -160,7 +161,7 @@ export async function init_perfil_usuario_page() {
 
     trigger_notification_popup("Usuario deletado com sucesso");
 
-    navigateTo("/lista_usuarios");
+    navigate_to("/lista_usuarios");
   });
 
 

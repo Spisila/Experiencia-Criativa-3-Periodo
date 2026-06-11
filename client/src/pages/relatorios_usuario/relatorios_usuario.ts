@@ -3,12 +3,12 @@ import "../../components/base_button.css"
 import "../../components/input_boxes.css"
 
 import { supabase } from "../../lib/supabase"
-import { navigateTo } from '../../main';
+import { navigate_to } from '../../main';
 
 import { clear_table, get_max_pages, setup_fill_table, setup_table_sorting, update_page } from '../../components/table_functions';
 
-import { get_auth_user } from '../../components/auth_functions';
-import { hideNotification, showNotification, trigger_notification_popup } from '../../components/notification_popup';
+import { get_user_id, get_user_session } from '../../components/auth_functions';
+import { hide_notification, show_notification, trigger_notification_popup } from '../../components/notification_popup';
 
 
 export async function init_relatorios_usuario_page() {
@@ -166,27 +166,24 @@ export async function init_relatorios_usuario_page() {
   
   `
 
-  const user_session = await supabase.auth.getSession();
 
-  const user_id = String(user_session.data.session?.user.id)
-
-  console.log(user_id)
+  const user_id = await get_user_id();
 
   const table = container.querySelector<HTMLTableElement>('#reports_table')
 
   if (!table) { return; }
 
-  showNotification("Buscando relatórios...")
-  
+  show_notification("Buscando relatórios...")
+
   const relatorios = await get_relatorios(String(user_id), 'nome', true, 1)
 
   if (relatorios.length == 0) {
-    hideNotification();
+    hide_notification();
     trigger_notification_popup("Nenhum relatorio encontrado");
   }
   else {
 
-    hideNotification();
+    hide_notification();
   }
 
 
@@ -345,7 +342,7 @@ async function get_entradas_relatorios(usuario_id: string) {
 
 function ir_relatorio_especifico(relatorio_id: string) {
 
-  navigateTo("/relatorio")
+  navigate_to("/relatorio")
   window.history.pushState(null, '', "/relatorio/" + relatorio_id);
 
 }

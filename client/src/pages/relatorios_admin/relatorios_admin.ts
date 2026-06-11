@@ -3,7 +3,7 @@ import "../../components/base_button.css"
 import "../../components/input_boxes.css"
 
 import { supabase } from "../../lib/supabase"
-import { navigateTo } from '../../main';
+import { navigate_to } from '../../main';
 
 import { setup_fill_table, update_page, get_max_pages, setup_table_sorting } from '../../components/table_functions';
 
@@ -184,14 +184,6 @@ export async function init_relatorios_admin_page() {
   
   `
 
-  const { data: user_session } = await supabase.auth.getSession();
-
-  if (!user_session) {
-    console.log("Sem seção de usuário")
-    return;
-  }
-
-
   const table = container.querySelector<HTMLTableElement>('#reports_table')
 
   if (!table) { return; }
@@ -271,7 +263,9 @@ export async function init_relatorios_admin_page() {
       console.log("Pesquisando por: " + search_input.value)
 
       const { data: pacienteBuscado, error: pegarPacienteBuscadoError } = await supabase
-        .from('paciente').select('id').or(`nome.ilike.${search_input.value}%, cpf.ilike.${search_input.value}%`);
+        .from('paciente')
+        .select('id')
+        .or(`nome.ilike.${search_input.value}%, cpf.ilike.${search_input.value}%`);
 
       if (pegarPacienteBuscadoError) {
         console.log("Erro ao pesquisar paciente")
@@ -362,7 +356,7 @@ async function get_entradas_todos_relatorios() {
 
 function ir_relatorio_especifico(relatorio_id: string) {
 
-  navigateTo("/relatorio")
+  navigate_to("/relatorio")
   window.history.pushState(null, '', "/relatorio/" + relatorio_id);
 
 }

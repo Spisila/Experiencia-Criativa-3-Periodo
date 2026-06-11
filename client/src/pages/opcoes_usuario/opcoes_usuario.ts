@@ -1,8 +1,8 @@
 import './opcoes_usuario.css'
 import '../../components/base_button.css'
 
-import { navigateTo } from '../../main';
-import { get_auth_user } from '../../components/auth_functions';
+import { navigate_to } from '../../main';
+import { get_user_session } from '../../components/auth_functions';
 
 export async function init_opcoes_usuario_page() {
 
@@ -47,24 +47,24 @@ export async function init_opcoes_usuario_page() {
   const usuario_perfil_button = container.querySelector<HTMLButtonElement>("#usuario_perfil_button");
 
   relatorios_button?.addEventListener('click', (_event) => {
-    navigateTo('/relatorios_usuario')
+    navigate_to('/relatorios_usuario')
   });
 
   pacientes_usuario_button?.addEventListener('click', (_event) => {
-    navigateTo('/lista_pacientes')
+    navigate_to('/lista_pacientes')
   });
 
   cadastrar_paciente_button?.addEventListener('click', (_event) => {
-    navigateTo('/cadastro_paciente')
+    navigate_to('/cadastro_paciente')
   })
 
-  const user_session = await get_auth_user();
+  const user_session = await get_user_session();
 
   const user_id = user_session?.session?.user.id;
 
   usuario_perfil_button?.addEventListener('click', (_event) => {
 
-    navigateTo("/perfil_usuario")
+    navigate_to("/perfil_usuario")
     window.history.pushState(null, '', "/perfil_usuario/" + user_id);
 
   })

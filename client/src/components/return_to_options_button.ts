@@ -1,5 +1,5 @@
 import { supabase } from "../lib/supabase";
-import { navigateTo } from "../main";
+import { navigate_to } from "../main";
 
 const show_options_button_path = [
   '/cadastro_paciente',
@@ -32,10 +32,10 @@ export async function return_to_options() {
   const role = user_session.session?.user.user_metadata.perfil
 
   if (role == "administrador") {
-    navigateTo("/opcoes_admin");
+    navigate_to("/opcoes_admin");
   }
   else if (role == "medico") {
-    navigateTo('/opcoes_usuario');
+    navigate_to('/opcoes_usuario');
   }
   else {
     console.log("Role nao conhecida");
