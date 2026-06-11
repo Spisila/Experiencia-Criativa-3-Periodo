@@ -5,7 +5,7 @@ import "../../components/input_boxes.css"
 import { supabase } from "../../lib/supabase"
 import { navigate_to } from '../../main';
 
-import { clear_table, get_max_pages, setup_fill_table, setup_table_sorting, update_page } from '../../components/table_functions';
+import { clear_table, get_max_pages, fill_table, setup_table_sorting, update_page } from '../../components/table_functions';
 
 import { get_user_id, get_user_session } from '../../components/auth_functions';
 import { hide_notification, show_notification, trigger_notification_popup } from '../../components/notification_popup';
@@ -187,7 +187,7 @@ export async function init_relatorios_usuario_page() {
   }
 
 
-  setup_fill_table(relatorios, table, ir_relatorio_especifico);
+  fill_table(relatorios, table, ir_relatorio_especifico);
 
   const sort_by_patient_name_button = container.querySelector<HTMLButtonElement>('#sort_by_patient_name_button');
   const sort_by_date_of_birth_button = container.querySelector<HTMLButtonElement>('#sort_by_date_of_birth_button');
@@ -198,35 +198,33 @@ export async function init_relatorios_usuario_page() {
   setup_table_sorting(container,
     sort_by_patient_name_button,
     (ascendente) => get_relatorios(user_id, 'nome', !ascendente, 1),
-    (dados) => setup_fill_table(dados, table, ir_relatorio_especifico)
+    (dados) => fill_table(dados, table, ir_relatorio_especifico)
   )
 
   setup_table_sorting(container,
     sort_by_date_of_birth_button,
     (ascendente) => get_relatorios(user_id, 'data_nascimento', ascendente, 1),
-    (dados) => setup_fill_table(dados, table, ir_relatorio_especifico)
+    (dados) => fill_table(dados, table, ir_relatorio_especifico)
   )
 
   setup_table_sorting(container,
     sort_by_sex_button,
     (ascendente) => get_relatorios(user_id, 'sexo', ascendente, 1),
-    (dados) => setup_fill_table(dados, table, ir_relatorio_especifico)
+    (dados) => fill_table(dados, table, ir_relatorio_especifico)
   )
 
   setup_table_sorting(container,
     sort_by_avaliacao_date_button,
     (ascendente) => get_relatorios(user_id, 'data_avaliacao', ascendente, 1),
-    (dados) => setup_fill_table(dados, table, ir_relatorio_especifico)
+    (dados) => fill_table(dados, table, ir_relatorio_especifico)
   )
 
   setup_table_sorting(container,
     sort_by_total_score_button,
     (ascendente) => get_relatorios(user_id, 'score', ascendente, 1),
-    (dados) => setup_fill_table(dados, table, ir_relatorio_especifico)
+    (dados) => fill_table(dados, table, ir_relatorio_especifico)
   )
 
-
-  // TODO: search como função 
   const search_input = container.querySelector<HTMLButtonElement>('#search_bar');
   const search_button = container.querySelector<HTMLButtonElement>('#search_button');
 
@@ -237,45 +235,53 @@ export async function init_relatorios_usuario_page() {
       let relatorios = await get_relatorios(user_id, 'nome', true, 1)
 
       clear_table(container)
-      setup_fill_table(relatorios, table, ir_relatorio_especifico)
+      fill_table(relatorios, table, ir_relatorio_especifico)
       return;
     }
 
-
     if (search_input?.value) {
 
-      const { data: pacienteBuscado, error: pegarPacienteBuscadoError } = await supabase
-        .from('paciente').select('id').or(`nome.ilike.${search_input.value}%, cpf.ilike.${search_input.value}%`);
+      const { data: relatorio_buscado, error: pegar_relatorio_buscado_erro } = await supabase
+        .rpc('pegar_dados_relatorios', {
+          usuario_id: user_id,
+          ascendente: true,
+          ordenar_por: 'nome'
+        })
+        .select('id')
+        .or(`nome_paciente.ilike.${search_input.value}%`);
 
-      if (pegarPacienteBuscadoError) {
-        console.log("Erro ao pesquisar paciente")
-        console.log(pegarPacienteBuscadoError)
+      if (pegar_relatorio_buscado_erro) {
+        console.log("Erro ao pesquisar relatorios")
+        console.log(pegar_relatorio_buscado_erro)
         return;
       }
 
-      if (!pacienteBuscado || pacienteBuscado.length === 0) {
-        trigger_notification_popup("Nenhum paciente encontrado com esse nome ou CPF")
+      const relatorios = relatorio_buscado as { id: number }[];
+
+      if (!relatorio_buscado || relatorios.length === 0) {
+        trigger_notification_popup("Nenhum relatorio encontrado com esse nome ou CPF")
         return;
       }
 
       clear_table(container);
 
-      for (let i = 0; i < pacienteBuscado.length; i++) {
+      for (let i = 0; i < relatorios.length; i++) {
 
-        const { data: relatoriosBuscados, error: pegarRelatoriosError } = await supabase
-          .rpc('obter_relatorios_do_paciente', {
-            paciente_id_param: pacienteBuscado.at(i)!.id,
+        const { data: relatorios_buscados, error: pegar_relatorios_buscados_error } = await supabase
+          .rpc('pegar_dados_relatorios', {
+            usuario_id: user_id,
             ascendente: true,
             ordenar_por: 'nome'
-          });
+          })
+          .eq("id", relatorios.at(i)!.id)
 
-        if (pegarRelatoriosError) {
+        if (pegar_relatorios_buscados_error) {
           console.log("Erro relatorios buscados por paciente");
-          console.log(pegarRelatoriosError)
+          console.log(pegar_relatorios_buscados_error)
         }
 
-        if (relatoriosBuscados) {
-          setup_fill_table(relatoriosBuscados, table, ir_relatorio_especifico)
+        if (relatorios_buscados) {
+          fill_table(relatorios_buscados, table, ir_relatorio_especifico)
         }
       }
 
@@ -291,7 +297,7 @@ export async function init_relatorios_usuario_page() {
     1,
     get_max_pages(realatorio_entadas!, 24),
     (p) => get_relatorios(String(user_id), 'nome', true, p),
-    (dados) => setup_fill_table(dados ?? [], table, ir_relatorio_especifico)
+    (dados) => fill_table(dados ?? [], table, ir_relatorio_especifico)
   )
 
 }

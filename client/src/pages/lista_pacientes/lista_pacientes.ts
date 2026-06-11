@@ -7,7 +7,7 @@ import { navigate_to } from '../../main';
 
 import { get_user_id } from '../../components/auth_functions';
 
-import { setup_table_sorting, setup_fill_table, clear_table, update_page, get_max_pages } from '../../components/table_functions';
+import { setup_table_sorting, fill_table, clear_table, update_page, get_max_pages } from '../../components/table_functions';
 
 import { trigger_notification_popup, show_notification, hide_notification } from '../../components/notification_popup';
 
@@ -163,7 +163,7 @@ export async function init_lista_pacientes_page() {
   }
 
   const pacientes_entradas = await get_entradas_pacientes(user_id);
-  setup_fill_table(pacientes ?? [], table, ir_perfil_paciente);
+  fill_table(pacientes ?? [], table, ir_perfil_paciente);
 
   // Botoes de ordenação
   const sort_by_patient_name_button = container.querySelector<HTMLButtonElement>('#sort_by_patient_name_button');
@@ -174,19 +174,19 @@ export async function init_lista_pacientes_page() {
   setup_table_sorting(container,
     sort_by_patient_name_button,
     (ascendente) => get_pacientes('nome', !ascendente, user_id, 1),
-    (dados) => setup_fill_table(dados, table, ir_perfil_paciente)
+    (dados) => fill_table(dados, table, ir_perfil_paciente)
   )
 
   setup_table_sorting(container,
     sort_by_date_of_birth_button,
     (ascendente) => get_pacientes('data_nascimento', ascendente, user_id, 1),
-    (dados) => setup_fill_table(dados, table, ir_perfil_paciente)
+    (dados) => fill_table(dados, table, ir_perfil_paciente)
   )
 
   setup_table_sorting(container,
     sort_by_sex_button,
     (ascendente) => get_pacientes('sexo', ascendente, user_id, 1),
-    (dados) => setup_fill_table(dados, table, ir_perfil_paciente)
+    (dados) => fill_table(dados, table, ir_perfil_paciente)
   )
 
   let page = 1;
@@ -196,10 +196,69 @@ export async function init_lista_pacientes_page() {
     page,
     get_max_pages(pacientes_entradas!, 25),
     (p) => get_pacientes('nome', true, user_id, p),
-    (dados) => setup_fill_table(dados ?? [], table, ir_perfil_paciente)
+    (dados) => fill_table(dados ?? [], table, ir_perfil_paciente)
   );
 
+  const search_input = container.querySelector<HTMLButtonElement>('#search_bar');
+  const search_button = container.querySelector<HTMLButtonElement>('#search_button');
+
+  search_button?.addEventListener('click', async (_MouseEvent) => {
+
+    if (search_input?.value.length === 0) {
+
+      let pacientes = await get_pacientes('nome', true, user_id, 1)
+
+      console.log("Nada")
+
+      clear_table(container)
+      fill_table(pacientes, table, ir_perfil_paciente)
+      return;
+    }
+
+    if (search_input?.value) {
+
+      const { data: paciente_buscado, error: pegar_paciente_buscado_erro } = await supabase
+        .from('paciente')
+        .select('id')
+        .or(`nome.ilike.${search_input.value}%, cpf.ilike.${search_input.value}%`);
+
+      if (pegar_paciente_buscado_erro) {
+        console.log("Erro ao pesquisar paciente")
+        console.log(pegar_paciente_buscado_erro)
+        return;
+      }
+
+      if (!paciente_buscado || paciente_buscado.length === 0) {
+        trigger_notification_popup("Nenhum usuario encontrado com esse nome ou CPF")
+        return;
+      }
+
+      clear_table(container);
+
+      for (let i = 0; i < paciente_buscado.length; i++) {
+
+        const { data: pacientes_buscados, error: pegar_pacientes_buscados_error } = await supabase
+          .from("paciente")
+          .select("nome, data_nascimento, sexo, cpf, id")
+          .eq("id", paciente_buscado.at(i)?.id)
+          .order("nome")
+
+        if (pegar_pacientes_buscados_error) {
+          console.log("Erro relatorios buscados por paciente");
+          console.log(pegar_pacientes_buscados_error)
+        }
+
+        if (pacientes_buscados) {
+          fill_table(pacientes_buscados, table, ir_perfil_paciente)
+        }
+      }
+
+
+    }
+
+  })
 }
+
 
 // Pega quantidade total de pacientes no banco
 async function get_entradas_pacientes(usuario_id: string) {
@@ -221,7 +280,7 @@ async function get_entradas_pacientes(usuario_id: string) {
 
 // TODO: Tamanho de pagina dinamico com tamanho da tela
 // Pega pacientes do banco
-async function get_pacientes<T extends object>(ordenar_por: string, ascendente: boolean, usuario_id: string, page: number): Promise<T[] | null> {
+async function get_pacientes<T extends object>(ordenar_por: string, ascendente: boolean, usuario_id: string, page: number): Promise<T[]> {
 
   const from = (page - 1) * 24
   const to = (page * 24) - 1

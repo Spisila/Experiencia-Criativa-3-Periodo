@@ -5,10 +5,12 @@ import "../../components/input_boxes.css"
 import { supabase } from "../../lib/supabase"
 import { navigate_to } from '../../main';
 
-import { setup_table_sorting, setup_fill_table } from '../../components/table_functions';
+import { setup_table_sorting, fill_table } from '../../components/table_functions';
 
 import { get_user_session } from '../../components/auth_functions';
 import { show_notification, hide_notification, trigger_notification_popup } from '../../components/notification_popup';
+
+import { clear_table } from '../../components/table_functions';
 
 export async function init_lista_usuarios_page() {
 
@@ -114,7 +116,7 @@ export async function init_lista_usuarios_page() {
   setup_table_sorting(container,
     sort_name_button,
     (ascendente) => get_usuarios('nome', !ascendente),
-    (usuarios) => setup_fill_table(usuarios, table, go_to_user_page)
+    (usuarios) => fill_table(usuarios, table, go_to_user_page)
   );
 
   show_notification("Carregando usuarios...")
@@ -129,8 +131,67 @@ export async function init_lista_usuarios_page() {
     hide_notification();
   }
 
-  setup_fill_table(usuarios, table, go_to_user_page)
+  fill_table(usuarios, table, go_to_user_page)
 
+
+  const search_input = container.querySelector<HTMLButtonElement>('#search_bar');
+  const search_button = container.querySelector<HTMLButtonElement>('#search_button');
+
+  search_button?.addEventListener('click', async (_MouseEvent) => {
+
+    if (search_input?.value.length === 0) {
+
+      let usuarios = await get_usuarios('nome', true)
+
+      console.log("Nada")
+
+      clear_table(container)
+      fill_table(usuarios, table, go_to_user_page)
+      return;
+    }
+
+    if (search_input?.value) {
+
+      const { data: usuario_buscado, error: pegar_usuario_buscado_erro } = await supabase
+        .from('usuario')
+        .select('id')
+        .or(`nome.ilike.${search_input.value}%, cpf.ilike.${search_input.value}%`);
+
+      if (pegar_usuario_buscado_erro) {
+        console.log("Erro ao pesquisar paciente")
+        console.log(pegar_usuario_buscado_erro)
+        return;
+      }
+
+      if (!usuario_buscado || usuario_buscado.length === 0) {
+        trigger_notification_popup("Nenhum usuario encontrado com esse nome ou CPF")
+        return;
+      }
+
+      clear_table(container);
+
+      for (let i = 0; i < usuario_buscado.length; i++) {
+
+        const { data: usuarios_buscados, error: pegar_usuarios_buscados_error } = await supabase
+          .from("usuario")
+          .select("nome, cpf, id")
+          .eq("id", usuario_buscado.at(i)?.id)
+          .order("nome")
+
+        if (pegar_usuarios_buscados_error) {
+          console.log("Erro relatorios buscados por paciente");
+          console.log(pegar_usuarios_buscados_error)
+        }
+
+        if (usuarios_buscados) {
+          fill_table(usuarios_buscados, table, go_to_user_page)
+        }
+      }
+
+
+    }
+
+  })
 
 }
 

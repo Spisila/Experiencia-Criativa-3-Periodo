@@ -1,9 +1,4 @@
-export interface sort_table_options<T> {
-  button: HTMLButtonElement | null;
-  fetch_data: (ascendente: boolean) => Promise<T[] | null>;
-  render_data: (data: T[]) => void;
-}
-
+import { supabase } from "../lib/supabase";
 
 export function setup_table_sorting<T extends object>(
   container: HTMLDivElement,
@@ -34,7 +29,7 @@ export function setup_table_sorting<T extends object>(
   });
 }
 
-export function setup_fill_table<T extends object>(row: T[], table: HTMLTableElement, botao_callback: (id: string) => void) {
+export function fill_table<T extends object>(row: T[], table: HTMLTableElement, botao_callback: (id: string) => void) {
 
   for (let i = 0; i < row.length; i++) {
 
@@ -98,6 +93,8 @@ export function setup_fill_table<T extends object>(row: T[], table: HTMLTableEle
   }
 
 }
+
+
 
 export function update_page<T extends object>(
   container: HTMLDivElement,
