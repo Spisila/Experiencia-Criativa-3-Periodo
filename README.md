@@ -31,6 +31,7 @@ A aplicação suporta funcionalidades de:
 ## Documentos do projeto
 
 - **[Manual de instalação do projeto](Documento_de_instalação_do_projeto.pdf)** - passo a passo de setup
+- **[Documento de implementação tecnica](Documento_de_implementação_tecnica.pdf)** - escolhas de desenvolvimento e detalhes da implementação do projeto
 
 ## Tecnologias usadas
 
