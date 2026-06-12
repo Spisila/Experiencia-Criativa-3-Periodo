@@ -302,7 +302,6 @@ export async function init_relatorios_usuario_page() {
 
 }
 
-// TODO: items por pagina dinamico
 async function get_relatorios(usuario_id: string, ordenar_por: string, ascendente: boolean, page: number) {
 
   const from = (page - 1) * 24

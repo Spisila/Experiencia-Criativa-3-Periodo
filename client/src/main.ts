@@ -129,8 +129,7 @@ async function handle_routing() {
       return;
     }
   }
-
-  // TODO: Trocar pela função de pega perfil
+  
   // Pega perfil do usuario
   const user_perfil = user_session.session?.user.user_metadata.perfil;
 

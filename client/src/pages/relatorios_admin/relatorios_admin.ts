@@ -317,7 +317,6 @@ export async function init_relatorios_admin_page() {
 
 }
 
-// TODO: Numero de itens por pagina dinamico
 async function get_todos_relatorios(ordenar_por: string, ascendente: boolean, page: number) {
 
   const from = (page - 1) * 24

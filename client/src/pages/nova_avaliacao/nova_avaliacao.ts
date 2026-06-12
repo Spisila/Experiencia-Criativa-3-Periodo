@@ -225,7 +225,6 @@ export async function init_nova_avaliacao_page() {
   const patientState = container.querySelector<HTMLHeadingElement>('#patient_state');
   const patientCity = container.querySelector<HTMLHeadingElement>('#patient_city');
 
-  // TODO: botar isso em um loop
   // Seta as variaveis
   if (patientName) {
     patientName.textContent = `Nome: ${pacienteDados.nome}`;
@@ -282,8 +281,6 @@ export async function init_nova_avaliacao_page() {
 
   const nova_avaliacao_button = container.querySelector<HTMLButtonElement>('#nova_avaliacao');
 
-
-  // TODO: refatorar tambem
   // Botoes de sim ou não
   const autismDiagnosisYesButton = container.querySelector<HTMLButtonElement>('#autism_diagnosis_yes');
   const autismDiagnosisNoButton = container.querySelector<HTMLButtonElement>('#autism_diagnosis_no');
@@ -404,7 +401,6 @@ export async function init_nova_avaliacao_page() {
     uploadFaceProfileContainer!.appendChild(photo_face_profile_preview);
   });
 
-  // TODO: refatorar também
   // Botoes de sintomas
   const symptomButtonDeficienciaIntelectual = container.querySelector<HTMLButtonElement>('#symptom_button_deficiência_intelectual');
   const symptomButtonFaceOrelhasAlongadas = container.querySelector<HTMLButtonElement>('#symptom_button_face_orelhas_alongadas');

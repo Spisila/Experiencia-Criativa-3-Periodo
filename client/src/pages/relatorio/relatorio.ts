@@ -599,7 +599,6 @@ export async function init_relatorio_page() {
 
       let novo_score = calcular_score_final(tem_sintomas, is_male);
 
-      // TODO: Colocar essa porra toda em uma transação
 
       const { data, error: erro_update_relatorio } = await supabase.from("avaliacao").update({
         diagnostico_autismo: tem_relatorio_extras.tem_autismo,
@@ -712,7 +711,6 @@ function hide_all_show_others<A extends HTMLElement, B extends HTMLElement>(all:
 
 }
 
-// TODO: Faz praticamente a mesma coisa que a outra função la em cima
 function table_to_button_set_active(text: HTMLTextAreaElement, button: HTMLButtonElement, bool: boolean) {
 
   if (bool == true) {
@@ -729,7 +727,6 @@ function table_to_button_set_active(text: HTMLTextAreaElement, button: HTMLButto
   }
 }
 
-// TODO: Refatorar também
 function set_fotos_avaliacao(container: HTMLDivElement, medico_id: string, relatorio_id: string) {
 
 

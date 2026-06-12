@@ -47,7 +47,6 @@ export async function init_perfil_usuario_page() {
 
   `
 
-  // TODO: Trocar pela função de get_permissao
   const user_session = await get_user_session()
 
   const permissao = user_session?.session?.user.user_metadata.perfil
@@ -88,7 +87,6 @@ export async function init_perfil_usuario_page() {
 
   let editando = false;
 
-  // TODO: Extrair isso em uma função exportada?
   function desabilitar_editar(desabilitado: boolean) {
 
     name_input!.disabled = desabilitado;

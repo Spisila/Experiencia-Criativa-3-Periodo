@@ -55,7 +55,6 @@ export function init_login_total_page() {
       return;
     }
 
-    // TODO: Isolar isso em uma função? Passar formulario e schema como parametros?
     // Validação do Zod
     const dados_formulario = {
       email: email,
@@ -88,7 +87,6 @@ export function init_login_total_page() {
       return;
     }
 
-    // TODO: função exportada de pegar a role
     // Checa o perfil do usuario e vai para a pagina de opções correspondente
     if (data) {
 

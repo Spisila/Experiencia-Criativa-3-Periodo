@@ -189,8 +189,7 @@ export async function init_perfil_paciente_page() {
     const confirmar = confirm("Tem certeza que deseja deletar este paciente?");
 
     if (!confirmar) return;
-
-    // TODO: Refatorar esse lixo
+    
     const { data: usuario_paciente } = await supabase
       .from("paciente")
       .select("usuario_id")

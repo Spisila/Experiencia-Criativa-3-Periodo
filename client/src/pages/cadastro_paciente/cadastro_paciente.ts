@@ -243,7 +243,6 @@ export async function init_cadastro_paciente_page() {
 
   const observation_input = container.querySelector<HTMLInputElement>('#observation');
 
-  // TODO: Função que pega esses botoes
   // Pegando inputs de botão sim ou nao
 
   const toggleMaleButton = container.querySelector<HTMLButtonElement>('#toggle_male');
@@ -261,7 +260,6 @@ export async function init_cadastro_paciente_page() {
   const familyWithAtaxiaYesButton = container.querySelector<HTMLButtonElement>('#family_with_ataxia_yes');
   const familyWithAtaxiaNoButton = container.querySelector<HTMLButtonElement>('#family_with_ataxia_no');
 
-  // TODO: função que inicia as variaveis
   // Setando variaveis de sim e não e setando todos os botoes como não
 
   let has_autism_diagnosis = switch_pair_button(autismDiagnosisNoButton!, autismDiagnosisYesButton!, false);
@@ -269,8 +267,7 @@ export async function init_cadastro_paciente_page() {
   let family_with_mental_symptoms = switch_pair_button(familyWithMentalSymptomsNoButton!, familyWithMentalSymptomsYesButton!, false);
   let family_with_ataxia = switch_pair_button(familyWithAtaxiaNoButton!, familyWithAtaxiaYesButton!, false);
 
-  // TODO: Função que adiciona os eventos para todas as variaveis
-  // Linkando o evento de click dos botoes de sim e nao com a função que faz eles trocarem e atualiza a variavel
+  //   // Linkando o evento de click dos botoes de sim e nao com a função que faz eles trocarem e atualiza a variavel
 
   autismDiagnosisYesButton?.addEventListener('click', (_event) => {
     has_autism_diagnosis = switch_pair_button(autismDiagnosisNoButton!, autismDiagnosisYesButton!, has_autism_diagnosis);
@@ -416,7 +413,6 @@ export async function init_cadastro_paciente_page() {
       return;
     }
 
-    // TODO: Função disso
     // Checagem se o CPF ja existe no sistema
     const { data: cpf_exists } = await supabase
       .from('paciente')
@@ -561,7 +557,6 @@ export async function init_cadastro_paciente_page() {
 
 }
 
-// TODO: Refatorar
 // Função que seta o input das fotos, adiciona e adiciona o preview delas
 function photo_upload(container: HTMLDivElement, photo_inputs: HTMLInputElement[]) {
 
@@ -628,7 +623,6 @@ function photo_upload(container: HTMLDivElement, photo_inputs: HTMLInputElement[
   });
 }
 
-// TODO: deixar generica para todos os botoes de toggle
 // Função que faz toggle no botao de sintomas 
 function toggle_symptom(chaveSintoma: string, botao: HTMLElement | null): void {
   if (!botao) return;

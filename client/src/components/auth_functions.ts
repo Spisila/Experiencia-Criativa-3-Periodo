@@ -27,5 +27,3 @@ export async function get_user_id() {
 
 }
 
-// TODO: Função de get_acess_token
-// TODO: Função de get_permissao
