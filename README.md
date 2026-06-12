@@ -52,6 +52,10 @@ A aplicação suporta funcionalidades de:
 - **Git** (para clonar o repositório)
 - **VS Code** ou outra IDE de sua preferência
 
+## Licença
+
+Este projeto está licenciado sob a **MIT License**. Consulte o arquivo `LICENSE` para os termos completos.
+
 ## Pré-requisitos de instalação
 
 ### 1. Instalar Node.js
