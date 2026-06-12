@@ -1,148 +1,221 @@
 # SindromeX
 
-Aplicação web SPA em TypeScript com Vite para gerenciamento de usuários, cadastro de pacientes, avaliações clínicas e geração de relatórios. A interface utiliza autenticação via Supabase, controle de rotas baseado em perfil e tema claro/escuro.
+Aplicação web SPA em TypeScript com Vite para gerenciamento de usuários, cadastro de pacientes, avaliações clínicas e geração de relatórios.
+
+A interface usa autenticação Supabase, roteamento de páginas por perfil e suporte a tema claro/escuro.
 
 ---
 
-## Tecnologias
+## Visão geral
+
+O projeto é composto por dois módulos principais:
+
+- `client/` — front-end em Vite e TypeScript
+- `server/` — backend em Express responsável pela criação de usuários com a chave de serviço do Supabase
+
+A aplicação suporta funcionalidades de:
+
+- login e controle de sessão
+- cadastro de pacientes, médicos e administradores
+- opções de usuário e administrador
+- listagem de pacientes e usuários
+- criação de nova avaliação clínica
+- exibição de relatórios e relatórios detalhados
+- tema claro/escuro e notificações de interface
+
+## Tutoriais em vídeo
+
+- **[Como instalar o projeto do GitHub](https://www.youtube.com/watch?v=fjbwkmoVXLQ)** — passo a passo de setup
+- **[Como usar o site](https://www.youtube.com/watch?v=yug1R7DyS6Q)** — guia de navegação e funcionalidades
+
+## Tecnologias usadas
 
 - TypeScript
 - Vite
+- Express
 - Supabase
 - Zod
 - Lucide Static
 - CSS puro
+- dotenv
 
-## Visão geral
+## Requisitos
 
-A aplicação contém páginas de:
+- Node.js 18 ou superior
+- npm
+- Projeto Supabase ativo com credenciais de API
 
-- Login
-- Cadastro de paciente
-- Cadastro de médico e administrador
-- Opções de usuário e administrador
-- Lista de pacientes
-- Nova avaliação clínica
-- Relatórios de usuário e administrador
-- Visualização de relatório detalhado
-
-A navegação é feita por rotas internas no front-end, com controle de acesso por perfil de usuário.
-
-## Estrutura principal
-
+## Estrutura do projeto
 
 ```
-
 Experiencia-Criativa-3-Periodo
 ├─ client
-│  ├─ index.html                 - Unico HTML do projeto
+│  ├─ index.html
+│  ├─ package.json
+│  ├─ tsconfig.json
 │  ├─ src
-│  │  ├─ main.ts - Script que inicializa o site e faz o roteamento
-│  │  ├─ style.css - CSS usado na pagina base 
-│  │  ├─ components - Componentes que são utilizados em várias paginas
+│  │  ├─ main.ts
+│  │  ├─ style.css
+│  │  ├─ components
+│  │  │  ├─ auth_functions.ts
 │  │  │  ├─ base_button.css
 │  │  │  ├─ big_ass_button.css
+│  │  │  ├─ bucket_functions.ts
 │  │  │  ├─ input_boxes.css
 │  │  │  ├─ logout_button.ts
 │  │  │  ├─ notification_popup.ts
 │  │  │  ├─ return_to_options_button.ts
+│  │  │  ├─ switch_pair_button.ts
 │  │  │  └─ tema_claro_escuro.ts
-│  │  ├─ lib 
-│  │  │  ├─ sintoma_pesos.ts - Script que pega os pesos do backend
-│  │  │  └─ supabase.ts - Script que inicia a conexão com o Supabase
-│  │  ├─ pages - Pasta que guarda as paginas do site
-│  │  │  ├─ cadastro_admin - Pastas seguem esse padrão, um script ts e um script de CSS para estilos unicos para aquela pagina
-│  │  │  │  ├─ cadastro_admin.css
-│  │  │  │  └─ cadastro_admin.ts - Contem o HTML a ser injetado e a lógica da pagina
+│  │  ├─ lib
+│  │  │  ├─ sintoma_pesos.ts
+│  │  │  └─ supabase.ts
+│  │  ├─ pages
+│  │  │  ├─ cadastro_admin
 │  │  │  ├─ cadastro_medico
 │  │  │  ├─ cadastro_paciente
 │  │  │  ├─ lista_pacientes
+│  │  │  ├─ lista_usuarios
 │  │  │  ├─ login_total
 │  │  │  ├─ nova_avaliacao
 │  │  │  ├─ opcoes_admin
 │  │  │  ├─ opcoes_usuario
+│  │  │  ├─ perfil_paciente
+│  │  │  ├─ perfil_usuario
 │  │  │  ├─ relatorio
 │  │  │  ├─ relatorios_admin
 │  │  │  └─ relatorios_usuario
-│  │  └─ schemas - Pasta que guarda as validações do zod
+│  │  └─ schemas
 │  │     ├─ cadastro_pacientes_schema.ts
 │  │     ├─ cadastro_usuario_schema.ts
 │  │     └─ login_schema.ts
-│  └─ tsconfig.json
-├─ package-lock.json
+├─ server
+│  ├─ package.json
+│  ├─ tsconfig.json
+│  └─ src
+│     └─ index.ts
 ├─ package.json
-└─ README.md 
-
+└─ README.md
 ```
-
-## Requisitos
-
-- Node.js 18+ / npm
-- Conta e projeto Supabase
 
 ## Configuração do ambiente
 
-Crie um arquivo `.env` na pasta `client/` com as variáveis:
+### 1. Front-end
+
+Edite o arquivo `.env.example` em `client/` com estas variáveis:
 
 ```env
 VITE_SUPABASE_URL=https://seu-projeto.supabase.co
 VITE_SUPABASE_ANON_KEY=sua-chave-anonima
 ```
 
+### 2. Back-end
+
+Edite o arquivo `.env.example` em `server/` com estas variáveis:
+
+```env
+SUPABASE_URL=https://seu-projeto.supabase.co
+SUPABASE_SERVICE_ROLE_KEY=sua-chave-service-role
+PORT=3000
+```
+
+> `SUPABASE_SERVICE_ROLE_KEY` deve ser mantada em segredo e só usada no servidor.
+
 ## Instalação
 
-No diretório raiz do repositório:
+> **Veja o [tutorial em vídeo de instalação](https://www.youtube.com/watch?v=fjbwkmoVXLQ)** para um guia visual passo a passo.
+
+No diretório raiz do repositório, execute:
 
 ```bash
 npm run setup
 ```
 
-## Execução
+Esse comando instala as dependências de:
 
-Para rodar o front-end em modo de desenvolvimento:
+- raiz do projeto
+- `client/`
+- `server/`
 
-```bash
-npm run dev
-```
+## Execução em desenvolvimento
 
-Para gerar a build de produção:
+> **Veja o [tutorial de uso do site](https://www.youtube.com/watch?v=yug1R7DyS6Q)** para saber como navegar e usar todas as funcionalidades.
 
-```bash
-npm run build 
-```
-
-Para pré-visualizar a build:
+### Rodar somente o front-end
 
 ```bash
-npm run preview 
+npm run dev --prefix client
 ```
 
-## Rotas disponíveis
+### Rodar somente o back-end
 
-A aplicação suporta as seguintes rotas:
+```bash
+npm run dev --prefix server
+```
+
+## Rotas e permissões
+
+### Rotas públicas
 
 - `/login_total`
+
+### Rotas para perfil `medico`
+
 - `/cadastro_paciente`
-- `/cadastro_medico`
-- `/cadastro_admin`
 - `/opcoes_usuario`
-- `/opcoes_admin`
 - `/lista_pacientes`
 - `/relatorios_usuario`
-- `/relatorios_admin`
-- `/relatorio`
 - `/nova_avaliacao`
+- `/perfil_paciente`
 
-## Observações
+### Rotas para perfil `administrador`
 
-- A autenticação e o estado de sessão dependem do Supabase.
-- O tema claro/escuro é inicializado em `client/src/components/tema_claro_escuro.ts`.
-- O arquivo `client/src/lib/supabase.ts` lança erro se as variáveis de ambiente não forem definidas.
+- `/cadastro_medico`
+- `/cadastro_admin`
+- `/opcoes_admin`
+- `/lista_usuarios`
+- `/relatorios_admin`
+- `/perfil_usuario`
 
----
+### Rota de relatório detalhado
 
-### Contato
+- `/relatorio` — disponível após autenticação e navegação interna
 
-Este README pode ser usado como base para documentar a aplicação e adicionar mais instruções sobre o uso de cada página e regras de perfil conforme o projeto evolui.
+## Como o front-end funciona
+
+- `client/src/main.ts` controla o roteamento interno e o acesso por perfil.
+- `client/src/lib/supabase.ts` cria o cliente Supabase usando variáveis de ambiente.
+- `client/src/components/tema_claro_escuro.ts` aplica o tema na página e salva a preferência em `localStorage`.
+- As páginas em `client/src/pages/*` injetam o HTML no container principal e implementam a lógica de cada tela.
+- Os schemas de validação Zod estão em `client/src/schemas/`.
+
+## Como o back-end funciona
+
+- `server/src/index.ts` expõe o endpoint `POST /api/usuarios`.
+- O backend usa a chave `SUPABASE_SERVICE_ROLE_KEY` para criar novos usuários via Supabase Admin API.
+- O servidor usa CORS e JSON body parser.
+
+### Endpoint principal
+
+`POST /api/usuarios`
+
+Body esperado:
+
+```json
+{
+  "email": "user@example.com",
+  "password": "senha123",
+  "perfil": "medico",
+  "nome": "Nome do usuário",
+  "cpf": "12345678901"
+}
+```
+
+## Observações importantes
+
+- A sessão do usuário é verificada em `client/src/main.ts` antes de carregar páginas restritas.
+- O front-end depende das variáveis `VITE_SUPABASE_URL` e `VITE_SUPABASE_ANON_KEY`.
+- O back-end depende das variáveis `SUPABASE_URL` e `SUPABASE_SERVICE_ROLE_KEY`.
+
 
 ```
