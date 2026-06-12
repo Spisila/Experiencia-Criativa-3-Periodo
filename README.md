@@ -30,7 +30,7 @@ A aplicação suporta funcionalidades de:
 
 ## Documentos do projeto
 
-- **[Manual de instalação do projeto](Documento de instalação do projeto.pdf)** - passo a passo de setup
+- **[Manual de instalação do projeto](Documento_de_instalação_do_projeto.pdf)** - passo a passo de setup
 
 ## Tecnologias usadas
 
